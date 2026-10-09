@@ -137,3 +137,16 @@ fn send(method: &str, url: &str, token: &str, body: Option<Value>) -> Result<Val
         Err(e) => Err(format!("Network error: {e}")),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Talks to api.github.com; run with `cargo test -- --ignored`.
+    #[test]
+    #[ignore]
+    fn bad_token_is_reported() {
+        let err = run("not-a-real-token", "", &History::default()).unwrap_err();
+        assert!(err.contains("401"), "{err}");
+    }
+}

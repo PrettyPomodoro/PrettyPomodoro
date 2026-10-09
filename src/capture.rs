@@ -2,6 +2,8 @@
 //!
 //! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Nord"] pomodoro`
 //!
+//! Pages: `running`, `timer`, `options`, `themes`, `editor`, `stats`, `sync`, `about`.
+//!
 //! Nothing is read from or written to the user's saved data in this mode.
 
 use crate::config::History;
@@ -9,6 +11,7 @@ use crate::core::Core;
 use chrono::Days;
 use eframe::egui;
 use std::path::PathBuf;
+use std::time::{Duration, Instant};
 
 pub struct Capture {
     path: PathBuf,
@@ -51,6 +54,12 @@ impl Capture {
             }
         }
         core.history = history;
+
+        // "running" shows the timer a third of the way through a focus round.
+        if self.page.as_deref() == Some("running") {
+            let started = Instant::now().checked_sub(Duration::from_secs(8 * 60 + 20));
+            core.toggle(started.unwrap_or_else(Instant::now));
+        }
     }
 
     pub fn update(&mut self, ctx: &egui::Context) {

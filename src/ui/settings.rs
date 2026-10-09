@@ -116,10 +116,11 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> b
             egui::TextEdit::singleline(&mut cfg.token)
                 .password(!state.show_token)
                 .hint_text("ghp_…")
-                .desired_width(w),
+                .margin(vec2(8.0, 6.0))
+                .desired_width(w - 16.0),
         );
         let label = if state.show_token { "Hide" } else { "Show" };
-        if ui.add_sized([54.0, 22.0], egui::Button::new(label)).clicked() {
+        if ui.add_sized([54.0, 28.0], egui::Button::new(label)).clicked() {
             state.show_token = !state.show_token;
         }
     });
@@ -133,6 +134,7 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> b
     ui.add(
         egui::TextEdit::singleline(&mut cfg.gist_id)
             .hint_text("Found or created on first sync")
+            .margin(vec2(8.0, 6.0))
             .desired_width(f32::INFINITY),
     );
     ui.add_space(2.0);

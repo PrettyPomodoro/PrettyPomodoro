@@ -184,10 +184,15 @@ pub fn data_dir() -> PathBuf {
 }
 
 fn load<T: DeserializeOwned + Default>(file: &str) -> T {
-    std::fs::read_to_string(data_dir().join(file))
-        .ok()
-        .and_then(|s| serde_json::from_str(&s).ok())
-        .unwrap_or_default()
+    let path = data_dir().join(file);
+    let Ok(text) = std::fs::read_to_string(&path) else {
+        return T::default();
+    };
+    serde_json::from_str(&text).unwrap_or_else(|_| {
+        // Keep the unreadable file around instead of overwriting it on the next save.
+        let _ = std::fs::rename(&path, path.with_extension("json.bak"));
+        T::default()
+    })
 }
 
 fn save<T: Serialize>(file: &str, value: &T, private: bool) {

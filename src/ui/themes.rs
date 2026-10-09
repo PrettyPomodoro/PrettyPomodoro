@@ -53,7 +53,7 @@ fn list(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     heading(ui, "Themes", theme);
 
     ui.vertical_centered(|ui| {
-        let button = egui::Button::new(RichText::new("＋  New Theme").size(14.0))
+        let button = egui::Button::new(RichText::new("+  New Theme").size(14.0))
             .min_size(vec2(ui.available_width(), 34.0));
         if ui.add(button).clicked() {
             state.start_new(&core.cfg);
@@ -136,7 +136,11 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     heading(ui, title, theme);
 
     ui.label(RichText::new("Name").size(13.0).color(theme.text_dim));
-    ui.add(egui::TextEdit::singleline(&mut editor.theme.name).desired_width(f32::INFINITY));
+    ui.add(
+        egui::TextEdit::singleline(&mut editor.theme.name)
+            .margin(vec2(8.0, 6.0))
+            .desired_width(f32::INFINITY),
+    );
     ui.add_space(6.0);
 
     let t = &mut editor.theme;
