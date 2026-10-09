@@ -20,9 +20,9 @@ pub struct Editor {
     /// Starting palettes for a new theme, one per style. Switching style swaps
     /// the palette as long as the colours haven't been touched.
     seeds: Option<(Theme, Theme)>,
-    /// Index of the colour row whose choices are open, and its hex text.
+    /// Index of the colour row whose choices are open.
     picking: Option<usize>,
-    hex: String,
+    picker: Picker,
     error: Option<String>,
 }
 
@@ -32,7 +32,7 @@ impl State {
         let row = 0;
         if let Some(editor) = &mut self.editor {
             editor.picking = Some(row);
-            editor.hex = to_hex(editor.theme.focus);
+            editor.picker.load(editor.theme.focus);
         }
     }
 
@@ -55,7 +55,7 @@ impl State {
             original: None,
             seeds: Some((standard, pencil)),
             picking: None,
-            hex: String::new(),
+            picker: Picker::default(),
             error: None,
         });
     }
@@ -177,7 +177,7 @@ fn list(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
                         theme: t.clone(),
                         seeds: None,
                         picking: None,
-                        hex: String::new(),
+                        picker: Picker::default(),
                         error: None,
                     });
                 }
@@ -302,7 +302,7 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     ui.label(RichText::new(hint).size(12.0).color(theme.text_dim));
     ui.add_space(6.0);
 
-    let Editor { theme: t, picking, hex, .. } = editor;
+    let Editor { theme: t, picking, picker, .. } = editor;
     let rows = [
         ("Focus", &mut t.focus),
         ("Short Break", &mut t.short_break),
@@ -332,10 +332,10 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         );
         if resp.on_hover_cursor(egui::CursorIcon::PointingHand).clicked() {
             *picking = (*picking != Some(i)).then_some(i);
-            *hex = to_hex(*color);
+            picker.load(*color);
         }
         if *picking == Some(i) {
-            color_choices(ui, color, hex, theme);
+            color_choices(ui, color, picker, theme);
         }
     }
 
@@ -376,21 +376,61 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     }
 }
 
-/// Inline colour choices for one row: a grid of swatches and a hex field.
-fn color_choices(ui: &mut Ui, color: &mut Color32, hex: &mut String, theme: &Theme) {
+/// Editing state of the open colour row. Hue, saturation and brightness are
+/// kept here rather than re-derived from the colour, so the hue survives a trip
+/// through grey or black.
+#[derive(Default)]
+struct Picker {
+    hex: String,
+    hsv: [f32; 3],
+}
+
+impl Picker {
+    fn load(&mut self, color: Color32) {
+        let hsva = egui::ecolor::Hsva::from(color);
+        self.hsv = [hsva.h, hsva.s, hsva.v];
+        self.hex = to_hex(color);
+    }
+
+    fn color(&self) -> Color32 {
+        hsv(self.hsv[0], self.hsv[1], self.hsv[2])
+    }
+}
+
+fn hsv(h: f32, s: f32, v: f32) -> Color32 {
+    egui::ecolor::Hsva::new(h, s, v, 1.0).into()
+}
+
+/// Inline colour choices for one row: hue / saturation / brightness sliders,
+/// a grid of quick swatches and a hex field.
+fn color_choices(ui: &mut Ui, color: &mut Color32, picker: &mut Picker, theme: &Theme) {
+    let [h, s, v] = picker.hsv;
+    let sliders: [(&str, Box<dyn Fn(f32) -> Color32>); 3] = [
+        ("Hue", Box::new(move |x| hsv(x, 1.0, 1.0))),
+        ("Saturation", Box::new(move |x| hsv(h, x, v.max(0.35)))),
+        ("Brightness", Box::new(move |x| hsv(h, s, x))),
+    ];
+    for (i, (label, color_at)) in sliders.into_iter().enumerate() {
+        if gradient_slider(ui, label, &mut picker.hsv[i], color_at, theme) {
+            *color = picker.color();
+            picker.hex = to_hex(*color);
+        }
+    }
+    ui.add_space(4.0);
+
     const HUES: [f32; 9] = [0.0, 0.07, 0.13, 0.28, 0.45, 0.55, 0.62, 0.75, 0.9];
     // (saturation, value) per row, pale to deep; a row of greys follows.
-    const TONES: [(f32, f32); 5] = [(0.25, 1.0), (0.5, 1.0), (0.75, 0.95), (0.85, 0.75), (0.9, 0.5)];
+    const TONES: [(f32, f32); 3] = [(0.3, 1.0), (0.7, 0.95), (0.9, 0.6)];
     let columns = HUES.len();
     let swatch_at = |row: usize, col: usize| -> Color32 {
         match TONES.get(row) {
-            Some(&(s, v)) => egui::ecolor::Hsva::new(HUES[col], s, v, 1.0).into(),
+            Some(&(s, v)) => hsv(HUES[col], s, v),
             None => Color32::from_gray((255.0 - 245.0 * col as f32 / (columns - 1) as f32) as u8),
         }
     };
 
     let gap = 4.0;
-    let (rows, cell_h) = (TONES.len() + 1, 22.0);
+    let (rows, cell_h) = (TONES.len() + 1, 20.0);
     let (area, _) = ui.allocate_exact_size(
         vec2(ui.available_width(), rows as f32 * (cell_h + gap) - gap),
         Sense::hover(),
@@ -412,26 +452,70 @@ fn color_choices(ui: &mut Ui, color: &mut Color32, hex: &mut String, theme: &The
             }
             if resp.clicked() {
                 *color = choice;
-                *hex = to_hex(choice);
+                picker.load(choice);
             }
         }
     }
 
     ui.horizontal(|ui| {
         ui.label(RichText::new("Hex").size(13.0).color(theme.text_dim));
-        let field = egui::TextEdit::singleline(hex)
+        let field = egui::TextEdit::singleline(&mut picker.hex)
             .font(FontId::monospace(13.0))
             .char_limit(7)
             .margin(vec2(8.0, 5.0))
             .desired_width(90.0);
         if ui.add(field).changed() {
             // Applied as soon as the text is a complete colour.
-            if let Some(parsed) = parse_hex(hex) {
+            if let Some(parsed) = parse_hex(&picker.hex) {
                 *color = parsed;
+                let typed = std::mem::take(&mut picker.hex);
+                picker.load(parsed);
+                picker.hex = typed;
             }
         }
     });
     ui.add_space(6.0);
+}
+
+/// A 0..1 slider whose track shows the colour each position gives.
+fn gradient_slider(
+    ui: &mut Ui,
+    label: &str,
+    value: &mut f32,
+    color_at: impl Fn(f32) -> Color32,
+    theme: &Theme,
+) -> bool {
+    let (rect, resp) = ui.allocate_exact_size(vec2(ui.available_width(), 26.0), Sense::click_and_drag());
+    let p = ui.painter();
+    p.text(rect.left_center(), Align2::LEFT_CENTER, label, FontId::proportional(12.5), theme.text_dim);
+
+    let knob_r = 8.0;
+    let track = Rect::from_min_max(
+        pos2(rect.left() + 78.0, rect.center().y - 5.0),
+        pos2(rect.right() - knob_r, rect.center().y + 5.0),
+    );
+    let before = *value;
+    if let Some(pos) = resp.interact_pointer_pos() {
+        *value = ((pos.x - track.left()) / track.width()).clamp(0.0, 1.0);
+    }
+
+    let steps = 48;
+    let w = track.width() / steps as f32;
+    for i in 0..steps {
+        let x = track.left() + i as f32 * w;
+        // Overlap by a hair so no seams show between the strips.
+        let strip = Rect::from_min_max(pos2(x, track.top()), pos2(x + w + 0.5, track.bottom()));
+        p.rect_filled(strip, 0.0, color_at((i as f32 + 0.5) / steps as f32));
+    }
+    let edge = Stroke::new(1.0_f32, crate::theme::mix(theme.surface, theme.text, 0.35));
+    p.rect_stroke(track, 2.0, edge, egui::StrokeKind::Outside);
+
+    let knob = pos2(track.left() + *value * track.width(), rect.center().y);
+    p.circle_filled(knob, knob_r, Color32::WHITE);
+    p.circle_filled(knob, knob_r - 2.5, color_at(*value));
+    p.circle_stroke(knob, knob_r, Stroke::new(1.0_f32, Color32::from_black_alpha(140)));
+    resp.on_hover_cursor(egui::CursorIcon::PointingHand);
+    *value != before
 }
 
 fn validate(editor: &Editor, cfg: &Config) -> Result<(), String> {
