@@ -43,7 +43,7 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     // Countdown, one glyph per fixed-width cell so the digits don't jitter.
     let secs = core.remaining(now).as_secs_f32().ceil() as u64;
     let text = format!("{:02}:{:02}", secs / 60, secs % 60);
-    let font = FontId::proportional(54.0);
+    let font = FontId::new(54.0, egui::FontFamily::Name(super::fonts::LIGHT.into()));
     let cell = |ch: char| if ch == ':' { 20.0 } else { 31.0 };
     let width: f32 = text.chars().map(cell).sum();
     let mut x = cx - width / 2.0;

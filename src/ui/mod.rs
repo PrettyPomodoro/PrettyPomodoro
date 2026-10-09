@@ -1,5 +1,6 @@
 //! The window: custom title bar, the timer card and the settings drawer.
 
+mod fonts;
 mod settings;
 mod stats;
 mod themes;
@@ -60,6 +61,7 @@ pub struct App {
 
 impl App {
     pub fn new(cc: &eframe::CreationContext<'_>, shared: Shared) -> Self {
+        fonts::install(&cc.egui_ctx);
         let window = NativeWindow::new(cc);
         let tray = window
             .clone()
