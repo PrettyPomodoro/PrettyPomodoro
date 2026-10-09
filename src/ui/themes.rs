@@ -9,6 +9,8 @@ use eframe::egui::{self, pos2, vec2, Align2, FontId, Rect, RichText, Sense, Stro
 #[derive(Default)]
 pub struct State {
     pub editor: Option<Editor>,
+    /// The family whose themes are expanded, if any.
+    open: Option<Family>,
 }
 
 pub struct Editor {
@@ -22,6 +24,11 @@ pub struct Editor {
 }
 
 impl State {
+    /// Expand the family holding the active theme.
+    pub fn expand_current(&mut self, cfg: &Config) {
+        self.open = Some(cfg.active_theme().family());
+    }
+
     pub fn start_new(&mut self, cfg: &Config) {
         let active = cfg.active_theme();
         let mut standard = match active.style {
@@ -99,12 +106,14 @@ fn list(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         if members.is_empty() {
             continue;
         }
-        ui.add_space(8.0);
-        ui.label(
-            RichText::new(format!("{}  ·  {}", family.label().to_uppercase(), members.len()))
-                .size(12.0)
-                .color(theme.text_dim),
-        );
+        ui.add_space(4.0);
+        let open = state.open == Some(family);
+        if family_tile(ui, family, &members, open, &core.cfg.theme, theme) {
+            state.open = (!open).then_some(family);
+        }
+        if !open {
+            continue;
+        }
         for (i, t) in members {
             let custom = i >= builtin_count;
             let (rect, resp) = ui.allocate_exact_size(vec2(ui.available_width(), 40.0), Sense::click());
@@ -169,6 +178,70 @@ fn list(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
             core.cfg.theme = crate::theme::DEFAULT_THEME.to_owned();
         }
     }
+}
+
+/// The header tile of a theme family, previewed in one of its themes: the
+/// active theme if it belongs here, otherwise the family's first. Returns true
+/// when clicked.
+fn family_tile(
+    ui: &mut Ui,
+    family: Family,
+    members: &[(usize, &Theme)],
+    open: bool,
+    active: &str,
+    theme: &Theme,
+) -> bool {
+    let current = members.iter().find(|(_, t)| t.name == active);
+    let face = current.unwrap_or(&members[0]).1;
+
+    let (rect, resp) = ui.allocate_exact_size(vec2(ui.available_width(), 66.0), Sense::click());
+    let p = ui.painter().clone();
+    p.rect_filled(rect, 9.0, face.background);
+    let border = match (current.is_some(), face.ink()) {
+        (true, _) => Stroke::new(2.0_f32, theme.accent),
+        (false, Some(ink)) => Stroke::new(1.5_f32, ink),
+        (false, None) => Stroke::new(1.0_f32, crate::theme::mix(theme.surface, theme.muted, 0.5)),
+    };
+    p.rect_stroke(rect, 9.0, border, egui::StrokeKind::Inside);
+
+    p.text(
+        rect.left_center() + vec2(16.0, -10.0),
+        Align2::LEFT_CENTER,
+        family.label(),
+        FontId::proportional(17.0),
+        face.text,
+    );
+    let count = match members.len() {
+        1 => "1 theme".to_owned(),
+        n => format!("{n} themes"),
+    };
+    let detail = match current {
+        Some((_, t)) => format!("{count}  ·  {} selected", t.name),
+        None => count,
+    };
+    p.text(
+        rect.left_center() + vec2(16.0, 12.0),
+        Align2::LEFT_CENTER,
+        detail,
+        FontId::proportional(12.0),
+        face.text_dim,
+    );
+
+    for (j, c) in [face.long_break, face.short_break, face.focus].into_iter().enumerate() {
+        let dot = pos2(rect.right() - 46.0 - 16.0 * j as f32, rect.center().y);
+        p.circle_filled(dot, 5.0, c);
+        if let Some(ink) = face.ink() {
+            p.circle_stroke(dot, 5.0, Stroke::new(1.2_f32, ink));
+        }
+    }
+    // Chevron: down when collapsed, up when expanded.
+    let c = pos2(rect.right() - 22.0, rect.center().y);
+    let tip = if open { -3.0 } else { 3.0 };
+    let stroke = Stroke::new(1.6_f32, face.text);
+    p.line_segment([c + vec2(-6.0, -tip), c + vec2(0.0, tip)], stroke);
+    p.line_segment([c + vec2(0.0, tip), c + vec2(6.0, -tip)], stroke);
+
+    resp.on_hover_cursor(egui::CursorIcon::PointingHand).clicked()
 }
 
 fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
@@ -273,6 +346,8 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     });
     if close {
         state.editor = None;
+        // Land on the list with the current theme's family expanded.
+        state.expand_current(&core.cfg);
     }
 }
 

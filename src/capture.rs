@@ -2,7 +2,7 @@
 //!
 //! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Nord"] prettypomodoro`
 //!
-//! Pages: `running`, `timer`, `options`, `themes`, `editor`, `stats`, `sync`, `about`.
+//! Pages: `running`, `timer`, `options`, `themes`, `family`, `editor`, `stats`, `sync`, `about`.
 //!
 //! Nothing is read from or written to the user's saved data in this mode.
 

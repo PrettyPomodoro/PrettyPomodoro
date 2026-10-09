@@ -104,7 +104,7 @@ impl App {
         let tab = match page {
             "timer" => Tab::Timer,
             "options" => Tab::Options,
-            "themes" | "editor" => Tab::Themes,
+            "themes" | "family" | "editor" => Tab::Themes,
             "stats" => Tab::Stats,
             "sync" => Tab::Sync,
             "about" => Tab::About,
@@ -112,9 +112,11 @@ impl App {
         };
         self.drawer_open = true;
         self.tab = tab;
-        if page == "editor" {
-            let core = lock(&self.shared);
-            self.themes.start_new(&core.cfg);
+        let core = lock(&self.shared);
+        match page {
+            "editor" => self.themes.start_new(&core.cfg),
+            "family" => self.themes.expand_current(&core.cfg),
+            _ => {}
         }
     }
 
