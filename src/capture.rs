@@ -2,7 +2,7 @@
 //!
 //! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Nord"] prettypomodoro`
 //!
-//! Pages: `running`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `sync`, `about`.
+//! Pages: `running`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `sync`, `signin`, `code`, `about`.
 //!
 //! Nothing is read from or written to the user's saved data in this mode.
 
@@ -54,6 +54,17 @@ impl Capture {
             }
         }
         core.history = history;
+
+        // The sync page signed out, and part-way through signing in.
+        if matches!(self.page.as_deref(), Some("signin" | "code")) {
+            core.cfg.sync = Default::default();
+        }
+        if self.page.as_deref() == Some("code") {
+            core.sign_in = crate::core::SignIn::Waiting {
+                code: "WDJB-MJHT".into(),
+                url: "https://github.com/login/device".into(),
+            };
+        }
 
         // "running" shows the timer a third of the way through a focus round.
         if self.page.as_deref() == Some("running") {

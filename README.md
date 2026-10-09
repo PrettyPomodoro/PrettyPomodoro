@@ -89,21 +89,25 @@ D-Bus development packages first (`libasound2-dev`, `libdbus-1-dev` on Debian/Ub
 
 ## Cloud sync
 
-Sync uses a private (secret) GitHub Gist, which is free with any GitHub account.
+Sync keeps the focus history in a private (secret) GitHub Gist, which is free
+with any GitHub account.
 
-1. Open **Settings → Cloud Sync** and follow the link to create a personal
-   access token with only the `gist` scope.
-2. Paste the token and press **Sync Now**. The app finds the gist created by
-   another device with the same token, or creates one.
-3. From then on the app syncs by itself on launch and after every completed
-   focus round.
+1. Open **Settings → Cloud Sync** and press **Sign in with GitHub**.
+2. The app shows a short code, copies it and opens github.com. Paste the code
+   there and approve.
+3. That's it. The app finds the gist created by another device on the same
+   account, or creates one, and from then on syncs by itself on launch and
+   after every completed focus round.
 
-History is stored per device and merged by taking the highest count each
-device has reported for a day, so syncing repeatedly or from several machines
-never double counts.
+The sign-in only grants access to gists. History is stored per device and
+merged by taking the highest count each device has reported for a day, so
+syncing repeatedly or from several machines never double counts.
 
-The token is stored in plain text in the config file (readable only by your
-user account on macOS and Linux).
+The access token is stored in plain text in the config file (readable only by
+your user account on macOS and Linux). **Sign Out** removes it.
+
+Building your own copy: sign-in goes through a GitHub OAuth app with device
+flow enabled; its client ID is the `GITHUB_CLIENT_ID` constant in `src/sync.rs`.
 
 ## Data
 

@@ -39,8 +39,20 @@ impl Phase {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SyncJob {
     Sync,
-    /// Only look up the gist ID for the current token.
-    FindGist,
+    /// Start "Sign in with GitHub".
+    SignIn,
+}
+
+/// Progress of "Sign in with GitHub".
+#[derive(Clone, Debug, Default, PartialEq)]
+pub enum SignIn {
+    #[default]
+    Idle,
+    /// Asking GitHub for a code.
+    Starting,
+    /// Waiting for the user to enter `code` at `url` in their browser.
+    Waiting { code: String, url: String },
+    Failed(String),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -67,6 +79,9 @@ pub struct Core {
     last_tick_sec: u64,
 
     pub sync_state: SyncState,
+    pub sign_in: SignIn,
+    /// Bumped to abandon a sign-in that is still waiting.
+    pub sign_in_attempt: u64,
     /// Picked up by the ticker thread, which owns starting sync jobs.
     pub sync_request: Option<SyncJob>,
 
@@ -95,6 +110,8 @@ impl Core {
             fresh: true,
             last_tick_sec: 0,
             sync_state: SyncState::Idle,
+            sign_in: SignIn::Idle,
+            sign_in_attempt: 0,
             sync_request: None,
             notifications: audio.is_some(),
             persist: audio.is_some(),

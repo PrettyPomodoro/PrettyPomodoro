@@ -38,7 +38,10 @@ pub struct Config {
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct SyncConfig {
+    /// GitHub access token from "Sign in with GitHub".
     pub token: String,
+    /// GitHub username, once known.
+    pub login: Option<String>,
     pub gist_id: String,
     pub last_sync: Option<String>,
 }

@@ -106,7 +106,7 @@ impl App {
             "options" => Tab::Options,
             "themes" | "family" | "editor" | "colors" => Tab::Themes,
             "stats" => Tab::Stats,
-            "sync" => Tab::Sync,
+            "sync" | "signin" | "code" => Tab::Sync,
             "about" => Tab::About,
             _ => return,
         };
@@ -186,7 +186,7 @@ impl App {
                     Tab::Themes => themes::show(ui, &mut self.themes, core, theme),
                     Tab::Stats => stats::show(ui, &mut self.stats, core, theme),
                     Tab::Sync => {
-                        if let Some(job) = settings::sync(ui, &mut self.settings, core, theme) {
+                        if let Some(job) = settings::sync(ui, core, theme) {
                             core.sync_request = Some(job);
                         }
                     }
