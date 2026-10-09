@@ -4,9 +4,45 @@
 use eframe::egui::Color32;
 use serde::{Deserialize, Serialize};
 
+/// How a theme is drawn, independent of its colours.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum Style {
+    /// Flat shapes.
+    #[default]
+    Standard,
+    /// Hand-drawn illustration look: ink outlines, hatching, wobbly lines.
+    PencilArt,
+}
+
+/// The group a theme is listed under.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Family {
+    Light,
+    Dark,
+    PencilArt,
+}
+
+impl Family {
+    pub const ALL: [Family; 3] = [Family::Light, Family::Dark, Family::PencilArt];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            Family::Light => "Light",
+            Family::Dark => "Dark",
+            Family::PencilArt => "Pencil Art",
+        }
+    }
+}
+
+/// Outline colour of the pencil art style.
+pub const INK: Color32 = Color32::from_rgb(16, 14, 20);
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Theme {
     pub name: String,
+    #[serde(default)]
+    pub style: Style,
     #[serde(with = "hex")]
     pub focus: Color32,
     #[serde(with = "hex")]
@@ -33,6 +69,19 @@ pub struct Theme {
 impl Theme {
     pub fn is_dark(&self) -> bool {
         luminance(self.background) < 0.5
+    }
+
+    pub fn family(&self) -> Family {
+        match self.style {
+            Style::PencilArt => Family::PencilArt,
+            Style::Standard if self.is_dark() => Family::Dark,
+            Style::Standard => Family::Light,
+        }
+    }
+
+    /// The outline colour, for themes drawn in the pencil art style.
+    pub fn ink(&self) -> Option<Color32> {
+        (self.style == Style::PencilArt).then_some(INK)
     }
 }
 
@@ -102,23 +151,48 @@ const BUILTIN: &[[&str; 10]] = &[
     ["Synthwave",        "ff7edb", "72f1b8", "36f9f6", "262335", "372d4b", "495495", "e0e3e6", "b893ce", "fede5d"],
 ];
 
+/// The pencil art theme: the app icon's blue, tomato red and leaf green.
+const TOMATO_SKETCH: [&str; 10] = [
+    "Tomato Sketch",
+    "e5392b",
+    "7cbf4b",
+    "f6c544",
+    "2a62e6",
+    "2456d3",
+    "153a9c",
+    "fff7e8",
+    "d3dfff",
+    "8fd155",
+];
+
+pub fn pencil_art_theme() -> Theme {
+    from_row(&TOMATO_SKETCH, Style::PencilArt)
+}
+
 pub fn builtin_themes() -> Vec<Theme> {
-    let c = |s: &str| parse_hex(s).expect("built-in colour");
-    BUILTIN
+    let mut themes: Vec<_> = BUILTIN
         .iter()
-        .map(|t| Theme {
-            name: t[0].to_owned(),
-            focus: c(t[1]),
-            short_break: c(t[2]),
-            long_break: c(t[3]),
-            background: c(t[4]),
-            surface: c(t[5]),
-            muted: c(t[6]),
-            text: c(t[7]),
-            text_dim: c(t[8]),
-            accent: c(t[9]),
-        })
-        .collect()
+        .map(|t| from_row(t, Style::Standard))
+        .collect();
+    themes.push(pencil_art_theme());
+    themes
+}
+
+fn from_row(t: &[&str; 10], style: Style) -> Theme {
+    let c = |s: &str| parse_hex(s).expect("built-in colour");
+    Theme {
+        name: t[0].to_owned(),
+        style,
+        focus: c(t[1]),
+        short_break: c(t[2]),
+        long_break: c(t[3]),
+        background: c(t[4]),
+        surface: c(t[5]),
+        muted: c(t[6]),
+        text: c(t[7]),
+        text_dim: c(t[8]),
+        accent: c(t[9]),
+    }
 }
 
 #[cfg(test)]
@@ -140,5 +214,18 @@ mod tests {
         let t = &builtin_themes()[0];
         let json = serde_json::to_string(t).unwrap();
         assert_eq!(&serde_json::from_str::<Theme>(&json).unwrap(), t);
+    }
+
+    #[test]
+    fn families() {
+        let themes = builtin_themes();
+        for family in Family::ALL {
+            assert!(themes.iter().any(|t| t.family() == family), "{family:?}");
+        }
+        // Themes saved before styles existed load as standard ones.
+        let mut json = serde_json::to_value(pencil_art_theme()).unwrap();
+        json.as_object_mut().unwrap().remove("style");
+        let old: Theme = serde_json::from_value(json).unwrap();
+        assert_eq!(old.family(), Family::Dark);
     }
 }

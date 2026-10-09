@@ -1,6 +1,6 @@
 //! Settings drawer pages: timer durations, options, cloud sync and about.
 
-use super::widgets::{heading, slider, text_link, toggle_row};
+use super::widgets::{ink_outline, heading, slider, text_link, toggle_row};
 use crate::core::{Core, SyncJob, SyncState};
 use crate::theme::{mix, Theme};
 use eframe::egui::{self, vec2, Align2, Color32, FontId, RichText, Sense, Ui};
@@ -8,6 +8,7 @@ use eframe::egui::{self, vec2, Align2, Color32, FontId, RichText, Sense, Ui};
 #[derive(Default)]
 pub struct State {
     show_token: bool,
+    icon: Option<egui::TextureHandle>,
 }
 
 fn section(ui: &mut Ui, text: &str, theme: &Theme) {
@@ -31,6 +32,7 @@ pub fn timer(ui: &mut Ui, core: &mut Core, theme: &Theme) {
                     .layout_no_wrap(text, FontId::monospace(13.0), theme.text);
             let (rect, _) = ui.allocate_exact_size(galley.size() + vec2(14.0, 6.0), Sense::hover());
             ui.painter().rect_filled(rect, 5.0, theme.background);
+            ink_outline(ui.painter(), rect, 5.0, theme);
             ui.painter().galley(rect.center() - galley.size() / 2.0, galley, theme.text);
         });
         slider(ui, value, 1, max, color, theme);
@@ -102,7 +104,7 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> O
     heading(ui, "Cloud Sync", theme);
     let dim = |s: &str| RichText::new(s).size(12.5).color(theme.text_dim);
 
-    ui.vertical_centered(|ui| ui.label(dim("Sync your history for free.")));
+    ui.vertical_centered(|ui| ui.label(dim("Sync your history privately for free.")));
     ui.add_space(8.0);
 
     ui.label(RichText::new("GitHub token").size(14.0));
@@ -122,7 +124,7 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> O
         }
     });
     ui.hyperlink_to(
-        RichText::new("Create a token with the “gist” scope ↗").size(12.5),
+        RichText::new("Create a token with the “gist” scope").size(12.5),
         "https://github.com/settings/tokens/new?scopes=gist&description=Pomodoro%20Sync",
     );
     ui.add_space(6.0);
@@ -175,17 +177,18 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> O
     job
 }
 
-pub fn about(ui: &mut Ui, theme: &Theme) {
+pub fn about(ui: &mut Ui, state: &mut State, theme: &Theme) {
     heading(ui, "About", theme);
     ui.vertical_centered(|ui| {
-        let (rect, _) = ui.allocate_exact_size(vec2(56.0, 56.0), Sense::hover());
-        let p = ui.painter();
-        // Same artwork as the app icon: a green ring on a white rounded square.
-        let [r, g, b] = crate::ICON_GREEN;
-        let outline = egui::Stroke::new(1.0_f32, mix(theme.surface, theme.muted, 0.5));
-        p.rect_filled(rect, 12.5, Color32::WHITE);
-        p.rect_stroke(rect, 12.5, outline, egui::StrokeKind::Outside);
-        p.circle_stroke(rect.center(), 16.5, egui::Stroke::new(5.0_f32, Color32::from_rgb(r, g, b)));
+        let icon = state.icon.get_or_insert_with(|| {
+            // Mipmaps keep the detailed artwork smooth when drawn small.
+            let options = egui::TextureOptions {
+                mipmap_mode: Some(egui::TextureFilter::Linear),
+                ..egui::TextureOptions::LINEAR
+            };
+            ui.ctx().load_texture("app-icon", crate::icon::about_image(), options)
+        });
+        ui.add(egui::Image::new(&*icon).fit_to_exact_size(vec2(72.0, 72.0)));
         ui.add_space(4.0);
         ui.label(RichText::new("Pomodoro").size(20.0));
         ui.label(
@@ -207,6 +210,7 @@ pub fn about(ui: &mut Ui, theme: &Theme) {
         let p = ui.painter();
         let pill = egui::Rect::from_min_size(rect.min + vec2(0.0, 3.0), vec2(84.0, 20.0));
         p.rect_filled(pill, 5.0, mix(theme.surface, theme.muted, 0.25));
+        ink_outline(p, pill, 5.0, theme);
         p.text(pill.center(), Align2::CENTER_CENTER, key, FontId::proportional(12.0), theme.text);
         p.text(
             rect.left_center() + vec2(94.0, 0.0),

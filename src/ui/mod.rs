@@ -1,6 +1,7 @@
 //! The window: custom title bar, the timer card and the settings drawer.
 
 mod fonts;
+mod pencil;
 mod settings;
 mod stats;
 mod themes;
@@ -183,7 +184,7 @@ impl App {
                             core.sync_request = Some(job);
                         }
                     }
-                    Tab::About => settings::about(ui, theme),
+                    Tab::About => settings::about(ui, &mut self.settings, theme),
                 }
                 ui.add_space(14.0);
             });
@@ -239,7 +240,10 @@ impl App {
         ] {
             w.bg_fill = fill;
             w.weak_bg_fill = fill;
-            w.bg_stroke = Stroke::NONE;
+            w.bg_stroke = match theme.ink() {
+                Some(ink) => Stroke::new(1.3_f32, ink),
+                None => Stroke::NONE,
+            };
             w.fg_stroke = Stroke::new(1.2_f32, theme.text);
             w.corner_radius = CornerRadius::same(6);
             w.expansion = 0.0;

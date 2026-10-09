@@ -14,7 +14,7 @@ dirs = "6"
 rodio = { version = "0.20", default-features = false }
 notify-rust = "4"
 ureq = { version = "2", features = ["json"] }
-image = { version = "0.25", default-features = false, features = ["png"] }
+image = { version = "0.25", default-features = false, features = ["png", "webp"] }
 raw-window-handle = "0.6"
 ab_glyph = "0.2"
 

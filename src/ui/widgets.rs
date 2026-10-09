@@ -200,6 +200,9 @@ pub fn slider(ui: &mut Ui, value: &mut u32, min: u32, max: u32, color: Color32, 
     p.line_segment([pos2(rect.left(), y), pos2(x, y)], Stroke::new(3.0_f32, color));
     let r = if resp.hovered() || resp.dragged() { knob_r + 1.0 } else { knob_r };
     p.circle_filled(pos2(x, y), r, color);
+    if let Some(ink) = theme.ink() {
+        p.circle_stroke(pos2(x, y), r, Stroke::new(1.5_f32, ink));
+    }
     resp.on_hover_cursor(egui::CursorIcon::PointingHand);
     released
 }
@@ -224,6 +227,10 @@ pub fn toggle_row(ui: &mut Ui, label: &str, on: &mut bool, theme: &Theme) -> boo
     p.rect_filled(sw, 9.0, mix(off, theme.accent, how_on));
     let knob_x = egui::lerp((sw.left() + 9.0)..=(sw.right() - 9.0), how_on);
     p.circle_filled(pos2(knob_x, sw.center().y), 6.5, theme.surface);
+    if let Some(ink) = theme.ink() {
+        p.rect_stroke(sw, 9.0, Stroke::new(1.4_f32, ink), egui::StrokeKind::Outside);
+        p.circle_stroke(pos2(knob_x, sw.center().y), 6.5, Stroke::new(1.2_f32, ink));
+    }
     let clicked = resp.clicked();
     resp.on_hover_cursor(egui::CursorIcon::PointingHand);
     clicked
@@ -246,4 +253,11 @@ pub fn heading(ui: &mut Ui, text: &str, theme: &Theme) {
         ui.label(egui::RichText::new(text).size(16.0).color(theme.text));
     });
     ui.add_space(6.0);
+}
+
+/// Ink outline around a filled shape, for themes in the pencil art style.
+pub fn ink_outline(p: &Painter, rect: Rect, radius: f32, theme: &Theme) {
+    if let Some(ink) = theme.ink() {
+        p.rect_stroke(rect, radius, Stroke::new(1.3_f32, ink), egui::StrokeKind::Outside);
+    }
 }

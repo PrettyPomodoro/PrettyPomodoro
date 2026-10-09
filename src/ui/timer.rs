@@ -1,5 +1,6 @@
 //! The main card: progress ring, countdown and transport controls.
 
+use super::pencil;
 use super::widgets::{icon_button, paint_icon, spaced_text, Icon};
 use crate::core::Core;
 use crate::theme::{mix, Theme};
@@ -34,10 +35,30 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
             p.add(Shape::line(points, stroke));
         }
     };
-    ring(1.0, mix(theme.background, theme.muted, 0.3));
     let left = core.fraction_left(now);
-    if left > 0.0 {
-        ring(left, color);
+    if let Some(ink) = theme.ink() {
+        // Pencil art: the ring is an inked tomato. The spent part of the band
+        // is cross-hatched, the rest is shaded with a few darker strokes.
+        let (top, band) = (-TAU / 4.0, (radius - 4.5, radius + 4.5));
+        let spent_end = top + TAU * (1.0 - left);
+        pencil::shadow(&p, pos2(cx, center.y + radius + 8.5), 170.0, ink, 11);
+        ring(1.0, mix(theme.background, theme.muted, 0.55));
+        let hatch = Stroke::new(1.0_f32, ink.gamma_multiply(0.75));
+        pencil::hatch_band(&p, center, band, (top, spent_end), 0.055, 0.07, hatch, 3);
+        pencil::hatch_band(&p, center, band, (top, spent_end), 0.11, -0.07, hatch, 4);
+        if left > 0.0 {
+            ring(left, color);
+            let shade = Stroke::new(1.0_f32, mix(color, ink, 0.45));
+            pencil::hatch_band(&p, center, band, (spent_end, top + TAU), 0.09, 0.05, shade, 5);
+        }
+        pencil::ink_circle(&p, center, radius + 5.0, 1.8, ink, 1);
+        pencil::ink_circle(&p, center, radius - 5.0, 1.5, ink, 2);
+        pencil::calyx(&p, pos2(cx, center.y - radius - 3.0), theme.short_break, ink);
+    } else {
+        ring(1.0, mix(theme.background, theme.muted, 0.3));
+        if left > 0.0 {
+            ring(left, color);
+        }
     }
 
     // Countdown, one glyph per fixed-width cell so the digits don't jitter.
@@ -66,7 +87,15 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         .interact(play, ui.id().with("play"), Sense::click())
         .on_hover_cursor(egui::CursorIcon::PointingHand);
     let outline = if resp.hovered() { theme.text } else { theme.muted };
-    p.circle_stroke(play.center(), 27.0, Stroke::new(1.5_f32, outline));
+    match theme.ink() {
+        Some(ink) => {
+            p.circle_filled(play.center(), 27.0, mix(theme.background, theme.text, if resp.hovered() { 0.22 } else { 0.1 }));
+            pencil::ink_circle(&p, play.center(), 27.0, 1.8, ink, 7);
+        }
+        None => {
+            p.circle_stroke(play.center(), 27.0, Stroke::new(1.5_f32, outline));
+        }
+    }
     let icon = if core.running { Icon::Pause } else { Icon::Play };
     paint_icon(&p, play.center(), icon, theme.text);
     let space = ui.input(|i| i.key_pressed(egui::Key::Space)) && !ui.ctx().wants_keyboard_input();

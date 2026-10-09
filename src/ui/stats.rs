@@ -1,7 +1,7 @@
 //! Activity page: summary tiles and a contribution-style heat map of
 //! completed focus sessions, shaded from the theme's colours.
 
-use super::widgets::{heading, icon_button, Icon};
+use super::widgets::{ink_outline, heading, icon_button, Icon};
 use crate::core::Core;
 use crate::theme::{mix, Theme};
 use chrono::{Datelike, Days, NaiveDate};
@@ -53,6 +53,7 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         let tile = Rect::from_min_size(row.min + vec2(i as f32 * (w + gap), 0.0), vec2(w, row.height()));
         let p = ui.painter();
         p.rect_filled(tile, 7.0, mix(theme.surface, theme.muted, 0.16));
+        ink_outline(p, tile, 7.0, theme);
         p.text(tile.center() - vec2(0.0, 8.0), Align2::CENTER_CENTER, value, FontId::proportional(21.0), theme.text);
         p.text(tile.center() + vec2(0.0, 15.0), Align2::CENTER_CENTER, label, FontId::proportional(10.5), theme.text_dim);
     }
@@ -141,6 +142,7 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
             );
             let stat = history.day(day);
             ui.painter().rect_filled(rect, 3.0, shade(theme, stat.sessions));
+            ink_outline(ui.painter(), rect.shrink(0.5), 3.0, theme);
             if day == today {
                 ui.painter().rect_stroke(rect, 3.0, Stroke::new(1.0_f32, theme.text), egui::StrokeKind::Outside);
             }
@@ -159,7 +161,9 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     x = more.left() - 5.0;
     for sessions in [8, 5, 3, 1, 0] {
         x -= CELL;
-        p.rect_filled(Rect::from_min_size(pos2(x, y - CELL / 2.0), vec2(CELL, CELL)), 3.0, shade(theme, sessions));
+        let cell = Rect::from_min_size(pos2(x, y - CELL / 2.0), vec2(CELL, CELL));
+        p.rect_filled(cell, 3.0, shade(theme, sessions));
+        ink_outline(p, cell.shrink(0.5), 3.0, theme);
         x -= STEP - CELL;
     }
     p.text(pos2(x - 2.0, y), Align2::RIGHT_CENTER, "Less", small, theme.text_dim);
