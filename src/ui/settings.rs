@@ -1,7 +1,7 @@
 //! Settings drawer pages: timer durations, options, cloud sync and about.
 
 use super::widgets::{heading, slider, text_link, toggle_row};
-use crate::core::{Core, SyncState};
+use crate::core::{Core, SyncJob, SyncState};
 use crate::theme::{mix, Theme};
 use eframe::egui::{self, vec2, Align2, Color32, FontId, RichText, Sense, Ui};
 
@@ -97,8 +97,8 @@ pub fn options(ui: &mut Ui, core: &mut Core, theme: &Theme) {
     }
 }
 
-/// Returns true when a sync should be started.
-pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> bool {
+/// Returns the background job the user asked for, if any.
+pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
     heading(ui, "Cloud Sync", theme);
     let dim = |s: &str| RichText::new(s).size(12.5).color(theme.text_dim);
 
@@ -131,25 +131,38 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> b
     ui.add_space(6.0);
 
     ui.label(RichText::new("Gist ID").size(14.0));
-    ui.add(
-        egui::TextEdit::singleline(&mut cfg.gist_id)
-            .hint_text("Found or created on first sync")
-            .margin(vec2(8.0, 6.0))
-            .desired_width(f32::INFINITY),
-    );
+    let mut job = None;
+    let busy = core.sync_state == SyncState::Running;
+    ui.horizontal(|ui| {
+        let w = ui.available_width() - 62.0;
+        ui.add(
+            egui::TextEdit::singleline(&mut cfg.gist_id)
+                .hint_text("Found or created on first sync")
+                .margin(vec2(8.0, 6.0))
+                .desired_width(w - 16.0),
+        );
+        let find = ui
+            .add_enabled_ui(!busy, |ui| ui.add_sized([54.0, 28.0], egui::Button::new("Find")))
+            .inner
+            .on_hover_text("Look up the gist for this token and fill in its ID");
+        if find.clicked() {
+            job = Some(SyncJob::FindGist);
+        }
+    });
     ui.add_space(2.0);
     toggle_row(ui, "Sync Automatically", &mut cfg.auto, theme);
     ui.label(dim("On launch and after every completed focus round."));
     ui.add_space(8.0);
 
-    let running = core.sync_state == SyncState::Running;
-    let mut start = false;
+    let running = busy;
     ui.vertical_centered(|ui| {
         let label = if running { "Syncing…" } else { "Sync Now" };
         let button = egui::Button::new(RichText::new(label).size(14.0).color(theme.surface))
             .fill(if running { theme.muted } else { theme.accent })
             .min_size(vec2(140.0, 32.0));
-        start = ui.add_enabled(!running, button).clicked();
+        if ui.add_enabled(!running, button).clicked() {
+            job = Some(SyncJob::Sync);
+        }
 
         ui.add_space(4.0);
         match &core.sync_state {
@@ -165,7 +178,7 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> b
             ui.label(dim(&format!("Last synced {when}")));
         }
     });
-    start
+    job
 }
 
 pub fn about(ui: &mut Ui, theme: &Theme) {

@@ -150,8 +150,13 @@ pub fn paint_icon(p: &Painter, c: Pos2, icon: Icon, color: Color32) {
             line((-3.5, 7.0), (3.5, 7.0));
         }
         Icon::Restart => {
-            arc(c, 7.0, -TAU * 0.2, TAU * 0.6);
-            poly(&[(-8.5, -7.5), (-2.5, -6.5), (-7.5, -2.0)]);
+            // Clockwise arc with the arrow head at its end, pointing along the travel.
+            let end = TAU * 0.6;
+            arc(c, 7.0, -TAU * 0.2, end);
+            let (out, along) = (vec2(end.cos(), end.sin()), vec2(-end.sin(), end.cos()));
+            let base = 7.0 * out - 0.5 * along;
+            let pts = [base + 6.0 * along, base + 3.8 * out, base - 3.8 * out];
+            poly(&pts.map(|v| (v.x, v.y)));
         }
     }
 }

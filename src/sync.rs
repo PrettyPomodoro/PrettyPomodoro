@@ -3,7 +3,7 @@
 //! scope; the gist is found or created automatically.
 
 use crate::config::{self, History};
-use crate::core::{lock, Shared, SyncState};
+use crate::core::{lock, Shared, SyncJob, SyncState};
 use eframe::egui;
 use serde_json::{json, Value};
 
@@ -11,8 +11,11 @@ const API: &str = "https://api.github.com";
 const FILE: &str = "pomodoro-history.json";
 const DESCRIPTION: &str = "Pomodoro focus history (synced by the Pomodoro app)";
 
-/// Run a sync in the background unless one is already in flight.
-pub fn spawn(shared: Shared, ctx: egui::Context) {
+/// Run a job in the background unless one is already in flight.
+///
+/// Locks the shared state, so it must not be called while the caller holds
+/// that lock; the UI queues jobs through `Core::sync_request` instead.
+pub fn spawn(shared: Shared, ctx: egui::Context, job: SyncJob) {
     let (token, gist_id, local) = {
         let mut core = lock(&shared);
         if core.sync_state == SyncState::Running {
@@ -31,23 +34,34 @@ pub fn spawn(shared: Shared, ctx: egui::Context) {
     };
 
     std::thread::spawn(move || {
-        let result = run(&token, &gist_id, &local);
-        let mut core = lock(&shared);
-        match result {
-            Ok((gist_id, merged)) => {
-                // Sessions may have completed while we were talking to GitHub.
-                core.history.merge(&merged);
-                config::save_history(&core.history);
-                core.cfg.sync.gist_id = gist_id;
-                let now = chrono::Local::now();
-                core.cfg.sync.last_sync = Some(now.format("%Y-%m-%d %H:%M").to_string());
-                config::save_config(&core.cfg);
-                let total = core.history.total().sessions;
-                core.sync_state = SyncState::Done(format!("Synced · {total} sessions in total"));
-            }
-            Err(e) => core.sync_state = SyncState::Failed(e),
-        }
-        drop(core);
+        let state = match job {
+            SyncJob::Sync => match run(&token, &gist_id, &local) {
+                Ok((gist_id, merged)) => {
+                    let mut core = lock(&shared);
+                    // Sessions may have completed while we were talking to GitHub.
+                    core.history.merge(&merged);
+                    config::save_history(&core.history);
+                    core.cfg.sync.gist_id = gist_id;
+                    let now = chrono::Local::now();
+                    core.cfg.sync.last_sync = Some(now.format("%Y-%m-%d %H:%M").to_string());
+                    config::save_config(&core.cfg);
+                    let total = core.history.total().sessions;
+                    SyncState::Done(format!("Synced · {total} sessions in total"))
+                }
+                Err(e) => SyncState::Failed(e),
+            },
+            SyncJob::FindGist => match find_gist(&token) {
+                Ok(Some(id)) => {
+                    let mut core = lock(&shared);
+                    core.cfg.sync.gist_id = id;
+                    config::save_config(&core.cfg);
+                    SyncState::Done("Found your sync gist.".into())
+                }
+                Ok(None) => SyncState::Done("No sync gist yet — Sync Now will create one.".into()),
+                Err(e) => SyncState::Failed(e),
+            },
+        };
+        lock(&shared).sync_state = state;
         ctx.request_repaint();
     });
 }
@@ -141,6 +155,16 @@ fn send(method: &str, url: &str, token: &str, body: Option<Value>) -> Result<Val
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn missing_token_fails_without_blocking() {
+        let core = crate::core::Core::new(Default::default(), History::default(), None);
+        let shared: Shared = std::sync::Arc::new(std::sync::Mutex::new(core));
+        for job in [SyncJob::Sync, SyncJob::FindGist] {
+            spawn(shared.clone(), egui::Context::default(), job);
+            assert!(matches!(lock(&shared).sync_state, SyncState::Failed(_)));
+        }
+    }
 
     /// Talks to api.github.com; run with `cargo test -- --ignored`.
     #[test]

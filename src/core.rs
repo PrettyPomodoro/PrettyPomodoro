@@ -35,6 +35,14 @@ impl Phase {
 
 }
 
+/// Background work on the cloud copy of the history.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SyncJob {
+    Sync,
+    /// Only look up the gist ID for the current token.
+    FindGist,
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum SyncState {
     Idle,
@@ -59,7 +67,8 @@ pub struct Core {
     last_tick_sec: u64,
 
     pub sync_state: SyncState,
-    pub sync_requested: bool,
+    /// Picked up by the ticker thread, which owns starting sync jobs.
+    pub sync_request: Option<SyncJob>,
 
     audio: Option<Audio>,
     notifications: bool,
@@ -86,7 +95,7 @@ impl Core {
             fresh: true,
             last_tick_sec: 0,
             sync_state: SyncState::Idle,
-            sync_requested: false,
+            sync_request: None,
             notifications: audio.is_some(),
             persist: audio.is_some(),
             audio,
@@ -222,7 +231,7 @@ impl Core {
                 config::save_history(&self.history);
             }
             if self.cfg.sync.auto && !self.cfg.sync.token.is_empty() {
-                self.sync_requested = true;
+                self.sync_request = Some(SyncJob::Sync);
             }
             self.play(Sound::FocusEnd);
             self.advance(self.cfg.auto_start_break, now);
@@ -288,15 +297,15 @@ impl Core {
 pub fn spawn_ticker(shared: Shared, ctx: egui::Context) {
     std::thread::spawn(move || loop {
         std::thread::sleep(Duration::from_millis(100));
-        let (running, sync) = {
+        let (running, job) = {
             let mut core = lock(&shared);
             core.tick(Instant::now());
-            (core.running, std::mem::take(&mut core.sync_requested))
+            (core.running, core.sync_request.take())
         };
-        if sync {
-            crate::sync::spawn(shared.clone(), ctx.clone());
+        if let Some(job) = job {
+            crate::sync::spawn(shared.clone(), ctx.clone(), job);
         }
-        if running {
+        if running || job.is_some() {
             ctx.request_repaint();
         }
     });

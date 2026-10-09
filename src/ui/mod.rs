@@ -72,7 +72,7 @@ impl App {
             if let Some(capture) = &capture {
                 capture.prepare(&mut core);
             } else if core.cfg.sync.auto && !core.cfg.sync.token.is_empty() {
-                core.sync_requested = true;
+                core.sync_request = Some(crate::core::SyncJob::Sync);
             }
             core.cfg.clone()
         };
@@ -168,7 +168,7 @@ impl App {
         egui::ScrollArea::vertical()
             .id_salt(self.tab as u8)
             .auto_shrink(false)
-            .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::VisibleWhenNeeded)
+            .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
             .show(&mut child, |ui| {
                 ui.add_space(12.0);
                 match self.tab {
@@ -177,8 +177,8 @@ impl App {
                     Tab::Themes => themes::show(ui, &mut self.themes, core, theme),
                     Tab::Stats => stats::show(ui, &mut self.stats, core, theme),
                     Tab::Sync => {
-                        if settings::sync(ui, &mut self.settings, core, theme) {
-                            crate::sync::spawn(self.shared.clone(), ui.ctx().clone());
+                        if let Some(job) = settings::sync(ui, &mut self.settings, core, theme) {
+                            core.sync_request = Some(job);
                         }
                     }
                     Tab::About => settings::about(ui, theme),

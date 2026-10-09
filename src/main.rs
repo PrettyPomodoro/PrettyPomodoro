@@ -49,9 +49,10 @@ fn main() -> eframe::Result {
     )
 }
 
-/// App icon drawn in code: a red timer ring on a dark rounded square.
+/// App icon drawn in code: a green timer ring on a white rounded square.
 fn app_icon() -> egui::IconData {
     const N: u32 = 256;
+    const GREEN: [f32; 3] = [38.0, 191.0, 115.0];
     let c = (N as f32 - 1.0) / 2.0;
     let cover = |edge: f32| (0.5 - edge).clamp(0.0, 1.0);
     let mut rgba = Vec::with_capacity((N * N * 4) as usize);
@@ -62,16 +63,9 @@ fn app_icon() -> egui::IconData {
             let (half, radius) = (112.0, 50.0);
             let (qx, qy) = ((dx - half + radius).max(0.0), (dy - half + radius).max(0.0));
             let square = cover((qx * qx + qy * qy).sqrt() - radius);
-            let d = (dx * dx + dy * dy).sqrt();
-            let ring = cover((d - 66.0).abs() - 10.0);
-            let dot = cover(d - 20.0);
-            let mut px = [47.0, 56.0, 75.0];
-            for (amount, color) in [(ring, [255.0, 78.0, 77.0]), (dot, [246.0, 242.0, 235.0])] {
-                for i in 0..3 {
-                    px[i] += (color[i] - px[i]) * amount;
-                }
-            }
-            rgba.extend_from_slice(&[px[0] as u8, px[1] as u8, px[2] as u8, (square * 255.0) as u8]);
+            let ring = cover(((dx * dx + dy * dy).sqrt() - 66.0).abs() - 10.0);
+            let px = GREEN.map(|g| (255.0 + (g - 255.0) * ring) as u8);
+            rgba.extend_from_slice(&[px[0], px[1], px[2], (square * 255.0) as u8]);
         }
     }
     egui::IconData {

@@ -16,19 +16,26 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let center = pos2(cx, rect.top() + 212.0);
     let radius = 108.0;
     let p = ui.painter().clone();
-    p.circle_stroke(center, radius, Stroke::new(9.0_f32, mix(theme.background, theme.muted, 0.3)));
-    let left = core.fraction_left(now);
-    if left >= 0.999 {
-        p.circle_stroke(center, radius, Stroke::new(9.0_f32, color));
-    } else if left > 0.0 {
-        let n = (left * 180.0).ceil().max(2.0) as usize;
-        let points = (0..=n)
+    let ring = |share: f32, color| {
+        let n = (share * 180.0).ceil().max(1.0) as usize;
+        let mut points: Vec<_> = (0..=n)
             .map(|i| {
-                let a = -TAU / 4.0 + TAU * left * i as f32 / n as f32;
+                let a = -TAU / 4.0 + TAU * share * i as f32 / n as f32;
                 center + radius * vec2(a.cos(), a.sin())
             })
             .collect();
-        p.add(Shape::line(points, Stroke::new(9.0_f32, color)));
+        let stroke = Stroke::new(9.0_f32, color);
+        if share >= 1.0 {
+            points.pop();
+            p.add(Shape::closed_line(points, stroke));
+        } else {
+            p.add(Shape::line(points, stroke));
+        }
+    };
+    ring(1.0, mix(theme.background, theme.muted, 0.3));
+    let left = core.fraction_left(now);
+    if left > 0.0 {
+        ring(left, color);
     }
 
     // Countdown, one glyph per fixed-width cell so the digits don't jitter.
