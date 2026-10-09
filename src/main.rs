@@ -49,10 +49,12 @@ fn main() -> eframe::Result {
     )
 }
 
+/// Ring colour of the app icon, shared with the About page.
+pub const ICON_GREEN: [u8; 3] = [38, 191, 115];
+
 /// App icon drawn in code: a green timer ring on a white rounded square.
 fn app_icon() -> egui::IconData {
     const N: u32 = 256;
-    const GREEN: [f32; 3] = [38.0, 191.0, 115.0];
     let c = (N as f32 - 1.0) / 2.0;
     let cover = |edge: f32| (0.5 - edge).clamp(0.0, 1.0);
     let mut rgba = Vec::with_capacity((N * N * 4) as usize);
@@ -64,7 +66,7 @@ fn app_icon() -> egui::IconData {
             let (qx, qy) = ((dx - half + radius).max(0.0), (dy - half + radius).max(0.0));
             let square = cover((qx * qx + qy * qy).sqrt() - radius);
             let ring = cover(((dx * dx + dy * dy).sqrt() - 66.0).abs() - 10.0);
-            let px = GREEN.map(|g| (255.0 + (g - 255.0) * ring) as u8);
+            let px = ICON_GREEN.map(|g| (255.0 + (g as f32 - 255.0) * ring) as u8);
             rgba.extend_from_slice(&[px[0], px[1], px[2], (square * 255.0) as u8]);
         }
     }

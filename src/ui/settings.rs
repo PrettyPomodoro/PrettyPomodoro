@@ -180,8 +180,12 @@ pub fn about(ui: &mut Ui, theme: &Theme) {
     ui.vertical_centered(|ui| {
         let (rect, _) = ui.allocate_exact_size(vec2(56.0, 56.0), Sense::hover());
         let p = ui.painter();
-        p.circle_stroke(rect.center(), 22.0, egui::Stroke::new(5.0_f32, theme.focus));
-        p.circle_filled(rect.center(), 7.0, theme.accent);
+        // Same artwork as the app icon: a green ring on a white rounded square.
+        let [r, g, b] = crate::ICON_GREEN;
+        let outline = egui::Stroke::new(1.0_f32, mix(theme.surface, theme.muted, 0.5));
+        p.rect_filled(rect, 12.5, Color32::WHITE);
+        p.rect_stroke(rect, 12.5, outline, egui::StrokeKind::Outside);
+        p.circle_stroke(rect.center(), 16.5, egui::Stroke::new(5.0_f32, Color32::from_rgb(r, g, b)));
         ui.add_space(4.0);
         ui.label(RichText::new("Pomodoro").size(20.0));
         ui.label(
