@@ -3,8 +3,8 @@
 use super::widgets::{heading, icon_button, Icon};
 use crate::config::Config;
 use crate::core::Core;
-use crate::theme::{builtin_themes, pencil_art_theme, to_hex, Family, Style, Theme};
-use eframe::egui::{self, pos2, vec2, Align2, FontId, Rect, RichText, Sense, Stroke, Ui};
+use crate::theme::{builtin_themes, parse_hex, pencil_art_theme, to_hex, Family, Style, Theme};
+use eframe::egui::{self, pos2, vec2, Align2, Color32, FontId, Rect, RichText, Sense, Stroke, Ui};
 
 #[derive(Default)]
 pub struct State {
@@ -20,10 +20,22 @@ pub struct Editor {
     /// Starting palettes for a new theme, one per style. Switching style swaps
     /// the palette as long as the colours haven't been touched.
     seeds: Option<(Theme, Theme)>,
+    /// Index of the colour row whose choices are open, and its hex text.
+    picking: Option<usize>,
+    hex: String,
     error: Option<String>,
 }
 
 impl State {
+    /// Open the choices of the first colour row in the editor.
+    pub fn pick_first_color(&mut self) {
+        let row = 0;
+        if let Some(editor) = &mut self.editor {
+            editor.picking = Some(row);
+            editor.hex = to_hex(editor.theme.focus);
+        }
+    }
+
     /// Expand the family holding the active theme.
     pub fn expand_current(&mut self, cfg: &Config) {
         self.open = Some(cfg.active_theme().family());
@@ -42,6 +54,8 @@ impl State {
             theme: standard.clone(),
             original: None,
             seeds: Some((standard, pencil)),
+            picking: None,
+            hex: String::new(),
             error: None,
         });
     }
@@ -162,6 +176,8 @@ fn list(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
                         original: Some(t.name.clone()),
                         theme: t.clone(),
                         seeds: None,
+                        picking: None,
+                        hex: String::new(),
                         error: None,
                     });
                 }
@@ -286,7 +302,7 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     ui.label(RichText::new(hint).size(12.0).color(theme.text_dim));
     ui.add_space(6.0);
 
-    let t = &mut editor.theme;
+    let Editor { theme: t, picking, hex, .. } = editor;
     let rows = [
         ("Focus", &mut t.focus),
         ("Short Break", &mut t.short_break),
@@ -298,20 +314,29 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         ("Secondary Text", &mut t.text_dim),
         ("Accent", &mut t.accent),
     ];
-    for (label, color) in rows {
-        ui.horizontal(|ui| {
-            ui.set_height(26.0);
-            ui.label(RichText::new(label).size(14.0));
-            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                ui.color_edit_button_srgba(color);
-                ui.label(
-                    RichText::new(to_hex(*color))
-                        .monospace()
-                        .size(12.0)
-                        .color(theme.text_dim),
-                );
-            });
-        });
+    let outline = Stroke::new(1.0_f32, crate::theme::mix(theme.surface, theme.text, 0.35));
+    for (i, (label, color)) in rows.into_iter().enumerate() {
+        // The whole row toggles its colour choices open and closed.
+        let (rect, resp) = ui.allocate_exact_size(vec2(ui.available_width(), 30.0), Sense::click());
+        let p = ui.painter();
+        p.text(rect.left_center(), Align2::LEFT_CENTER, label, FontId::proportional(14.0), theme.text);
+        let swatch = Rect::from_center_size(rect.right_center() - vec2(20.0, 0.0), vec2(40.0, 20.0));
+        p.rect_filled(swatch, 5.0, *color);
+        p.rect_stroke(swatch, 5.0, outline, egui::StrokeKind::Inside);
+        p.text(
+            swatch.left_center() - vec2(10.0, 0.0),
+            Align2::RIGHT_CENTER,
+            to_hex(*color),
+            FontId::monospace(12.0),
+            theme.text_dim,
+        );
+        if resp.on_hover_cursor(egui::CursorIcon::PointingHand).clicked() {
+            *picking = (*picking != Some(i)).then_some(i);
+            *hex = to_hex(*color);
+        }
+        if *picking == Some(i) {
+            color_choices(ui, color, hex, theme);
+        }
     }
 
     if let Some(error) = &editor.error {
@@ -349,6 +374,64 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         // Land on the list with the current theme's family expanded.
         state.expand_current(&core.cfg);
     }
+}
+
+/// Inline colour choices for one row: a grid of swatches and a hex field.
+fn color_choices(ui: &mut Ui, color: &mut Color32, hex: &mut String, theme: &Theme) {
+    const HUES: [f32; 9] = [0.0, 0.07, 0.13, 0.28, 0.45, 0.55, 0.62, 0.75, 0.9];
+    // (saturation, value) per row, pale to deep; a row of greys follows.
+    const TONES: [(f32, f32); 5] = [(0.25, 1.0), (0.5, 1.0), (0.75, 0.95), (0.85, 0.75), (0.9, 0.5)];
+    let columns = HUES.len();
+    let swatch_at = |row: usize, col: usize| -> Color32 {
+        match TONES.get(row) {
+            Some(&(s, v)) => egui::ecolor::Hsva::new(HUES[col], s, v, 1.0).into(),
+            None => Color32::from_gray((255.0 - 245.0 * col as f32 / (columns - 1) as f32) as u8),
+        }
+    };
+
+    let gap = 4.0;
+    let (rows, cell_h) = (TONES.len() + 1, 22.0);
+    let (area, _) = ui.allocate_exact_size(
+        vec2(ui.available_width(), rows as f32 * (cell_h + gap) - gap),
+        Sense::hover(),
+    );
+    let cell_w = (area.width() - gap * (columns - 1) as f32) / columns as f32;
+    for row in 0..rows {
+        for col in 0..columns {
+            let rect = Rect::from_min_size(
+                area.min + vec2(col as f32 * (cell_w + gap), row as f32 * (cell_h + gap)),
+                vec2(cell_w, cell_h),
+            );
+            let choice = swatch_at(row, col);
+            let resp = ui
+                .interact(rect, ui.id().with(("swatch", row, col)), Sense::click())
+                .on_hover_cursor(egui::CursorIcon::PointingHand);
+            ui.painter().rect_filled(rect, 4.0, choice);
+            if choice == *color || resp.hovered() {
+                ui.painter().rect_stroke(rect, 4.0, Stroke::new(2.0_f32, theme.text), egui::StrokeKind::Inside);
+            }
+            if resp.clicked() {
+                *color = choice;
+                *hex = to_hex(choice);
+            }
+        }
+    }
+
+    ui.horizontal(|ui| {
+        ui.label(RichText::new("Hex").size(13.0).color(theme.text_dim));
+        let field = egui::TextEdit::singleline(hex)
+            .font(FontId::monospace(13.0))
+            .char_limit(7)
+            .margin(vec2(8.0, 5.0))
+            .desired_width(90.0);
+        if ui.add(field).changed() {
+            // Applied as soon as the text is a complete colour.
+            if let Some(parsed) = parse_hex(hex) {
+                *color = parsed;
+            }
+        }
+    });
+    ui.add_space(6.0);
 }
 
 fn validate(editor: &Editor, cfg: &Config) -> Result<(), String> {

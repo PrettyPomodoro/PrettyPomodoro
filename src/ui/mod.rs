@@ -104,7 +104,7 @@ impl App {
         let tab = match page {
             "timer" => Tab::Timer,
             "options" => Tab::Options,
-            "themes" | "family" | "editor" => Tab::Themes,
+            "themes" | "family" | "editor" | "colors" => Tab::Themes,
             "stats" => Tab::Stats,
             "sync" => Tab::Sync,
             "about" => Tab::About,
@@ -115,6 +115,10 @@ impl App {
         let core = lock(&self.shared);
         match page {
             "editor" => self.themes.start_new(&core.cfg),
+            "colors" => {
+                self.themes.start_new(&core.cfg);
+                self.themes.pick_first_color();
+            }
             "family" => self.themes.expand_current(&core.cfg),
             _ => {}
         }
