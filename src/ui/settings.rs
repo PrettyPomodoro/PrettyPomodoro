@@ -102,11 +102,8 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> O
     heading(ui, "Cloud Sync", theme);
     let dim = |s: &str| RichText::new(s).size(12.5).color(theme.text_dim);
 
-    ui.label(dim(
-        "Keep your focus history in a private GitHub Gist — free with any GitHub \
-         account — and share it between your devices.",
-    ));
-    ui.add_space(6.0);
+    ui.vertical_centered(|ui| ui.label(dim("Sync your history for free.")));
+    ui.add_space(8.0);
 
     ui.label(RichText::new("GitHub token").size(14.0));
     let cfg = &mut core.cfg.sync;
@@ -149,10 +146,7 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> O
             job = Some(SyncJob::FindGist);
         }
     });
-    ui.add_space(2.0);
-    toggle_row(ui, "Sync Automatically", &mut cfg.auto, theme);
-    ui.label(dim("On launch and after every completed focus round."));
-    ui.add_space(8.0);
+    ui.add_space(12.0);
 
     let running = busy;
     ui.vertical_centered(|ui| {

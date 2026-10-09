@@ -48,7 +48,7 @@ Sync uses a private GitHub Gist, which is free with any GitHub account.
    access token with only the `gist` scope.
 2. Paste the token and press **Sync Now**. The app finds the gist created by
    another device with the same token, or creates one.
-3. Turn on **Sync Automatically** to sync on launch and after every completed
+3. From then on the app syncs by itself on launch and after every completed
    focus round.
 
 History is stored per device and merged by taking the highest count each

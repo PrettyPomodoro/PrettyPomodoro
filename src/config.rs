@@ -40,7 +40,6 @@ pub struct Config {
 pub struct SyncConfig {
     pub token: String,
     pub gist_id: String,
-    pub auto: bool,
     pub last_sync: Option<String>,
 }
 

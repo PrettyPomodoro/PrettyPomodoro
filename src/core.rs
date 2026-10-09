@@ -230,7 +230,7 @@ impl Core {
             if self.persist {
                 config::save_history(&self.history);
             }
-            if self.cfg.sync.auto && !self.cfg.sync.token.is_empty() {
+            if !self.cfg.sync.token.is_empty() {
                 self.sync_request = Some(SyncJob::Sync);
             }
             self.play(Sound::FocusEnd);

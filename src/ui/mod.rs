@@ -71,7 +71,7 @@ impl App {
             let mut core = lock(&shared);
             if let Some(capture) = &capture {
                 capture.prepare(&mut core);
-            } else if core.cfg.sync.auto && !core.cfg.sync.token.is_empty() {
+            } else if !core.cfg.sync.token.is_empty() {
                 core.sync_request = Some(crate::core::SyncJob::Sync);
             }
             core.cfg.clone()
