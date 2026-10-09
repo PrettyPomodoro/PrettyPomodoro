@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Pomodoro
+Comment=A small, themeable Pomodoro timer
+Exec=pomodoro
+Icon=pomodoro
+Categories=Utility;Office;
+Terminal=false
