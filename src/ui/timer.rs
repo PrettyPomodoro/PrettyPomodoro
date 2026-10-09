@@ -12,7 +12,8 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let cx = rect.center().x;
     let color = core.phase.color(theme);
 
-    // Progress ring: a faint full track with the remaining share drawn over it.
+    // Progress ring: a faint full track with the remaining share drawn over it,
+    // emptying clockwise from the top.
     let center = pos2(cx, rect.top() + 212.0);
     let radius = 108.0;
     let p = ui.painter().clone();
@@ -20,7 +21,8 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         let n = (share * 180.0).ceil().max(1.0) as usize;
         let mut points: Vec<_> = (0..=n)
             .map(|i| {
-                let a = -TAU / 4.0 + TAU * share * i as f32 / n as f32;
+                // The arc always ends at 12 o'clock; its start sweeps clockwise as time passes.
+                let a = -TAU / 4.0 + TAU * (1.0 - share) + TAU * share * i as f32 / n as f32;
                 center + radius * vec2(a.cos(), a.sin())
             })
             .collect();
