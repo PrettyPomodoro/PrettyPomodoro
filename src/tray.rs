@@ -97,7 +97,7 @@ mod imp {
     }
 
     pub fn create(shared: Shared, window: NativeWindow, ctx: egui::Context) -> Option<Tray> {
-        let show = MenuItem::new("Show Pomodoro", true, None);
+        let show = MenuItem::new("Show PrettyPomodoro", true, None);
         let toggle = MenuItem::new("Start / Pause", true, None);
         let skip = MenuItem::new("Skip Round", true, None);
         let quit = MenuItem::new("Quit", true, None);
@@ -137,7 +137,7 @@ mod imp {
 
         let icon = TrayIconBuilder::new()
             .with_menu(Box::new(menu))
-            .with_tooltip("Pomodoro")
+            .with_tooltip("PrettyPomodoro")
             .with_icon(icon()?)
             .with_icon_as_template(true)
             .build()

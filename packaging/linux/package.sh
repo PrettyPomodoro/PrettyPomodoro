@@ -5,21 +5,21 @@ cd "$(dirname "$0")/../.."
 
 cargo build --release --locked
 
-name=Pomodoro-linux-x64
+name=PrettyPomodoro-linux-x64
 rm -rf "dist/$name" "dist/$name.tar.gz"
 mkdir -p "dist/$name"
-cp target/release/pomodoro "dist/$name/pomodoro"
-cp assets/icon.png "dist/$name/pomodoro.png"
-cp packaging/linux/pomodoro.desktop "dist/$name/pomodoro.desktop"
+cp target/release/prettypomodoro "dist/$name/prettypomodoro"
+cp assets/icon.png "dist/$name/prettypomodoro.png"
+cp packaging/linux/prettypomodoro.desktop "dist/$name/prettypomodoro.desktop"
 cat > "dist/$name/install.sh" <<'INSTALL'
 #!/usr/bin/env bash
-# Installs Pomodoro for the current user.
+# Installs PrettyPomodoro for the current user.
 set -euo pipefail
 cd "$(dirname "$0")"
-install -Dm755 pomodoro "$HOME/.local/bin/pomodoro"
-install -Dm644 pomodoro.png "$HOME/.local/share/icons/hicolor/256x256/apps/pomodoro.png"
-install -Dm644 pomodoro.desktop "$HOME/.local/share/applications/pomodoro.desktop"
-echo "Installed to ~/.local/bin/pomodoro"
+install -Dm755 prettypomodoro "$HOME/.local/bin/prettypomodoro"
+install -Dm644 prettypomodoro.png "$HOME/.local/share/icons/hicolor/256x256/apps/prettypomodoro.png"
+install -Dm644 prettypomodoro.desktop "$HOME/.local/share/applications/prettypomodoro.desktop"
+echo "Installed to ~/.local/bin/prettypomodoro"
 INSTALL
 chmod +x "dist/$name/install.sh"
 tar -C dist -czf "dist/$name.tar.gz" "$name"

@@ -1,4 +1,4 @@
-# Pomodoro
+# PrettyPomodoro
 
 A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
@@ -35,23 +35,23 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 ## Download
 
-[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon%20%2B%20Intel)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/Pomodoro-macos-universal.zip)
-[![Download for Windows](https://img.shields.io/badge/Download-Windows%20x64-0078D4?style=for-the-badge)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/Pomodoro-windows-x64.zip)
-[![Download for Linux](https://img.shields.io/badge/Download-Linux%20x64-E95420?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/Pomodoro-linux-x64.tar.gz)
+[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon%20%2B%20Intel)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/PrettyPomodoro-macos-universal.zip)
+[![Download for Windows](https://img.shields.io/badge/Download-Windows%20x64-0078D4?style=for-the-badge)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/PrettyPomodoro-windows-x64.zip)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux%20x64-E95420?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/PrettyPomodoro-linux-x64.tar.gz)
 
 The buttons point at the latest published release and start working once the
 first release is published.
 
-- **macOS**: unzip and move `Pomodoro.app` to Applications. The app is not
+- **macOS**: unzip and move `PrettyPomodoro.app` to Applications. The app is not
   notarized, so the first time right-click it and choose **Open**.
-- **Windows**: unzip and run `Pomodoro.exe`. SmartScreen may ask for
+- **Windows**: unzip and run `PrettyPomodoro.exe`. SmartScreen may ask for
   confirmation because the executable is unsigned.
-- **Linux**: extract the archive and run `./install.sh`, or run `./pomodoro`
+- **Linux**: extract the archive and run `./install.sh`, or run `./prettypomodoro`
   directly. Sound needs ALSA (`libasound2`).
 
 ## Small and fast
 
-Pomodoro is a single native Rust executable. It does not bundle a browser
+PrettyPomodoro is a single native Rust executable. It does not bundle a browser
 engine or a language runtime.
 
 | | Measured |
@@ -76,7 +76,7 @@ timer uses no CPU.
 cargo run --release
 ```
 
-On macOS, build `Pomodoro.app`, install it into `/Applications` and open it with:
+On macOS, build `PrettyPomodoro.app`, install it into `/Applications` and open it with:
 
 ```bash
 packaging/macos/install.sh

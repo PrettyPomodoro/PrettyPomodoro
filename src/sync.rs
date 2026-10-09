@@ -9,7 +9,7 @@ use serde_json::{json, Value};
 
 const API: &str = "https://api.github.com";
 const FILE: &str = "pomodoro-history.json";
-const DESCRIPTION: &str = "Pomodoro focus history (synced by the Pomodoro app)";
+const DESCRIPTION: &str = "Pomodoro focus history (synced by PrettyPomodoro)";
 
 /// Run a job in the background unless one is already in flight.
 ///

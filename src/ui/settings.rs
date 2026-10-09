@@ -125,7 +125,7 @@ pub fn sync(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) -> O
     });
     ui.hyperlink_to(
         RichText::new("Create a token with the “gist” scope").size(12.5),
-        "https://github.com/settings/tokens/new?scopes=gist&description=Pomodoro%20Sync",
+        "https://github.com/settings/tokens/new?scopes=gist&description=PrettyPomodoro%20Sync",
     );
     ui.add_space(6.0);
 
@@ -190,7 +190,7 @@ pub fn about(ui: &mut Ui, state: &mut State, theme: &Theme) {
         });
         ui.add(egui::Image::new(&*icon).fit_to_exact_size(vec2(72.0, 72.0)));
         ui.add_space(4.0);
-        ui.label(RichText::new("Pomodoro").size(20.0));
+        ui.label(RichText::new("PrettyPomodoro").size(20.0));
         ui.label(
             RichText::new(format!("Version {}", env!("CARGO_PKG_VERSION")))
                 .size(12.5)

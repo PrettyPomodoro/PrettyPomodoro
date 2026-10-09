@@ -22,7 +22,7 @@ fn main() -> eframe::Result {
     let shared = Arc::new(Mutex::new(core));
 
     let mut viewport = egui::ViewportBuilder::default()
-        .with_title("Pomodoro")
+        .with_title("PrettyPomodoro")
         .with_inner_size(ui::WINDOW_SIZE)
         .with_resizable(false)
         .with_maximize_button(false)
@@ -44,7 +44,7 @@ fn main() -> eframe::Result {
         ..Default::default()
     };
     eframe::run_native(
-        "Pomodoro",
+        "PrettyPomodoro",
         options,
         Box::new(move |cc| Ok(Box::new(ui::App::new(cc, shared)))),
     )

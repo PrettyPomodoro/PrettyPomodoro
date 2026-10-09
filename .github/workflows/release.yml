@@ -35,15 +35,15 @@ jobs:
           - name: macOS (universal)
             os: macos-latest
             targets: aarch64-apple-darwin,x86_64-apple-darwin
-            artifact: Pomodoro-macos-universal.zip
+            artifact: PrettyPomodoro-macos-universal.zip
           - name: Windows (x64)
             os: windows-latest
             targets: ""
-            artifact: Pomodoro-windows-x64.zip
+            artifact: PrettyPomodoro-windows-x64.zip
           - name: Linux (x64)
             os: ubuntu-22.04
             targets: ""
-            artifact: Pomodoro-linux-x64.tar.gz
+            artifact: PrettyPomodoro-linux-x64.tar.gz
     steps:
       - uses: actions/checkout@v4
 
@@ -76,8 +76,8 @@ jobs:
         run: |
           cargo build --release --locked
           New-Item -ItemType Directory -Force dist | Out-Null
-          Copy-Item target/release/pomodoro.exe dist/Pomodoro.exe
-          Compress-Archive -Force -Path dist/Pomodoro.exe -DestinationPath dist/${{ matrix.artifact }}
+          Copy-Item target/release/prettypomodoro.exe dist/PrettyPomodoro.exe
+          Compress-Archive -Force -Path dist/PrettyPomodoro.exe -DestinationPath dist/${{ matrix.artifact }}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -104,6 +104,6 @@ jobs:
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: |
-            dist/Pomodoro-macos-universal.zip
-            dist/Pomodoro-windows-x64.zip
-            dist/Pomodoro-linux-x64.tar.gz
+            dist/PrettyPomodoro-macos-universal.zip
+            dist/PrettyPomodoro-windows-x64.zip
+            dist/PrettyPomodoro-linux-x64.tar.gz

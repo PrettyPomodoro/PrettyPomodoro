@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds a universal (Apple Silicon + Intel) Pomodoro.app and zips it into dist/.
+# Builds a universal (Apple Silicon + Intel) PrettyPomodoro.app and zips it into dist/.
 # With --native it builds for this Mac's architecture only, which is faster.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
@@ -13,13 +13,13 @@ fi
 binaries=()
 for target in "${targets[@]}"; do
     cargo build --release --locked --target "$target"
-    binaries+=("target/$target/release/pomodoro")
+    binaries+=("target/$target/release/prettypomodoro")
 done
 
-app=dist/Pomodoro.app
-rm -rf dist/Pomodoro.app dist/Pomodoro-macos-universal.zip
+app=dist/PrettyPomodoro.app
+rm -rf dist/PrettyPomodoro.app dist/PrettyPomodoro-macos-universal.zip
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
-lipo -create -output "$app/Contents/MacOS/pomodoro" "${binaries[@]}"
+lipo -create -output "$app/Contents/MacOS/prettypomodoro" "${binaries[@]}"
 sed "s/@VERSION@/$version/g" packaging/macos/Info.plist > "$app/Contents/Info.plist"
 
 # AppIcon.icns from the padded icon, at every size the Dock and Finder ask for.
@@ -36,6 +36,6 @@ iconutil -c icns -o "$app/Contents/Resources/AppIcon.icns" "$iconset"
 codesign --force --deep --sign - "$app"
 
 if [[ ${#targets[@]} -gt 1 ]]; then
-    ditto -c -k --keepParent "$app" dist/Pomodoro-macos-universal.zip
-    echo "dist/Pomodoro-macos-universal.zip"
+    ditto -c -k --keepParent "$app" dist/PrettyPomodoro-macos-universal.zip
+    echo "dist/PrettyPomodoro-macos-universal.zip"
 fi

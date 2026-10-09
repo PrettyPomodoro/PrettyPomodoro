@@ -1,6 +1,6 @@
 //! Developer aid: render one page with demo data to a PNG and exit.
 //!
-//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Nord"] pomodoro`
+//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Nord"] prettypomodoro`
 //!
 //! Pages: `running`, `timer`, `options`, `themes`, `editor`, `stats`, `sync`, `about`.
 //!

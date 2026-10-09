@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>Pomodoro</string>
+    <string>PrettyPomodoro</string>
     <key>CFBundleDisplayName</key>
-    <string>Pomodoro</string>
+    <string>PrettyPomodoro</string>
     <key>CFBundleIdentifier</key>
-    <string>io.github.ahmed-abd-elwahed.pomodoro</string>
+    <string>io.github.ahmed-abd-elwahed.prettypomodoro</string>
     <key>CFBundleExecutable</key>
-    <string>pomodoro</string>
+    <string>prettypomodoro</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundlePackageType</key>

@@ -1,5 +1,5 @@
 [package]
-name = "pomodoro"
+name = "prettypomodoro"
 version = "0.1.0"
 edition = "2021"
 description = "A small, themeable Pomodoro timer written in pure Rust"

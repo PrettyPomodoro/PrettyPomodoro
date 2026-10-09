@@ -134,7 +134,7 @@ impl App {
         ui.painter().text(
             rect.center(),
             Align2::CENTER_CENTER,
-            "Pomodoro",
+            "PrettyPomodoro",
             FontId::proportional(16.0),
             theme.text_dim,
         );

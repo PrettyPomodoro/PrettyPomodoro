@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Pomodoro
+Name=PrettyPomodoro
 Comment=A small, themeable Pomodoro timer
-Exec=pomodoro
-Icon=pomodoro
+Exec=prettypomodoro
+Icon=prettypomodoro
 Categories=Utility;Office;
 Terminal=false

@@ -285,7 +285,7 @@ impl Core {
         // Showing a notification can block on the OS; keep it off the timer thread.
         std::thread::spawn(move || {
             let _ = notify_rust::Notification::new()
-                .appname("Pomodoro")
+                .appname("PrettyPomodoro")
                 .summary(&title)
                 .body(&body)
                 .show();
