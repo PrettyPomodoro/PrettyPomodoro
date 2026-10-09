@@ -83,18 +83,19 @@ pub fn shadow(p: &Painter, center: Pos2, width: f32, color: Color32, seed: u32) 
     }
 }
 
-/// The leafy top of a tomato, sitting on `top`.
-pub fn calyx(p: &Painter, top: Pos2, green: Color32, ink: Color32) {
+/// The leafy top of a tomato, sitting on `top`. `turn` rotates it clockwise
+/// from its upright pose, in radians.
+pub fn calyx(p: &Painter, top: Pos2, turn: f32, green: Color32, ink: Color32) {
     let outline = Stroke::new(1.3_f32, ink);
     // (direction in degrees, length); screen y points down.
     let leaves = [(197.0_f32, 31.0_f32), (158.0, 23.0), (-17.0, 31.0), (22.0, 23.0), (95.0, 15.0)];
     for (deg, len) in leaves {
-        let along = dir(deg.to_radians());
+        let along = dir(deg.to_radians() + turn);
         let across = vec2(-along.y, along.x) * 5.0;
         let points = vec![top - across, top + along * len * 0.45 - across * 0.75, top + along * len, top + along * len * 0.4 + across * 0.9, top + across];
         p.add(Shape::convex_polygon(points, green, outline));
     }
-    let up = dir((-72.0_f32).to_radians());
+    let up = dir((-72.0_f32).to_radians() + turn);
     let across = vec2(-up.y, up.x) * 2.6;
     let stem = vec![top - across, top + up * 17.0 - across * 0.8, top + up * 17.0 + across * 0.8, top + across];
     p.add(Shape::convex_polygon(stem, green, outline));

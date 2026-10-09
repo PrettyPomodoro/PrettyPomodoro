@@ -53,7 +53,9 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         }
         pencil::ink_circle(&p, center, radius + 5.0, 1.8, ink, 1);
         pencil::ink_circle(&p, center, radius - 5.0, 1.5, ink, 2);
-        pencil::calyx(&p, pos2(cx, center.y - radius - 3.0), theme.short_break, ink);
+        // The leaves ride on the tip of the remaining arc as it moves clockwise.
+        let tip = center + (radius + 3.0) * vec2(spent_end.cos(), spent_end.sin());
+        pencil::calyx(&p, tip, spent_end - top, theme.short_break, ink);
     } else {
         ring(1.0, mix(theme.background, theme.muted, 0.3));
         if left > 0.0 {
