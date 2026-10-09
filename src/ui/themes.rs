@@ -401,8 +401,8 @@ fn hsv(h: f32, s: f32, v: f32) -> Color32 {
     egui::ecolor::Hsva::new(h, s, v, 1.0).into()
 }
 
-/// Inline colour choices for one row: hue / saturation / brightness sliders,
-/// a grid of quick swatches and a hex field.
+/// Inline colour choices for one row: hue / saturation / brightness sliders
+/// and a hex field.
 fn color_choices(ui: &mut Ui, color: &mut Color32, picker: &mut Picker, theme: &Theme) {
     let [h, s, v] = picker.hsv;
     let sliders: [(&str, Box<dyn Fn(f32) -> Color32>); 3] = [
@@ -417,45 +417,6 @@ fn color_choices(ui: &mut Ui, color: &mut Color32, picker: &mut Picker, theme: &
         }
     }
     ui.add_space(4.0);
-
-    const HUES: [f32; 9] = [0.0, 0.07, 0.13, 0.28, 0.45, 0.55, 0.62, 0.75, 0.9];
-    // (saturation, value) per row, pale to deep; a row of greys follows.
-    const TONES: [(f32, f32); 3] = [(0.3, 1.0), (0.7, 0.95), (0.9, 0.6)];
-    let columns = HUES.len();
-    let swatch_at = |row: usize, col: usize| -> Color32 {
-        match TONES.get(row) {
-            Some(&(s, v)) => hsv(HUES[col], s, v),
-            None => Color32::from_gray((255.0 - 245.0 * col as f32 / (columns - 1) as f32) as u8),
-        }
-    };
-
-    let gap = 4.0;
-    let (rows, cell_h) = (TONES.len() + 1, 20.0);
-    let (area, _) = ui.allocate_exact_size(
-        vec2(ui.available_width(), rows as f32 * (cell_h + gap) - gap),
-        Sense::hover(),
-    );
-    let cell_w = (area.width() - gap * (columns - 1) as f32) / columns as f32;
-    for row in 0..rows {
-        for col in 0..columns {
-            let rect = Rect::from_min_size(
-                area.min + vec2(col as f32 * (cell_w + gap), row as f32 * (cell_h + gap)),
-                vec2(cell_w, cell_h),
-            );
-            let choice = swatch_at(row, col);
-            let resp = ui
-                .interact(rect, ui.id().with(("swatch", row, col)), Sense::click())
-                .on_hover_cursor(egui::CursorIcon::PointingHand);
-            ui.painter().rect_filled(rect, 4.0, choice);
-            if choice == *color || resp.hovered() {
-                ui.painter().rect_stroke(rect, 4.0, Stroke::new(2.0_f32, theme.text), egui::StrokeKind::Inside);
-            }
-            if resp.clicked() {
-                *color = choice;
-                picker.load(choice);
-            }
-        }
-    }
 
     ui.horizontal(|ui| {
         ui.label(RichText::new("Hex").size(13.0).color(theme.text_dim));
