@@ -217,6 +217,14 @@ fn save<T: Serialize>(file: &str, value: &T, private: bool) {
 
 pub fn load_config() -> Config {
     let mut cfg: Config = load("config.json");
+    // Follow a built-in theme that has been renamed, unless a custom theme
+    // has since taken the old name.
+    if let Some(name) = crate::theme::current_name(&cfg.theme) {
+        if cfg.custom_themes.iter().all(|t| t.name != cfg.theme) {
+            cfg.theme = name.to_owned();
+            save_config(&cfg);
+        }
+    }
     if cfg.device_id.is_empty() {
         cfg.device_id = new_device_id();
         save_config(&cfg);

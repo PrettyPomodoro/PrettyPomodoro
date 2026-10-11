@@ -4,26 +4,28 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
 [Pomotroid](https://github.com/Splode/pomotroid).
 
-| Timer | Running (Catppuccin Mocha) | Pencil Art (Tomato Sketch) |
+| Timer | Running (Velvet Dusk) | Pencil Art (Tomato Sketch) |
 | --- | --- | --- |
 | ![Timer](docs/timer.png) | ![Running](docs/timer-dark.png) | ![Pencil art](docs/pencil.png) |
 
-| Activity | Activity (Catppuccin Mocha) | Themes |
+| Activity | Activity (Velvet Dusk) | Themes |
 | --- | --- | --- |
 | ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Themes](docs/themes.png) |
 
-| Editorial Sage (goal ticked off) | Pencil Art (Paper Sketch) | GitHub Dark |
+| Editorial Sage (goal ticked off) | Pencil Art (Paper Sketch) | Ink Well |
 | --- | --- | --- |
-| ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![GitHub Dark](docs/github-dark.png) |
+| ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
 
 ## Features
 
 - Compact 360 × 480 card window with its own title bar.
 - Focus, short break and long break rounds with adjustable lengths and round count.
 - 36 built-in themes in five families:
-  - **Light** (6) and **Dark** (15): Graphite, Catppuccin, Tokyo Night,
-    Dracula, Nord, Gruvbox, Rosé Pine, One Dark, Solarized, GitHub, Everforest,
-    Kanagawa, Monokai Pro, Night Owl, Ayu, Synthwave.
+  - **Light** (6): Graphite, Milk Foam, Old Parchment, Blush Dawn, Sunlit Sand,
+    Clean Sheet.
+  - **Dark** (15): Velvet Dusk, Neon Harbor, Midnight Orchid, Arctic Slate,
+    Ember Bark, Plum Twilight, Quiet Carbon, Deep Lagoon, Ink Well, Mossy
+    Hollow, Indigo Tide, Candy Charcoal, Abyss Blue, Desert Night, Retro Arcade.
   - **Pencil Art** (5): Tomato Sketch and four more, drawn like the app icon with
     ink outlines, hatching and a sketched tomato for the timer ring.
   - **Sketch** (5): a greyscale interface around a timer drawn like a
