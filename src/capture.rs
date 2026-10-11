@@ -1,4 +1,5 @@
-//! Developer aid: render one page with demo data to a PNG and exit.
+//! Developer aid: render one page with demo data to a PNG, or to an SVG if the
+//! path ends in `.svg`, and exit.
 //!
 //! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Ink Well"] [POMO_GOAL="..."] prettypomodoro`
 //!
@@ -103,10 +104,27 @@ impl Capture {
         }
     }
 
+    fn is_svg(&self) -> bool {
+        self.path.extension().is_some_and(|e| e == "svg")
+    }
+
+    /// The capture is an SVG and it is time to render it.
+    pub fn wants_svg(&self) -> bool {
+        self.is_svg() && self.frame == 10
+    }
+
+    pub fn save_svg(&self, svg: &str) -> ! {
+        let result = std::fs::write(&self.path, svg);
+        if let Err(e) = &result {
+            eprintln!("capture failed: {e}");
+        }
+        std::process::exit(result.is_err() as i32)
+    }
+
     pub fn update(&mut self, ctx: &egui::Context) {
         self.frame += 1;
         // Give layout and animations a few frames to settle first.
-        if self.frame == 10 {
+        if self.frame == 10 && !self.is_svg() {
             ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(Default::default()));
         }
         let shot = ctx.input(|i| {

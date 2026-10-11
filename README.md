@@ -4,13 +4,13 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
 [Pomotroid](https://github.com/Splode/pomotroid).
 
-| Editorial Sage | Pencil Art (Paper Sketch) | Ink Well |
+| Editorial Lavender | Sky Sketch | Ink Well |
 | --- | --- | --- |
-| ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
+| ![Editorial Lavender](docs/editorial-lavender.svg) | ![Sky Sketch](docs/sky-sketch.svg) | ![Ink Well](docs/ink-well.svg) |
 
 | Activity | Activity (Ink Well) | Cloud Sync |
 | --- | --- | --- |
-| ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Cloud Sync](docs/sync.png) |
+| ![Activity](docs/activity.svg) | ![Activity dark](docs/activity-dark.svg) | ![Cloud Sync](docs/sync.svg) |
 
 ## Features
 
@@ -32,8 +32,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [![Download for Windows](https://img.shields.io/badge/Download-Windows%20x64-0078D4?style=for-the-badge)](https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-windows-x64.zip)
 [![Download for Linux](https://img.shields.io/badge/Download-Linux%20x64-E95420?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-linux-x64.tar.gz)
 
-The buttons point at the latest published release and start working once the
-first release is published.
+The buttons always download the latest published release.
 
 - **macOS**: unzip and move `PrettyPomodoro.app` to Applications. The app is not
   notarized, so the first time right-click it and choose **Open**.

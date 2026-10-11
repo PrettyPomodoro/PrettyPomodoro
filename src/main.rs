@@ -5,6 +5,7 @@ mod capture;
 mod config;
 mod core;
 mod icon;
+mod svg;
 mod sync;
 mod theme;
 mod tray;

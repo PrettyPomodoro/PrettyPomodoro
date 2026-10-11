@@ -1,6 +1,6 @@
 //! The window: custom title bar, the timer card and the settings drawer.
 
-mod fonts;
+pub mod fonts;
 mod pencil;
 mod settings;
 mod sketch;
@@ -282,6 +282,22 @@ impl eframe::App for App {
     }
 
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.draw(ctx);
+        if self.capture.as_ref().is_some_and(|c| c.wants_svg()) {
+            let svg = self.render_svg();
+            if let Some(capture) = &self.capture {
+                capture.save_svg(&svg);
+            }
+        }
+        if let Some(capture) = &mut self.capture {
+            capture.update(ctx);
+        }
+    }
+}
+
+impl App {
+    /// One frame of the whole window.
+    fn draw(&mut self, ctx: &egui::Context) {
         let shared = self.shared.clone();
         let mut core = lock(&shared);
 
@@ -324,10 +340,24 @@ impl eframe::App for App {
                 config::save_config(&core.cfg);
             }
         }
-        drop(core);
+    }
 
-        if let Some(capture) = &mut self.capture {
-            capture.update(ctx);
+    /// Draw the window into a context of its own and return the frame as an SVG.
+    fn render_svg(&mut self) -> String {
+        let ctx = egui::Context::default();
+        fonts::install(&ctx);
+        let size = egui::Vec2::from(WINDOW_SIZE);
+        let mut shapes = Vec::new();
+        // A few passes, so layout that depends on the previous frame settles.
+        for pass in 0..4 {
+            self.applied_theme = None;
+            let input = egui::RawInput {
+                screen_rect: Some(Rect::from_min_size(egui::Pos2::ZERO, size)),
+                time: Some(pass as f64),
+                ..Default::default()
+            };
+            shapes = ctx.run(input, |ctx| self.draw(ctx)).shapes;
         }
+        crate::svg::render(&shapes, size)
     }
 }

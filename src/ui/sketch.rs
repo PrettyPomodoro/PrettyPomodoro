@@ -15,6 +15,7 @@ pub fn wobble(angle: f32, seed: u32) -> f32 {
 
 /// A wobbly arc, drawn from angle `from` to `to`. With `dash` (dash and gap
 /// lengths) the pattern starts at `from`.
+#[allow(clippy::too_many_arguments)]
 pub fn arc(p: &Painter, center: Pos2, radius: f32, from: f32, to: f32, stroke: Stroke, dash: Option<(f32, f32)>, seed: u32) {
     let n = ((to - from).abs() / TAU * 160.0).ceil().max(2.0) as usize;
     let points: Vec<_> = (0..=n)

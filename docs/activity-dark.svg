@@ -1,0 +1,528 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" width="360" height="480">
+<defs>
+<clipPath id="c0"><rect x="0" y="40" width="360" height="394"/></clipPath>
+</defs>
+<rect x="0" y="0" width="360" height="480" rx="0" fill="none"/>
+<rect x="0" y="0" width="360" height="480" rx="0" fill="#0d1117"/>
+<text x="124.22" y="25.97" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="110.55" lengthAdjust="spacingAndGlyphs" xml:space="preserve">PrettyPomodoro</text>
+<path d="M32 12L24 20" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M24 20L32 28" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M325 13L339 27" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M325 27L339 13" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M289 20L303 20" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<rect x="0" y="40" width="360" height="394" rx="0" fill="#161b22"/>
+<g clip-path="url(#c0)">
+<text x="159" y="67.47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" style="font-variant-numeric:lining-nums" fill="#e6edf3" textLength="41.17" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Focus</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="139.86" y="108.56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22.4" font-weight="400" style="font-variant-numeric:lining-nums" fill="#f57c1f" xml:space="preserve">🔥</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="170.77" y="108.56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" font-weight="400" style="font-variant-numeric:lining-nums" fill="#e6edf3" textLength="44.67" lengthAdjust="spacingAndGlyphs" xml:space="preserve">125</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="144.61" y="125.59" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="70.38" lengthAdjust="spacingAndGlyphs" xml:space="preserve">minutes today</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="101.56" y="154.59" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="153.31" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Jun 14, 2026 – Oct 12, 2026</text>
+</g>
+<g clip-path="url(#c0)">
+<path d="M36 142L28 150" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+</g>
+<g clip-path="url(#c0)">
+<path d="M28 150L36 158" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="27.12" y="211.16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="19.24" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Mon</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="25.84" y="243.16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="20.27" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Wed</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="35.41" y="275.16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="10.62" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Fri</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="185" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="201" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="217" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="233" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="265" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="51.5" y="281" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="185" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="201" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="217" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="249" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="265" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="67.5" y="281" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="185" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="201" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="217" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="233" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="249" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="265" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="83.5" y="281" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="99.5" y="178.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="12.49" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Jul</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="185" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="201" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="217" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="233" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="265" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="99.5" y="281" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="185" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="201" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="217" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="265" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="115.5" y="281" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="185" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="201" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="217" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="233" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="265" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="131.5" y="281" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="185" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="201" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="217" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="233" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="265" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="147.5" y="281" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="163.5" y="178.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="17.43" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Aug</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="185" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="201" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="217" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="233" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="249" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="265" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="163.5" y="281" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="185" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="201" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="217" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="233" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="249" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="265" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="179.5" y="281" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="185" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="201" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="217" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="233" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="249" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="265" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="195.5" y="281" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="185" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="201" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="217" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="265" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="211.5" y="281" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="185" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="201" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="217" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="233" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="249" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="265" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="227.5" y="281" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="243.5" y="178.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="16.86" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Sep</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="185" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="201" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="217" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="249" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="265" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="243.5" y="281" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="185" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="201" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="217" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="233" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="265" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="259.5" y="281" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="185" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="201" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="217" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="249" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="265" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="275.5" y="281" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="185" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="201" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="217" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="249" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="265" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="291.5" y="281" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="307.5" y="178.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="15.63" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Oct</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="185" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="201" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="217" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="233" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="249" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="265" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="307.5" y="281" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="323.5" y="185" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="323.5" y="201" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="323" y="200.5" width="14" height="14" rx="3.5" fill="none" stroke="#e6edf3" stroke-width="1"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="315.28" y="320.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="22.23" lengthAdjust="spacingAndGlyphs" xml:space="preserve">More</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="297.28" y="310.5" width="13" height="13" rx="3" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="281.28" y="310.5" width="13" height="13" rx="3" fill="#c44642"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="265.28" y="310.5" width="13" height="13" rx="3" fill="#8f3b3a"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="249.28" y="310.5" width="13" height="13" rx="3" fill="#5f3133"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="233.28" y="310.5" width="13" height="13" rx="3" fill="#1e232a"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="208.53" y="320.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="20.04" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Less</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="339" width="74.5" height="50" rx="7" fill="#1a1f26"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="53.05" y="364.81" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="400" style="font-variant-numeric:lining-nums" fill="#e6edf3" xml:space="preserve">5</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="45.77" y="380.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="27.04" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Today</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="102.5" y="339" width="74.5" height="50" rx="7" fill="#1a1f26"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="133.95" y="364.81" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="400" style="font-variant-numeric:lining-nums" fill="#e6edf3" xml:space="preserve">7</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="117.78" y="380.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="45.14" lengthAdjust="spacingAndGlyphs" xml:space="preserve">This Week</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="183" y="339" width="74.5" height="50" rx="7" fill="#1a1f26"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="213.7" y="364.81" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="400" style="font-variant-numeric:lining-nums" fill="#e6edf3" xml:space="preserve">6</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="197.28" y="380.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="46.61" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Day Streak</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="263.5" y="339" width="74.5" height="50" rx="7" fill="#1a1f26"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="283.55" y="364.81" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="21" font-weight="400" style="font-variant-numeric:lining-nums" fill="#e6edf3" textLength="34.66" lengthAdjust="spacingAndGlyphs" xml:space="preserve">451</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="284.14" y="380.66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="34.14" lengthAdjust="spacingAndGlyphs" xml:space="preserve">All Time</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="65" y="413.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#8b949e" textLength="225.18" lengthAdjust="spacingAndGlyphs" xml:space="preserve">187 h 55 min of focus across 451 sessions</text>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="27" cy="496" r="2.5" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="27" cy="520" r="2.5" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="27" cy="572" r="2.5" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="27" cy="596" r="2.5" fill="#f85149"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="27" cy="648" r="2.5" fill="#f85149"/>
+</g>
+<circle cx="30" cy="457" r="8.5" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M30 452L30 457" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M30 457L33.5 459.5" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<path d="M81 451L99 451" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<circle cx="93" cy="451" r="2.8" fill="#8b949e"/>
+<path d="M81 457L99 457" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<circle cx="86" cy="457" r="2.8" fill="#8b949e"/>
+<path d="M81 463L99 463" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<circle cx="91" cy="463" r="2.8" fill="#8b949e"/>
+<circle cx="150" cy="457" r="8.5" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<circle cx="145.7" cy="454.88" r="1.5" fill="#8b949e"/>
+<circle cx="149.94" cy="452.2" r="1.5" fill="#8b949e"/>
+<circle cx="154.25" cy="454.77" r="1.5" fill="#8b949e"/>
+<circle cx="153.5" cy="460.5" r="2.4" fill="#8b949e"/>
+<rect x="201.5" y="450.5" width="17" height="15" rx="2" fill="none" stroke="#e6edf3" stroke-width="1.6"/>
+<path d="M201.5 454.5L218.5 454.5" fill="none" stroke="#e6edf3" stroke-width="1.6"/>
+<path d="M206 448L206 452" fill="none" stroke="#e6edf3" stroke-width="1.6"/>
+<path d="M214 448L214 452" fill="none" stroke="#e6edf3" stroke-width="1.6"/>
+<circle cx="206" cy="458.5" r="1" fill="#e6edf3"/>
+<circle cx="210" cy="458.5" r="1" fill="#e6edf3"/>
+<circle cx="214" cy="458.5" r="1" fill="#e6edf3"/>
+<circle cx="206" cy="462" r="1" fill="#e6edf3"/>
+<circle cx="210" cy="462" r="1" fill="#e6edf3"/>
+<path d="M195 478.5L225 478.5" fill="none" stroke="#58a6ff" stroke-width="3"/>
+<path d="M265.5 463.5L264.62 463.41L263.78 463.16L263 462.74L262.32 462.18L261.76 461.5L261.34 460.72L261.09 459.88L261 459L261.09 458.12L261.34 457.28L261.76 456.5L262.32 455.82L263 455.26L263.78 454.84L264.62 454.59L265.5 454.5" fill="none" stroke="#8b949e" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M263.54 454.81L263.74 453.9L264.08 453.04L264.56 452.25L265.17 451.55L265.89 450.96L266.7 450.51L267.57 450.19L268.48 450.02L269.41 450.02L270.33 450.16L271.2 450.46L272.02 450.9L272.75 451.48L273.37 452.16L273.87 452.95L274.23 453.8" fill="none" stroke="#8b949e" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M275 454.5L275.88 454.59L276.72 454.84L277.5 455.26L278.18 455.82L278.74 456.5L279.16 457.28L279.41 458.12L279.5 459L279.41 459.88L279.16 460.72L278.74 461.5L278.18 462.18L277.5 462.74L276.72 463.16L275.88 463.41L275 463.5" fill="none" stroke="#8b949e" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M265.5 463.5L275 463.5" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<circle cx="330" cy="457" r="8.5" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+<circle cx="330" cy="452.8" r="1.2" fill="#8b949e"/>
+<path d="M330 456L330 461.8" fill="none" stroke="#8b949e" stroke-width="1.6"/>
+</svg>
