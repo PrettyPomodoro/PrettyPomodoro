@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theme gallery, PrettyPomodoro</title>
+<meta name="description" content="All 27 built-in PrettyPomodoro themes in five families: Editorial, Sketch, Light, Dark and Pencil Art.">
+<meta name="theme-color" content="#101615">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Newsreader:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #F3F2EE;
+  --canvas-warm: #E5CABB;
+  --canvas-white: #FFFFFF;
+  --ink: #141413;
+  --ink-muted: #5E5D59;
+  --rule: #DDDCD6;
+  --accent: #D97757;
+  --panel-dark: #101615;
+  --panel-raised: #18201F;
+  --text-muted: #B9BDB8;
+  --dot: rgba(243, 242, 238, 0.07);
+  --data-teal-soft: #B3DFE2;
+  --data-peach: #FCE5B4;
+  --tint-lavender: #C9C8E0;
+  --tint-sage: #B8D0C6;
+  --data-teal: #0E7C8C;
+  --data-amber: #F29F05;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background-color: var(--panel-dark);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 24px 24px;
+  color: var(--canvas);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+a { color: var(--canvas-white); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--data-teal-soft); outline-offset: 3px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 max(16px, 4vw); }
+
+header { padding: 28px 0 0; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.01em; color: var(--canvas); text-decoration: none; }
+.brand img { display: block; width: 32px; height: 32px; }
+header .wrap { display: flex; align-items: center; justify-content: space-between; }
+.repo { display: inline-flex; padding: 6px; margin: -6px; border-radius: 12px; color: var(--canvas); }
+.repo:hover { color: var(--canvas-white); background: var(--panel-raised); }
+.repo[aria-current="page"] { color: var(--canvas-white); background: var(--panel-raised); }
+.repo svg { display: block; }
+.icons { display: flex; align-items: center; gap: 20px; }
+
+.intro { padding: clamp(40px, 7vw, 88px) 0 clamp(32px, 5vw, 56px); }
+h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  margin: 0 0 16px;
+}
+.sub { color: var(--text-muted); font-size: 1.25rem; line-height: 1.45; margin: 0; max-width: 30em; }
+
+.family {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 24px clamp(24px, 4vw, 56px);
+  align-items: start;
+  padding: clamp(40px, 6vw, 72px) 0;
+  border-top: 2px solid var(--panel-raised);
+}
+.family-head { position: sticky; top: 24px; }
+.family h2 {
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem); line-height: 1.15;
+  margin: 0 0 6px;
+}
+.count { margin: 0; color: var(--text-muted); font-size: 0.9375rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 40px 24px;
+  margin: 0;
+}
+figure { margin: 0; min-width: 0; }
+figure img {
+  display: block; width: 100%; max-width: 360px; height: auto;
+  border: 2px solid var(--canvas); border-radius: 24px;
+}
+figcaption { margin: 12px 0 0; color: var(--text-muted); font-size: 0.9375rem; }
+
+footer { border-top: 2px solid var(--panel-raised); padding: 28px 0 40px; color: var(--text-muted); font-size: 0.9375rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+footer p { margin: 0; }
+
+@media (max-width: 800px) {
+  .family { grid-template-columns: minmax(0, 1fr); }
+  .family-head { position: static; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: minmax(0, 360px); }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="icon.png" width="32" height="32" alt="">PrettyPomodoro</a>
+    <div class="icons">
+      <a class="repo" href="gallery.html" aria-label="Theme gallery" title="Theme gallery" aria-current="page">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="17" rx="3.5"/><circle cx="8.5" cy="9" r="1.6" fill="currentColor" stroke="none"/><path d="M3 17.5l5.5-5 4 3.500 3-2.500 5.500 4.500"/></svg>
+      </a>
+      <a class="repo" href="https://github.com/PrettyPomodoro/PrettyPomodoro" aria-label="PrettyPomodoro on GitHub" title="View the source on GitHub">
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="intro">
+      <h1>Theme gallery</h1>
+      <p class="sub">All 27 built-in themes, in the order they appear in the app.</p>
+    </div>
+
+    <section class="family" aria-labelledby="fam-0">
+      <div class="family-head">
+        <h2 id="fam-0">Editorial</h2>
+        <p class="count">5 themes</p>
+      </div>
+      <div class="grid">
+        <figure>
+          <img src="gallery/editorial.svg" width="360" height="480" loading="lazy" alt="The timer in the Editorial theme">
+          <figcaption>Editorial</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/editorial-warm.svg" width="360" height="480" loading="lazy" alt="The timer in the Editorial Warm theme">
+          <figcaption>Editorial Warm</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/editorial-white.svg" width="360" height="480" loading="lazy" alt="The timer in the Editorial White theme">
+          <figcaption>Editorial White</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/editorial-sage.svg" width="360" height="480" loading="lazy" alt="The timer in the Editorial Sage theme">
+          <figcaption>Editorial Sage</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/editorial-lavender.svg" width="360" height="480" loading="lazy" alt="The timer in the Editorial Lavender theme">
+          <figcaption>Editorial Lavender</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="family" aria-labelledby="fam-1">
+      <div class="family-head">
+        <h2 id="fam-1">Sketch</h2>
+        <p class="count">5 themes</p>
+      </div>
+      <div class="grid">
+        <figure>
+          <img src="gallery/sketch-light.svg" width="360" height="480" loading="lazy" alt="The timer in the Sketch Light theme">
+          <figcaption>Sketch Light</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sketch-dark.svg" width="360" height="480" loading="lazy" alt="The timer in the Sketch Dark theme">
+          <figcaption>Sketch Dark</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sketch-blue.svg" width="360" height="480" loading="lazy" alt="The timer in the Sketch Blue theme">
+          <figcaption>Sketch Blue</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sketch-blue-dark.svg" width="360" height="480" loading="lazy" alt="The timer in the Sketch Blue Dark theme">
+          <figcaption>Sketch Blue Dark</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sketch-gold.svg" width="360" height="480" loading="lazy" alt="The timer in the Sketch Gold theme">
+          <figcaption>Sketch Gold</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="family" aria-labelledby="fam-2">
+      <div class="family-head">
+        <h2 id="fam-2">Light</h2>
+        <p class="count">6 themes</p>
+      </div>
+      <div class="grid">
+        <figure>
+          <img src="gallery/graphite.svg" width="360" height="480" loading="lazy" alt="The timer in the Graphite theme">
+          <figcaption>Graphite</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/milk-foam.svg" width="360" height="480" loading="lazy" alt="The timer in the Milk Foam theme">
+          <figcaption>Milk Foam</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/old-parchment.svg" width="360" height="480" loading="lazy" alt="The timer in the Old Parchment theme">
+          <figcaption>Old Parchment</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/blush-dawn.svg" width="360" height="480" loading="lazy" alt="The timer in the Blush Dawn theme">
+          <figcaption>Blush Dawn</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sunlit-sand.svg" width="360" height="480" loading="lazy" alt="The timer in the Sunlit Sand theme">
+          <figcaption>Sunlit Sand</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/clean-sheet.svg" width="360" height="480" loading="lazy" alt="The timer in the Clean Sheet theme">
+          <figcaption>Clean Sheet</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="family" aria-labelledby="fam-3">
+      <div class="family-head">
+        <h2 id="fam-3">Dark</h2>
+        <p class="count">6 themes</p>
+      </div>
+      <div class="grid">
+        <figure>
+          <img src="gallery/ink-well.svg" width="360" height="480" loading="lazy" alt="The timer in the Ink Well theme">
+          <figcaption>Ink Well</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/deep-lagoon.svg" width="360" height="480" loading="lazy" alt="The timer in the Deep Lagoon theme">
+          <figcaption>Deep Lagoon</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/ember-bark.svg" width="360" height="480" loading="lazy" alt="The timer in the Ember Bark theme">
+          <figcaption>Ember Bark</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/retro-arcade.svg" width="360" height="480" loading="lazy" alt="The timer in the Retro Arcade theme">
+          <figcaption>Retro Arcade</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/plum-twilight.svg" width="360" height="480" loading="lazy" alt="The timer in the Plum Twilight theme">
+          <figcaption>Plum Twilight</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/abyss-blue.svg" width="360" height="480" loading="lazy" alt="The timer in the Abyss Blue theme">
+          <figcaption>Abyss Blue</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="family" aria-labelledby="fam-4">
+      <div class="family-head">
+        <h2 id="fam-4">Pencil Art</h2>
+        <p class="count">5 themes</p>
+      </div>
+      <div class="grid">
+        <figure>
+          <img src="gallery/tomato-sketch.svg" width="360" height="480" loading="lazy" alt="The timer in the Tomato Sketch theme">
+          <figcaption>Tomato Sketch</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/paper-sketch.svg" width="360" height="480" loading="lazy" alt="The timer in the Paper Sketch theme">
+          <figcaption>Paper Sketch</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/garden-sketch.svg" width="360" height="480" loading="lazy" alt="The timer in the Garden Sketch theme">
+          <figcaption>Garden Sketch</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sunny-sketch.svg" width="360" height="480" loading="lazy" alt="The timer in the Sunny Sketch theme">
+          <figcaption>Sunny Sketch</figcaption>
+        </figure>
+        <figure>
+          <img src="gallery/sky-sketch.svg" width="360" height="480" loading="lazy" alt="The timer in the Sky Sketch theme">
+          <figcaption>Sky Sketch</figcaption>
+        </figure>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>PrettyPomodoro, MIT license</p>
+    <p><a href="https://github.com/PrettyPomodoro/PrettyPomodoro">View the source on GitHub</a></p>
+  </div>
+</footer>
+</body>
+</html>
