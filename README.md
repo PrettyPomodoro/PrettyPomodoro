@@ -31,8 +31,8 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
     ink outlines, hatching and a sketched tomato for the timer ring.
 - A theme editor for your own themes in any of the styles: flat light/dark,
   pencil art, sketch or editorial.
-- A goal for each focus round, typed above the timer. When the round finishes
-  a box appears beside it to tick the goal off.
+- A goal for each focus round, typed above the timer, with a box beside it to
+  tick the goal off in green. Both stay through the break that follows.
 - Chimes at the end of focus and break rounds, optional tick sounds, volume and mute.
 - Activity heat map in the style of the GitHub contribution graph, shaded from
   the active theme's colours, with today / week / streak / all-time totals.

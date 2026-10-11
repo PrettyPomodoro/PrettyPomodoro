@@ -35,18 +35,6 @@ impl Phase {
 
 }
 
-/// Where the goal typed for a focus round stands.
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
-pub enum GoalStatus {
-    /// The focus round is still to do or under way.
-    #[default]
-    Open,
-    /// The focus round ran to its end; the goal can be ticked off.
-    Finished,
-    /// Ticked off by the user.
-    Achieved,
-}
-
 /// Background work on the cloud copy of the history.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SyncJob {
@@ -84,10 +72,11 @@ pub struct Core {
     pub round: u32,
     pub running: bool,
     /// What the current focus round is for, typed on the timer page. It stays
-    /// through the break after a finished round, to be ticked off, and is
-    /// cleared for the next round.
+    /// through the break after a finished round and is cleared for the next
+    /// round.
     pub goal: String,
-    pub goal_status: GoalStatus,
+    /// The goal has been ticked off.
+    pub goal_achieved: bool,
     /// Time left when paused; while running, `deadline` is authoritative.
     remaining: Duration,
     deadline: Option<Instant>,
@@ -123,7 +112,7 @@ impl Core {
             round: 1,
             running: false,
             goal: String::new(),
-            goal_status: GoalStatus::Open,
+            goal_achieved: false,
             remaining,
             deadline: None,
             fresh: true,
@@ -212,7 +201,7 @@ impl Core {
 
     fn clear_goal(&mut self) {
         self.goal.clear();
-        self.goal_status = GoalStatus::Open;
+        self.goal_achieved = false;
     }
 
     fn advance(&mut self, autostart: bool, now: Instant) {
@@ -283,8 +272,6 @@ impl Core {
             self.play(Sound::FocusEnd);
             if self.goal.trim().is_empty() {
                 self.clear_goal();
-            } else {
-                self.goal_status = GoalStatus::Finished;
             }
             self.advance(self.cfg.auto_start_break, now);
             if self.cfg.notify_focus_end {
@@ -418,29 +405,27 @@ mod tests {
     }
 
     #[test]
-    fn goal_can_be_ticked_after_a_finished_round_only() {
+    fn goal_and_its_tick_last_through_the_break() {
         let mut c = core();
         let mut now = Instant::now();
         c.goal = "Write the report".into();
         c.toggle(now);
         c.toggle(now);
         c.restart_phase();
-        assert_eq!((c.goal.as_str(), c.goal_status), ("Write the report", GoalStatus::Open));
-
+        c.goal_achieved = true;
         finish(&mut c, &mut now);
         assert_eq!(c.phase, Phase::ShortBreak);
-        assert_eq!((c.goal.as_str(), c.goal_status), ("Write the report", GoalStatus::Finished));
-        c.goal_status = GoalStatus::Achieved;
+        assert_eq!((c.goal.as_str(), c.goal_achieved), ("Write the report", true));
 
-        // The next focus round starts with an empty goal.
+        // The next focus round starts with an empty, unticked goal.
         finish(&mut c, &mut now);
         assert_eq!(c.phase, Phase::Focus);
-        assert_eq!((c.goal.as_str(), c.goal_status), ("", GoalStatus::Open));
+        assert_eq!((c.goal.as_str(), c.goal_achieved), ("", false));
 
-        // A skipped round was not finished, so there is nothing to tick.
+        // A skipped round takes its goal with it.
         c.goal = "Skipped".into();
         c.skip(now);
-        assert_eq!((c.goal.as_str(), c.goal_status), ("", GoalStatus::Open));
+        assert_eq!((c.goal.as_str(), c.goal_achieved), ("", false));
     }
 
     #[test]

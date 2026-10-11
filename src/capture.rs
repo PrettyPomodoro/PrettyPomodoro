@@ -1,6 +1,6 @@
 //! Developer aid: render one page with demo data to a PNG and exit.
 //!
-//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Arctic Slate"] prettypomodoro`
+//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Arctic Slate"] [POMO_GOAL="..."] prettypomodoro`
 //!
 //! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `sync`, `signin`, `code`, `about`.
 //!
@@ -28,6 +28,11 @@ impl Capture {
             theme: std::env::var("POMO_THEME").ok(),
             frame: 0,
         })
+    }
+
+    /// The demo goal, or the one given in `POMO_GOAL`.
+    fn goal(&self) -> String {
+        std::env::var("POMO_GOAL").unwrap_or_else(|_| "Draft the launch notes".into())
     }
 
     pub fn prepare(&self, core: &mut Core) {
@@ -69,16 +74,16 @@ impl Capture {
         // "achieved" shows the break after a finished focus round, goal ticked off.
         if self.page.as_deref() == Some("achieved") {
             core.cfg.auto_start_break = false;
-            core.goal = "Draft the launch notes".into();
+            core.goal = self.goal();
             let now = Instant::now();
             core.toggle(now);
             core.tick(now + Duration::from_secs(3600));
-            core.goal_status = crate::core::GoalStatus::Achieved;
+            core.goal_achieved = true;
         }
 
         // "running" shows the timer a third of the way through a focus round.
         if self.page.as_deref() == Some("running") {
-            core.goal = "Draft the launch notes".into();
+            core.goal = self.goal();
             let started = Instant::now().checked_sub(Duration::from_secs(8 * 60 + 20));
             core.toggle(started.unwrap_or_else(Instant::now));
         }

@@ -2,7 +2,7 @@
 
 use super::widgets::{icon_button, ink_outline, paint_icon, spaced_text, Icon};
 use super::{fonts, pencil, sketch};
-use crate::core::{Core, GoalStatus, Phase};
+use crate::core::{Core, Phase};
 use crate::theme::{luminance, mix, Style, Theme, EDITORIAL_INK, INK};
 use eframe::egui::{self, pos2, vec2, Align, Align2, Color32, FontId, Rect, RichText, Sense, Shape, Stroke, Ui};
 use std::f32::consts::TAU;
@@ -13,7 +13,7 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let cx = rect.center().x;
     let color = core.phase.color(theme);
 
-    if core.phase == Phase::Focus || core.goal_status != GoalStatus::Open {
+    if core.phase == Phase::Focus || !core.goal.is_empty() {
         goal_box(ui, rect, core, theme);
     }
 
@@ -245,15 +245,12 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     }
 }
 
-/// The goal of the current focus round: a text box above the ring. Once the
-/// round has finished the goal is fixed and gets a box to tick it off in.
+/// The goal of the current focus round: a box to tick it off in and a text
+/// box, above the ring. The goal can be edited until the round has finished.
 fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let row = Rect::from_center_size(pos2(rect.center().x, rect.top() + 72.0), vec2(236.0, 28.0));
-    let finished = core.goal_status != GoalStatus::Open;
-    let frame = match finished {
-        true => row.with_max_x(row.right() - 34.0),
-        false => row,
-    };
+    let tick = Rect::from_min_max(row.min, pos2(row.left() + 28.0, row.bottom()));
+    let frame = row.with_min_x(tick.right() + 6.0);
     let id = ui.id().with("goal");
     let p = ui.painter().clone();
     let edge = |on: bool, color| {
@@ -269,9 +266,16 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         }
     };
     let font = FontId::proportional(14.0);
+    // A row of text has more room above its letters than below; nudged up, the
+    // letters sit in the middle of the box.
+    let text_center = frame.center() - vec2(0.0, 1.0);
 
-    if !finished {
+    if core.phase == Phase::Focus {
         boxed(frame, edge(ui.memory(|m| m.has_focus(id)), theme.accent));
+        // The field is exactly one row tall and centred in its box by hand;
+        // left to itself the text sits against the top.
+        let row_height = ui.fonts(|f| f.row_height(&font));
+        let field = Rect::from_center_size(text_center, vec2(frame.width() - 20.0, row_height));
         let edit = egui::TextEdit::singleline(&mut core.goal)
             .id(id)
             .frame(false)
@@ -279,37 +283,37 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
             .font(font)
             .text_color(theme.text)
             .horizontal_align(Align::Center)
-            .vertical_align(Align::Center)
-            .margin(vec2(10.0, 0.0))
+            .margin(vec2(0.0, 0.0))
+            .desired_width(field.width())
             .char_limit(80);
-        ui.put(frame, edit);
-        return;
+        ui.put(field, edit);
+    } else {
+        // The goal on one line, cut short with an ellipsis if it doesn't fit.
+        boxed(frame, edge(false, theme.accent));
+        let mut job = egui::text::LayoutJob::simple_singleline(core.goal.trim().to_owned(), font, theme.text);
+        job.wrap = egui::text::TextWrapping::truncate_at_width(frame.width() - 20.0);
+        let galley = p.layout_job(job);
+        p.galley(text_center - galley.size() / 2.0, galley, theme.text);
     }
 
-    // The goal on one line, cut short with an ellipsis if it doesn't fit.
-    boxed(frame, edge(false, theme.accent));
-    let mut job = egui::text::LayoutJob::simple_singleline(core.goal.trim().to_owned(), font, theme.text);
-    job.wrap = egui::text::TextWrapping::truncate_at_width(frame.width() - 20.0);
-    let galley = p.layout_job(job);
-    p.galley(frame.center() - galley.size() / 2.0, galley, theme.text);
-
-    let tick = Rect::from_min_max(pos2(row.right() - 28.0, row.top()), row.max);
-    let resp = ui
-        .interact(tick, ui.id().with("goal-tick"), Sense::click())
-        .on_hover_cursor(egui::CursorIcon::PointingHand);
+    // Only a goal that has been typed can be ticked off.
+    let has_goal = !core.goal.trim().is_empty();
+    core.goal_achieved &= has_goal;
+    let sense = if has_goal { Sense::click() } else { Sense::hover() };
+    let mut resp = ui.interact(tick, ui.id().with("goal-tick"), sense);
+    if has_goal {
+        resp = resp.on_hover_cursor(egui::CursorIcon::PointingHand);
+    }
     if resp.clicked() {
-        core.goal_status = match core.goal_status {
-            GoalStatus::Achieved => GoalStatus::Finished,
-            _ => GoalStatus::Achieved,
-        };
+        core.goal_achieved = !core.goal_achieved;
     }
-    let achieved = core.goal_status == GoalStatus::Achieved;
+    let achieved = core.goal_achieved;
     // A green that reads on the box's fill, light or dark.
     let green = match luminance(theme.surface) < 0.5 {
         true => Color32::from_rgb(0x22, 0xc5, 0x5e),
         false => Color32::from_rgb(0x16, 0xa3, 0x4a),
     };
-    boxed(tick, edge(achieved || resp.hovered(), green));
+    boxed(tick, edge(achieved || (has_goal && resp.hovered()), green));
     // The tick is drawn in, stroke by stroke, when the box is ticked.
     let drawn = ui.ctx().animate_bool_with_time(resp.id, achieved, 0.25);
     if drawn > 0.0 {
@@ -324,5 +328,9 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         }
         p.add(Shape::line(points, stroke));
     }
-    resp.on_hover_text(if achieved { "Goal achieved" } else { "Tick off your goal" });
+    resp.on_hover_text(match (has_goal, achieved) {
+        (false, _) => "Type a goal to tick it off",
+        (true, false) => "Tick off your goal",
+        (true, true) => "Goal achieved",
+    });
 }
