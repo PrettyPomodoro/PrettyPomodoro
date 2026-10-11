@@ -52,9 +52,12 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     let p = ui.painter();
     let figure = FontId::proportional(28.0);
     let minutes = history.day(today).minutes.to_string();
-    let (flame_w, gap) = (p.layout_no_wrap("🔥".into(), figure.clone(), FLAME).size().x, 6.0);
+    // The flame glyph carries blank space on its right, so the gap is small.
+    let (flame_w, gap) = (p.layout_no_wrap("🔥".into(), figure.clone(), FLAME).size().x, 2.0);
     let minutes_w = p.layout_no_wrap(minutes.clone(), figure.clone(), theme.text).size().x;
-    let left = pos2(hero.center().x - (flame_w + gap + minutes_w) / 2.0, hero.top() + 15.0);
+    // Nudged left by the same blank space, so the drawn shapes are centred
+    // rather than their boxes.
+    let left = pos2(hero.center().x - (flame_w + gap + minutes_w) / 2.0 - 2.5, hero.top() + 15.0);
     p.text(left, Align2::LEFT_CENTER, "🔥", figure.clone(), FLAME);
     p.text(left + vec2(flame_w + gap, 0.0), Align2::LEFT_CENTER, minutes, figure, theme.text);
     p.text(
