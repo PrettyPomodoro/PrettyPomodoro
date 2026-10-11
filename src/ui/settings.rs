@@ -143,7 +143,9 @@ pub fn sync(ui: &mut Ui, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
             ui.label(dim("Syncs on launch and after every focus round."));
             ui.add_space(12.0);
             if text_link(ui, "Sign Out", 13.5, theme).clicked() {
-                core.cfg.sync = Default::default();
+                // Signing out forgets the account, not the choice below.
+                let sync_goals = core.cfg.sync.sync_goals;
+                core.cfg.sync = crate::config::SyncConfig { sync_goals, ..Default::default() };
                 core.sync_state = SyncState::Idle;
             }
             return;
@@ -189,11 +191,24 @@ pub fn sync(ui: &mut Ui, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
                 }
                 ui.label(dim(
                     "You get a short code to enter on github.com. The app can only \
-                     read and write your gists, where it keeps one private file.",
+                     read and write your gists, where it keeps your data in one private gist.",
                 ));
             }
         }
     });
+
+    // Goal texts are personal, so syncing them is something to opt into.
+    ui.add_space(14.0);
+    if toggle_row(ui, "Sync Goal Texts", &mut core.cfg.sync.sync_goals, theme)
+        && core.cfg.sync.sync_goals
+        && !core.cfg.sync.token.is_empty()
+    {
+        job = Some(SyncJob::Sync);
+    }
+    ui.label(dim(
+        "Also keeps the goals you tick off in your private gist, so your goal \
+         history follows you to your other computers.",
+    ));
     job
 }
 

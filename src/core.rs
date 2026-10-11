@@ -218,6 +218,9 @@ impl Core {
         if self.persist {
             config::save_goals(&self.goals);
         }
+        if self.cfg.sync.sync_goals && !self.cfg.sync.token.is_empty() {
+            self.sync_request = Some(SyncJob::Sync);
+        }
     }
 
     fn clear_goal(&mut self) {

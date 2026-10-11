@@ -25,8 +25,21 @@
 </g>
 <g clip-path="url(#c0)">
 <text x="24" y="176.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="305.55" lengthAdjust="spacingAndGlyphs" xml:space="preserve">You get a short code to enter on github.com. The app can </text>
-<text x="26" y="191.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="300.7" lengthAdjust="spacingAndGlyphs" xml:space="preserve">only read and write your gists, where it keeps one private </text>
-<text x="170" y="206.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="18.35" lengthAdjust="spacingAndGlyphs" xml:space="preserve">file.</text>
+<text x="25" y="191.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="303.46" lengthAdjust="spacingAndGlyphs" xml:space="preserve">only read and write your gists, where it keeps your data in </text>
+<text x="137" y="206.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="83.78" lengthAdjust="spacingAndGlyphs" xml:space="preserve">one private gist.</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="251.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#27292d" textLength="98" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Sync Goal Texts</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="302" y="237" width="36" height="18" rx="9" fill="#cdcecf"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="311" cy="246" r="6.5" fill="#fcfcfc"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="281.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="290.12" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Also keeps the goals you tick off in your private gist, so </text>
+<text x="22" y="296.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#656a75" textLength="282.77" lengthAdjust="spacingAndGlyphs" xml:space="preserve">your goal history follows you to your other computers.</text>
 </g>
 <circle cx="30" cy="457" r="8.5" fill="none" stroke="#656a75" stroke-width="1.6"/>
 <path d="M30 452L30 457" fill="none" stroke="#656a75" stroke-width="1.6"/>

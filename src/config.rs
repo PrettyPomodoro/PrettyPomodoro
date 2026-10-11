@@ -44,6 +44,8 @@ pub struct SyncConfig {
     pub login: Option<String>,
     pub gist_id: String,
     pub last_sync: Option<String>,
+    /// Also sync the text of achieved goals. Off unless the user opts in.
+    pub sync_goals: bool,
 }
 
 impl Default for Config {
@@ -175,7 +177,7 @@ impl History {
 }
 
 /// Goals that were ticked off, by the day they were achieved, oldest first
-/// within a day. Kept on this computer only.
+/// within a day. Kept on this computer unless the user turns on syncing them.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct GoalLog {
@@ -185,6 +187,18 @@ pub struct GoalLog {
 impl GoalLog {
     pub fn add(&mut self, day: NaiveDate, goal: &str) {
         self.days.entry(day).or_default().push(goal.to_owned());
+    }
+
+    /// Add the goals of another copy that this one lacks, day by day.
+    pub fn merge(&mut self, other: &GoalLog) {
+        for (day, goals) in &other.days {
+            let mine = self.days.entry(*day).or_default();
+            for goal in goals {
+                if !mine.contains(goal) {
+                    mine.push(goal.clone());
+                }
+            }
+        }
     }
 
     /// Take back the most recent entry of `goal`, for a tick that was undone.
@@ -322,6 +336,20 @@ mod tests {
         assert!(!log.days.contains_key(&d(2)));
         log.remove("Never logged");
         assert_eq!(log.days.len(), 1);
+    }
+
+    #[test]
+    fn goal_log_merge_adds_only_what_is_missing() {
+        let mut a = GoalLog::default();
+        a.add(d(1), "Report");
+        let mut b = GoalLog::default();
+        b.add(d(1), "Report");
+        b.add(d(1), "Slides");
+        b.add(d(2), "Review");
+        a.merge(&b);
+        a.merge(&b);
+        assert_eq!(a.days[&d(1)], ["Report", "Slides"]);
+        assert_eq!(a.days[&d(2)], ["Review"]);
     }
 
     #[test]

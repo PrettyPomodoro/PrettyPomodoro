@@ -91,6 +91,10 @@ with any GitHub account.
    account, or creates one, and from then on syncs by itself on launch and
    after every completed focus round.
 
+The text of the goals you tick off is not synced unless you switch on
+**Sync Goal Texts** on the same page; it then goes into a second file in the
+same gist.
+
 The sign-in only grants access to gists. History is stored per device and
 merged by taking the highest count each device has reported for a day, so
 syncing repeatedly or from several machines never double counts.
@@ -106,8 +110,7 @@ flow enabled; its client ID is the `GITHUB_CLIENT_ID` constant in `src/sync.rs`.
 Settings and history live in the platform config directory under
 `pomodoro-rs/` (`~/Library/Application Support/pomodoro-rs` on macOS):
 `config.json` for settings and custom themes, `history.json` for completed
-focus sessions and `goals.json` for the goals you have ticked off. Cloud sync
-covers the history only; goals stay on the computer they were ticked on.
+focus sessions and `goals.json` for the goals you have ticked off.
 
 ## Releases
 

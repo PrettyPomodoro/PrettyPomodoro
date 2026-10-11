@@ -1,8 +1,9 @@
 //! Cloud sync of the focus history through a private GitHub Gist (free with any
-//! GitHub account). The user supplies a personal access token with the `gist`
-//! scope; the gist is found or created automatically.
+//! GitHub account). The user signs in with GitHub, which grants access to
+//! gists only; the gist is found or created automatically. The text of achieved
+//! goals is synced to a second file in the same gist if the user opts in.
 
-use crate::config::{self, History};
+use crate::config::{self, GoalLog, History};
 use crate::core::{lock, Shared, SignIn, SyncJob, SyncState};
 use std::time::{Duration, Instant};
 use eframe::egui;
@@ -10,6 +11,7 @@ use serde_json::{json, Value};
 
 const API: &str = "https://api.github.com";
 const FILE: &str = "pomodoro-history.json";
+const GOALS_FILE: &str = "pomodoro-goals.json";
 const DESCRIPTION: &str = "Pomodoro focus history (synced by PrettyPomodoro)";
 
 /// Client ID of the GitHub OAuth app users sign in through. It is public by
@@ -29,7 +31,7 @@ pub fn spawn(shared: Shared, ctx: egui::Context, job: SyncJob) {
 }
 
 fn spawn_sync(shared: Shared, ctx: egui::Context) {
-    let (token, gist_id, local, known_login) = {
+    let (token, gist_id, local, goals, known_login) = {
         let mut core = lock(&shared);
         if core.sync_state == SyncState::Running {
             return;
@@ -43,20 +45,25 @@ fn spawn_sync(shared: Shared, ctx: egui::Context) {
             core.cfg.sync.token.trim().to_owned(),
             core.cfg.sync.gist_id.trim().to_owned(),
             core.history.clone(),
+            core.cfg.sync.sync_goals.then(|| core.goals.clone()),
             core.cfg.sync.login.is_some(),
         )
     };
 
     std::thread::spawn(move || {
-        let result = run(&token, &gist_id, &local);
+        let result = run(&token, &gist_id, &local, goals.as_ref());
         // Tokens saved by older versions came without a username.
         let login = if known_login || result.is_err() { None } else { fetch_login(&token).ok() };
         let mut core = lock(&shared);
         core.sync_state = match result {
-            Ok((gist_id, merged)) => {
+            Ok((gist_id, merged, goals)) => {
                 // Sessions may have completed while we were talking to GitHub.
                 core.history.merge(&merged);
                 config::save_history(&core.history);
+                if let Some(goals) = goals {
+                    core.goals.merge(&goals);
+                    config::save_goals(&core.goals);
+                }
                 core.cfg.sync.gist_id = gist_id;
                 if login.is_some() {
                     core.cfg.sync.login = login;
@@ -199,31 +206,59 @@ fn fetch_login(token: &str) -> Result<String, String> {
         .ok_or_else(|| "GitHub did not return a username.".to_owned())
 }
 
-fn run(token: &str, gist_id: &str, local: &History) -> Result<(String, History), String> {
+/// Merge the local data with the gist's and write back what changed. Goals
+/// are left alone, on both sides, unless `goals` is given.
+fn run(
+    token: &str,
+    gist_id: &str,
+    local: &History,
+    goals: Option<&GoalLog>,
+) -> Result<(String, History, Option<GoalLog>), String> {
     let gist_id = match gist_id {
         "" => find_gist(token)?,
         id => Some(id.to_owned()),
     };
 
     let mut merged = local.clone();
+    let mut merged_goals = goals.cloned();
     let Some(id) = gist_id else {
-        let id = create_gist(token, &merged)?;
-        return Ok((id, merged));
+        let mut files = json!({ FILE: { "content": to_content(&merged)? } });
+        if let Some(goals) = &merged_goals {
+            files[GOALS_FILE] = json!({ "content": to_content(goals)? });
+        }
+        let id = create_gist(token, files)?;
+        return Ok((id, merged, merged_goals));
     };
 
-    let remote = fetch(token, &id)?;
+    let gist = send("GET", &format!("{API}/gists/{id}"), token, None)?;
+    let mut changed = serde_json::Map::new();
+
+    let remote: Option<History> = read_file(&gist, FILE)?;
     if let Some(remote) = &remote {
         merged.merge(remote);
     }
     if remote.as_ref() != Some(&merged) {
-        let body = json!({ "files": { FILE: { "content": to_content(&merged)? } } });
-        send("PATCH", &format!("{API}/gists/{id}"), token, Some(body))?;
+        changed.insert(FILE.into(), json!({ "content": to_content(&merged)? }));
     }
-    Ok((id, merged))
+
+    if let Some(goals) = &mut merged_goals {
+        let remote: Option<GoalLog> = read_file(&gist, GOALS_FILE)?;
+        if let Some(remote) = &remote {
+            goals.merge(remote);
+        }
+        if remote.as_ref() != Some(&*goals) {
+            changed.insert(GOALS_FILE.into(), json!({ "content": to_content(goals)? }));
+        }
+    }
+
+    if !changed.is_empty() {
+        send("PATCH", &format!("{API}/gists/{id}"), token, Some(json!({ "files": changed })))?;
+    }
+    Ok((id, merged, merged_goals))
 }
 
-fn to_content(history: &History) -> Result<String, String> {
-    serde_json::to_string_pretty(history).map_err(|e| e.to_string())
+fn to_content<T: serde::Serialize>(data: &T) -> Result<String, String> {
+    serde_json::to_string_pretty(data).map_err(|e| e.to_string())
 }
 
 /// Look for a gist created by another device with the same token.
@@ -236,11 +271,11 @@ fn find_gist(token: &str) -> Result<Option<String>, String> {
     Ok(found)
 }
 
-fn create_gist(token: &str, history: &History) -> Result<String, String> {
+fn create_gist(token: &str, files: Value) -> Result<String, String> {
     let body = json!({
         "description": DESCRIPTION,
         "public": false,
-        "files": { FILE: { "content": to_content(history)? } },
+        "files": files,
     });
     let created = send("POST", &format!("{API}/gists"), token, Some(body))?;
     created["id"]
@@ -249,15 +284,15 @@ fn create_gist(token: &str, history: &History) -> Result<String, String> {
         .ok_or_else(|| "GitHub did not return a gist id.".to_owned())
 }
 
-fn fetch(token: &str, id: &str) -> Result<Option<History>, String> {
-    let gist = send("GET", &format!("{API}/gists/{id}"), token, None)?;
-    let Some(file) = gist["files"].get(FILE) else {
+/// One of the gist's files, parsed; `None` if the gist has no such file.
+fn read_file<T: serde::de::DeserializeOwned>(gist: &Value, name: &str) -> Result<Option<T>, String> {
+    let Some(file) = gist["files"].get(name) else {
         return Ok(None);
     };
     let content = file["content"].as_str().unwrap_or_default();
     serde_json::from_str(content)
         .map(Some)
-        .map_err(|e| format!("The synced file is not valid history data: {e}"))
+        .map_err(|e| format!("The synced file {name} is not valid data: {e}"))
 }
 
 fn send(method: &str, url: &str, token: &str, body: Option<Value>) -> Result<Value, String> {
@@ -316,7 +351,7 @@ mod tests {
     #[test]
     #[ignore]
     fn bad_token_is_reported() {
-        let err = run("not-a-real-token", "", &History::default()).unwrap_err();
+        let err = run("not-a-real-token", "", &History::default(), None).unwrap_err();
         assert!(err.contains("401"), "{err}");
     }
 }
