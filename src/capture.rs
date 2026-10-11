@@ -96,7 +96,8 @@ impl Capture {
 
         // "running" shows the timer a third of the way through a focus round.
         if self.page.as_deref() == Some("running") {
-            core.goal = self.goal();
+            // No goal typed yet, so the placeholder shows, unless one is given.
+            core.goal = std::env::var("POMO_GOAL").unwrap_or_default();
             let started = Instant::now().checked_sub(Duration::from_secs(8 * 60 + 20));
             core.toggle(started.unwrap_or_else(Instant::now));
         }

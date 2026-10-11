@@ -238,16 +238,48 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     }
 }
 
-/// The goal of the current focus round: a text box above the ring. Once the
-/// round has finished the goal is fixed and gets a box on its left to tick it
-/// off in.
+/// The goal of the current focus round: plain text on the background, above
+/// the ring, that can be typed over. Once the round has finished the goal is
+/// fixed and gets a box on its left to tick it off in.
 fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let row = Rect::from_center_size(pos2(rect.center().x, rect.top() + 72.0), vec2(236.0, 28.0));
-    let tick = Rect::from_min_max(row.min, pos2(row.left() + 28.0, row.bottom()));
-    let finished = core.phase != Phase::Focus;
-    let frame = if finished { row.with_min_x(tick.right() + 6.0) } else { row };
     let id = ui.id().with("goal");
     let p = ui.painter().clone();
+    let font = FontId::proportional(14.0);
+    // A row of text has more room above its letters than below; nudged up, the
+    // letters sit level with the middle of the tick box.
+    let lift = vec2(0.0, 1.0);
+
+    if core.phase == Phase::Focus {
+        // The field is exactly one row tall and centred in its row by hand;
+        // left to itself the text sits against the top.
+        let row_height = ui.fonts(|f| f.row_height(&font));
+        let field = Rect::from_center_size(row.center() - lift, vec2(row.width(), row_height));
+        let edit = egui::TextEdit::singleline(&mut core.goal)
+            .id(id)
+            .frame(false)
+            .hint_text(RichText::new("(Goal for current focus round)").color(theme.text_dim))
+            .font(font)
+            .text_color(theme.text)
+            .horizontal_align(Align::Center)
+            .margin(vec2(0.0, 0.0))
+            .desired_width(field.width())
+            .char_limit(80);
+        ui.put(field, edit);
+        return;
+    }
+
+    // The goal on one line, cut short with an ellipsis if it doesn't fit, with
+    // the tick box just before it; the pair is centred.
+    let (side, gap) = (28.0, 8.0);
+    let mut job = egui::text::LayoutJob::simple_singleline(core.goal.trim().to_owned(), font, theme.text);
+    job.wrap = egui::text::TextWrapping::truncate_at_width(row.width() - side - gap);
+    let galley = p.layout_job(job);
+    let left = row.center().x - (side + gap + galley.size().x) / 2.0;
+    let tick = Rect::from_min_size(pos2(left, row.top()), vec2(side, side));
+    let text_at = pos2(tick.right() + gap, row.center().y - galley.size().y / 2.0) - lift;
+    p.galley(text_at, galley, theme.text);
+
     let edge = |on: bool, color| {
         let idle = mix(theme.background, theme.muted, 0.45);
         Stroke::new(1.0_f32, if on { color } else { idle })
@@ -260,37 +292,6 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
             p.rect_stroke(rect, 8.0, stroke, egui::StrokeKind::Inside);
         }
     };
-    let font = FontId::proportional(14.0);
-    // A row of text has more room above its letters than below; nudged up, the
-    // letters sit in the middle of the box.
-    let text_center = frame.center() - vec2(0.0, 1.0);
-
-    if !finished {
-        boxed(frame, edge(ui.memory(|m| m.has_focus(id)), theme.accent));
-        // The field is exactly one row tall and centred in its box by hand;
-        // left to itself the text sits against the top.
-        let row_height = ui.fonts(|f| f.row_height(&font));
-        let field = Rect::from_center_size(text_center, vec2(frame.width() - 20.0, row_height));
-        let edit = egui::TextEdit::singleline(&mut core.goal)
-            .id(id)
-            .frame(false)
-            .hint_text(RichText::new("Goal for this focus round").color(theme.text_dim))
-            .font(font)
-            .text_color(theme.text)
-            .horizontal_align(Align::Center)
-            .margin(vec2(0.0, 0.0))
-            .desired_width(field.width())
-            .char_limit(80);
-        ui.put(field, edit);
-        return;
-    }
-
-    // The goal on one line, cut short with an ellipsis if it doesn't fit.
-    boxed(frame, edge(false, theme.accent));
-    let mut job = egui::text::LayoutJob::simple_singleline(core.goal.trim().to_owned(), font, theme.text);
-    job.wrap = egui::text::TextWrapping::truncate_at_width(frame.width() - 20.0);
-    let galley = p.layout_job(job);
-    p.galley(text_center - galley.size() / 2.0, galley, theme.text);
 
     // Only a goal that has been typed can be ticked off.
     let has_goal = !core.goal.trim().is_empty();
