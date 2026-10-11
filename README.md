@@ -43,9 +43,9 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 ## Download
 
-[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon%20%2B%20Intel)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/PrettyPomodoro-macos-universal.zip)
-[![Download for Windows](https://img.shields.io/badge/Download-Windows%20x64-0078D4?style=for-the-badge)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/PrettyPomodoro-windows-x64.zip)
-[![Download for Linux](https://img.shields.io/badge/Download-Linux%20x64-E95420?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/ahmed-abd-elwahed/Pomodoro/releases/latest/download/PrettyPomodoro-linux-x64.tar.gz)
+[![Download for macOS](https://img.shields.io/badge/Download-macOS%20(Apple%20Silicon%20%2B%20Intel)-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-macos-universal.zip)
+[![Download for Windows](https://img.shields.io/badge/Download-Windows%20x64-0078D4?style=for-the-badge)](https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-windows-x64.zip)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux%20x64-E95420?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-linux-x64.tar.gz)
 
 The buttons point at the latest published release and start working once the
 first release is published.
