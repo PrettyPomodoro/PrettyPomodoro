@@ -15,7 +15,7 @@ const DESCRIPTION: &str = "Pomodoro focus history (synced by PrettyPomodoro)";
 /// Client ID of the GitHub OAuth app users sign in through. It is public by
 /// design (the device flow uses no client secret). The app must have "Enable
 /// Device Flow" ticked in its GitHub settings.
-pub const GITHUB_CLIENT_ID: &str = "";
+pub const GITHUB_CLIENT_ID: &str = "Ov23liYZ52NESUYMTBoh";
 
 /// Run a job in the background.
 ///
