@@ -4,9 +4,9 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
 [Pomotroid](https://github.com/Splode/pomotroid).
 
-| Editorial Lavender | Sky Sketch | Sketch Light |
+| Sky Sketch | Editorial Lavender | Sketch Light |
 | --- | --- | --- |
-| ![Editorial Lavender](docs/editorial-lavender.svg) | ![Sky Sketch](docs/sky-sketch.svg) | ![Sketch Light](docs/sketch-light.svg) |
+| ![Sky Sketch](docs/sky-sketch.svg) | ![Editorial Lavender](docs/editorial-lavender.svg) | ![Sketch Light](docs/sketch-light.svg) |
 
 | Activity | Activity (Ink Well) | Cloud Sync |
 | --- | --- | --- |
@@ -143,7 +143,7 @@ The icon files in `assets/` are generated from `assets/icon-source.webp` with
 
 ## Acknowledgements
 
-Thank you to [Pomotroid](https://github.com/Splode/pomotroid) for inspiring us to make this app.
+Thank you to [Pomotroid](https://github.com/Splode/pomotroid) for inspiring this app.
 
 ## License
 
