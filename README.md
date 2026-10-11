@@ -145,7 +145,7 @@ The icon files in `assets/` are generated from `assets/icon-source.webp` with
 
 ## Acknowledgements
 
-Thank you to [Pomotroid](https://github.com/Splode/pomotroid) for inspiring this app.
+Thank you to [Pomotroid](https://github.com/Splode/pomotroid) for inspiring this project.
 
 ## License
 
