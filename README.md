@@ -35,7 +35,9 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 The buttons always download the latest published release.
 
 - **macOS**: unzip and move `PrettyPomodoro.app` to Applications. The app is not
-  notarized, so the first time right-click it and choose **Open**.
+  notarized, so macOS blocks the first launch: press **Done**, open **System
+  Settings → Privacy & Security**, scroll to Security and press **Open Anyway**.
+  This is needed once.
 - **Windows**: unzip and run `PrettyPomodoro.exe`. SmartScreen may ask for
   confirmation because the executable is unsigned.
 - **Linux**: extract the archive and run `./install.sh`, or run `./prettypomodoro`
