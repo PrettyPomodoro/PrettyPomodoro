@@ -16,13 +16,21 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 - Compact 360 × 480 card window with its own title bar.
 - Focus, short break and long break rounds with adjustable lengths and round count.
-- 24 built-in themes in three families:
+- 38 built-in themes in five families:
   - **Light** (7) and **Dark** (16): Graphite, Pomotroid, Catppuccin, Tokyo Night,
     Dracula, Nord, Gruvbox, Rosé Pine, One Dark, Solarized, GitHub, Everforest,
     Kanagawa, Monokai Pro, Night Owl, Ayu, Synthwave.
-  - **Pencil Art**: Tomato Sketch, drawn like the app icon with ink outlines,
-    hatching and a sketched tomato for the timer ring.
-- A theme editor for your own themes, either flat light/dark or pencil art.
+  - **Pencil Art** (5): Tomato Sketch and four more, drawn like the app icon with
+    ink outlines, hatching and a sketched tomato for the timer ring.
+  - **Sketch** (5): a greyscale interface around a timer drawn like a
+    hand-sketched chart, with dashed grid rings, one wobbly coloured series and
+    handwritten figures.
+  - **Editorial** (5): warm paper canvases, serif figures, clean ink outlines
+    and a terracotta accent.
+- A theme editor for your own themes in any of the styles: flat light/dark,
+  pencil art, sketch or editorial.
+- A goal for each focus round, typed above the timer. When the round finishes
+  a box appears beside it to tick the goal off.
 - Chimes at the end of focus and break rounds, optional tick sounds, volume and mute.
 - Activity heat map in the style of the GitHub contribution graph, shaded from
   the active theme's colours, with today / week / streak / all-time totals.

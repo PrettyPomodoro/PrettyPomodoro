@@ -3,6 +3,7 @@
 mod fonts;
 mod pencil;
 mod settings;
+mod sketch;
 mod stats;
 mod themes;
 mod timer;

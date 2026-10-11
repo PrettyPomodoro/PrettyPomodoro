@@ -3,7 +3,7 @@
 use super::widgets::{heading, icon_button, Icon};
 use crate::config::Config;
 use crate::core::Core;
-use crate::theme::{builtin_themes, parse_hex, pencil_art_theme, to_hex, Family, Style, Theme};
+use crate::theme::{first_of_style, parse_hex, to_hex, Family, Style, Theme};
 use eframe::egui::{self, pos2, vec2, Align2, Color32, FontId, Rect, RichText, Sense, Stroke, Ui};
 
 #[derive(Default)]
@@ -19,7 +19,7 @@ pub struct Editor {
     original: Option<String>,
     /// Starting palettes for a new theme, one per style. Switching style swaps
     /// the palette as long as the colours haven't been touched.
-    seeds: Option<(Theme, Theme)>,
+    seeds: Option<Vec<Theme>>,
     /// Index of the colour row whose choices are open.
     picking: Option<usize>,
     picker: Picker,
@@ -43,17 +43,18 @@ impl State {
 
     pub fn start_new(&mut self, cfg: &Config) {
         let active = cfg.active_theme();
-        let mut standard = match active.style {
-            Style::Standard => active,
-            Style::PencilArt => builtin_themes().swap_remove(0),
-        };
-        standard.name = unique_name(cfg, "My Theme");
-        let mut pencil = pencil_art_theme();
-        pencil.name = standard.name.clone();
+        let name = unique_name(cfg, "My Theme");
+        let seeds: Vec<_> = Style::ALL
+            .into_iter()
+            .map(|style| {
+                let seed = if active.style == style { active.clone() } else { first_of_style(style) };
+                Theme { name: name.clone(), ..seed }
+            })
+            .collect();
         self.editor = Some(Editor {
-            theme: standard.clone(),
+            theme: seeds[0].clone(),
             original: None,
-            seeds: Some((standard, pencil)),
+            seeds: Some(seeds),
             picking: None,
             picker: Picker::default(),
             error: None,
@@ -66,17 +67,16 @@ impl Editor {
         if self.theme.style == style {
             return;
         }
-        if let Some((standard, pencil)) = &self.seeds {
-            let (from, to) = match style {
-                Style::PencilArt => (standard, pencil),
-                Style::Standard => (pencil, standard),
-            };
-            let name = std::mem::take(&mut self.theme.name);
-            let untouched = Theme { name: from.name.clone(), ..self.theme.clone() } == *from;
-            if untouched {
-                self.theme = to.clone();
+        if let Some(seeds) = &self.seeds {
+            let seed = |style| seeds.iter().find(|t| t.style == style);
+            if let (Some(from), Some(to)) = (seed(self.theme.style), seed(style)) {
+                let name = std::mem::take(&mut self.theme.name);
+                let untouched = Theme { name: from.name.clone(), ..self.theme.clone() } == *from;
+                if untouched {
+                    self.theme = to.clone();
+                }
+                self.theme.name = name;
             }
-            self.theme.name = name;
         }
         self.theme.style = style;
     }
@@ -279,24 +279,28 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     );
     ui.add_space(6.0);
 
-    // A theme is either a flat light/dark one or drawn as pencil art.
+    // A theme is either a flat light/dark one or drawn in one of the styles.
     ui.label(RichText::new("Style").size(13.0).color(theme.text_dim));
-    ui.horizontal(|ui| {
-        let w = (ui.available_width() - 8.0) / 2.0;
-        for (style, label) in [(Style::Standard, "Light / Dark"), (Style::PencilArt, "Pencil Art")] {
-            let on = editor.theme.style == style;
-            let text = RichText::new(label).color(if on { theme.surface } else { theme.text });
-            let mut button = egui::Button::new(text);
-            if on {
-                button = button.fill(theme.accent);
+    for row in Style::ALL.chunks(2) {
+        ui.horizontal(|ui| {
+            let w = (ui.available_width() - 8.0) / 2.0;
+            for &style in row {
+                let on = editor.theme.style == style;
+                let color = if on { theme.on_accent() } else { theme.text };
+                let mut button = egui::Button::new(RichText::new(style.label()).color(color));
+                if on {
+                    button = button.fill(theme.accent);
+                }
+                if ui.add_sized([w, 30.0], button).clicked() {
+                    editor.set_style(style);
+                }
             }
-            if ui.add_sized([w, 30.0], button).clicked() {
-                editor.set_style(style);
-            }
-        }
-    });
+        });
+    }
     let hint = match editor.theme.family() {
         Family::PencilArt => "Hand-drawn look: ink outlines, hatching and a sketched timer.".to_owned(),
+        Family::Sketch => "Greyscale, with the timer drawn as a hand-sketched chart.".to_owned(),
+        Family::Editorial => "Editorial look: serif figures and clean ink outlines.".to_owned(),
         family => format!("Flat colours. Listed under {} because of its background.", family.label()),
     };
     ui.label(RichText::new(hint).size(12.0).color(theme.text_dim));
@@ -351,7 +355,7 @@ fn edit(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         if ui.add_sized([w, 32.0], egui::Button::new("Cancel")).clicked() {
             close = true;
         }
-        let save = egui::Button::new(RichText::new("Save Theme").color(theme.surface)).fill(theme.accent);
+        let save = egui::Button::new(RichText::new("Save Theme").color(theme.on_accent())).fill(theme.accent);
         if ui.add_sized([w, 32.0], save).clicked() {
             match validate(editor, &core.cfg) {
                 Ok(()) => {

@@ -35,6 +35,18 @@ impl Phase {
 
 }
 
+/// Where the goal typed for a focus round stands.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum GoalStatus {
+    /// The focus round is still to do or under way.
+    #[default]
+    Open,
+    /// The focus round ran to its end; the goal can be ticked off.
+    Finished,
+    /// Ticked off by the user.
+    Achieved,
+}
+
 /// Background work on the cloud copy of the history.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SyncJob {
@@ -71,6 +83,11 @@ pub struct Core {
     /// 1-based focus round within the current set.
     pub round: u32,
     pub running: bool,
+    /// What the current focus round is for, typed on the timer page. It stays
+    /// through the break after a finished round, to be ticked off, and is
+    /// cleared for the next round.
+    pub goal: String,
+    pub goal_status: GoalStatus,
     /// Time left when paused; while running, `deadline` is authoritative.
     remaining: Duration,
     deadline: Option<Instant>,
@@ -105,6 +122,8 @@ impl Core {
             phase: Phase::Focus,
             round: 1,
             running: false,
+            goal: String::new(),
+            goal_status: GoalStatus::Open,
             remaining,
             deadline: None,
             fresh: true,
@@ -178,13 +197,22 @@ impl Core {
     /// Back to the first focus round.
     pub fn reset(&mut self) {
         self.round = 1;
+        self.clear_goal();
         self.enter(Phase::Focus, false, Instant::now());
     }
 
     /// Move on without counting the current phase as completed.
     pub fn skip(&mut self, now: Instant) {
+        if self.phase == Phase::Focus {
+            self.clear_goal();
+        }
         let was_running = self.running;
         self.advance(was_running, now);
+    }
+
+    fn clear_goal(&mut self) {
+        self.goal.clear();
+        self.goal_status = GoalStatus::Open;
     }
 
     fn advance(&mut self, autostart: bool, now: Instant) {
@@ -198,10 +226,12 @@ impl Core {
                 self.enter(next, autostart, now);
             }
             Phase::ShortBreak => {
+                self.clear_goal();
                 self.round += 1;
                 self.enter(Phase::Focus, autostart, now);
             }
             Phase::LongBreak => {
+                self.clear_goal();
                 self.round = 1;
                 self.enter(Phase::Focus, autostart, now);
             }
@@ -251,6 +281,11 @@ impl Core {
                 self.sync_request = Some(SyncJob::Sync);
             }
             self.play(Sound::FocusEnd);
+            if self.goal.trim().is_empty() {
+                self.clear_goal();
+            } else {
+                self.goal_status = GoalStatus::Finished;
+            }
             self.advance(self.cfg.auto_start_break, now);
             if self.cfg.notify_focus_end {
                 let (kind, min) = match self.phase {
@@ -380,6 +415,32 @@ mod tests {
         assert_eq!(c.phase, Phase::ShortBreak);
         assert!(c.running);
         assert_eq!(c.history.total().sessions, 0);
+    }
+
+    #[test]
+    fn goal_can_be_ticked_after_a_finished_round_only() {
+        let mut c = core();
+        let mut now = Instant::now();
+        c.goal = "Write the report".into();
+        c.toggle(now);
+        c.toggle(now);
+        c.restart_phase();
+        assert_eq!((c.goal.as_str(), c.goal_status), ("Write the report", GoalStatus::Open));
+
+        finish(&mut c, &mut now);
+        assert_eq!(c.phase, Phase::ShortBreak);
+        assert_eq!((c.goal.as_str(), c.goal_status), ("Write the report", GoalStatus::Finished));
+        c.goal_status = GoalStatus::Achieved;
+
+        // The next focus round starts with an empty goal.
+        finish(&mut c, &mut now);
+        assert_eq!(c.phase, Phase::Focus);
+        assert_eq!((c.goal.as_str(), c.goal_status), ("", GoalStatus::Open));
+
+        // A skipped round was not finished, so there is nothing to tick.
+        c.goal = "Skipped".into();
+        c.skip(now);
+        assert_eq!((c.goal.as_str(), c.goal_status), ("", GoalStatus::Open));
     }
 
     #[test]

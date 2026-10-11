@@ -1,5 +1,6 @@
 //! Colour themes. Built-in palettes follow the well-known editor colour
-//! schemes of the same name; users can add their own on the Themes page.
+//! schemes of the same name, or one of two design systems (Sketch and
+//! Editorial); users can add their own on the Themes page.
 
 use eframe::egui::Color32;
 use serde::{Deserialize, Serialize};
@@ -13,6 +14,24 @@ pub enum Style {
     Standard,
     /// Hand-drawn illustration look: ink outlines, hatching, wobbly lines.
     PencilArt,
+    /// Greyscale interface around a timer drawn like a hand-sketched chart:
+    /// dashed grid rings, a wobbly series line, handwritten figures.
+    Sketch,
+    /// Warm editorial look: serif figures and clean ink outlines on paper.
+    Editorial,
+}
+
+impl Style {
+    pub const ALL: [Style; 4] = [Style::Standard, Style::PencilArt, Style::Sketch, Style::Editorial];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            Style::Standard => "Light / Dark",
+            Style::PencilArt => "Pencil Art",
+            Style::Sketch => "Sketch",
+            Style::Editorial => "Editorial",
+        }
+    }
 }
 
 /// The group a theme is listed under.
@@ -21,22 +40,29 @@ pub enum Family {
     Light,
     Dark,
     PencilArt,
+    Sketch,
+    Editorial,
 }
 
 impl Family {
-    pub const ALL: [Family; 3] = [Family::Light, Family::Dark, Family::PencilArt];
+    pub const ALL: [Family; 5] =
+        [Family::Light, Family::Dark, Family::PencilArt, Family::Sketch, Family::Editorial];
 
     pub fn label(self) -> &'static str {
         match self {
             Family::Light => "Light",
             Family::Dark => "Dark",
             Family::PencilArt => "Pencil Art",
+            Family::Sketch => "Sketch",
+            Family::Editorial => "Editorial",
         }
     }
 }
 
 /// Outline colour of the pencil art style.
 pub const INK: Color32 = Color32::from_rgb(16, 14, 20);
+/// Outline and text colour of the editorial style.
+pub const EDITORIAL_INK: Color32 = Color32::from_rgb(0x14, 0x14, 0x13);
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Theme {
@@ -74,14 +100,28 @@ impl Theme {
     pub fn family(&self) -> Family {
         match self.style {
             Style::PencilArt => Family::PencilArt,
+            Style::Sketch => Family::Sketch,
+            Style::Editorial => Family::Editorial,
             Style::Standard if self.is_dark() => Family::Dark,
             Style::Standard => Family::Light,
         }
     }
 
-    /// The outline colour, for themes drawn in the pencil art style.
+    /// The outline colour, for themes drawn in a style that outlines its shapes.
     pub fn ink(&self) -> Option<Color32> {
-        (self.style == Style::PencilArt).then_some(INK)
+        match self.style {
+            Style::PencilArt => Some(INK),
+            Style::Editorial => Some(EDITORIAL_INK),
+            Style::Standard | Style::Sketch => None,
+        }
+    }
+
+    /// Text colour on an accent fill. Editorial sets ink on its accent, never white.
+    pub fn on_accent(&self) -> Color32 {
+        match self.style {
+            Style::Editorial => EDITORIAL_INK,
+            _ => self.surface,
+        }
     }
 }
 
@@ -151,22 +191,48 @@ const BUILTIN: &[[&str; 10]] = &[
     ["Synthwave",        "ff7edb", "72f1b8", "36f9f6", "262335", "372d4b", "495495", "e0e3e6", "b893ce", "fede5d"],
 ];
 
-/// The pencil art theme: the app icon's blue, tomato red and leaf green.
-const TOMATO_SKETCH: [&str; 10] = [
-    "Tomato Sketch",
-    "e5392b",
-    "7cbf4b",
-    "f6c544",
-    "2a62e6",
-    "2456d3",
-    "153a9c",
-    "fff7e8",
-    "d3dfff",
-    "8fd155",
+/// The Pencil Art family. Tomato Sketch is the app icon's blue, tomato red and
+/// leaf green; the others keep its tomato on a different sheet of paper.
+#[rustfmt::skip]
+const PENCIL_ART: &[[&str; 10]] = &[
+    ["Tomato Sketch", "e5392b", "7cbf4b", "f6c544", "2a62e6", "2456d3", "153a9c", "fff7e8", "d3dfff", "8fd155"],
+    ["Paper Sketch",  "e5392b", "7cbf4b", "f6c544", "fff7e8", "f6ecd6", "b9a98a", "100e14", "5b5246", "e5392b"],
+    ["Garden Sketch", "e5392b", "a8e063", "f6c544", "2f8f5b", "27804f", "185c37", "fff7e8", "d3f0dc", "f6c544"],
+    ["Sunny Sketch",  "e5392b", "4f9d2d", "2a62e6", "f6c544", "efb92e", "b98a12", "100e14", "5a4508", "e5392b"],
+    ["Sky Sketch",    "e5392b", "4f9d2d", "f6c544", "8fd1ff", "7cc4f5", "3f8fc4", "100e14", "1f4d6e", "e5392b"],
 ];
 
-pub fn pencil_art_theme() -> Theme {
-    from_row(&TOMATO_SKETCH, Style::PencilArt)
+/// The Sketch family. The timer page is the system's `surface` and the settings
+/// pages its `canvas`; the one hue belongs to the focus series alone, breaks
+/// are the grey comparison series, and controls stay greyscale. The hue is the
+/// system's green, its link blue or its seal gold.
+#[rustfmt::skip]
+const SKETCH: &[[&str; 10]] = &[
+    ["Sketch Light",     "16a34a", "737373", "404040", "ffffff", "fafafa", "999999", "171717", "737373", "404040"],
+    ["Sketch Dark",      "22c55e", "a3a3a3", "d4d4d4", "171717", "0a0a0a", "7a7a7a", "f5f5f5", "a3a3a3", "d4d4d4"],
+    ["Sketch Blue",      "1d4ed8", "737373", "404040", "ffffff", "fafafa", "999999", "171717", "737373", "404040"],
+    ["Sketch Blue Dark", "60a5fa", "a3a3a3", "d4d4d4", "171717", "0a0a0a", "7a7a7a", "f5f5f5", "a3a3a3", "d4d4d4"],
+    ["Sketch Gold",      "d8a83c", "a3a3a3", "d4d4d4", "171717", "0a0a0a", "7a7a7a", "f5f5f5", "a3a3a3", "d4d4d4"],
+];
+
+/// The Editorial family: terracotta focus, teal and amber breaks, ink text, on
+/// each of the system's canvases and illustration tints. Muted sits between
+/// the system's `rule` and `ink-muted` so tracks stay visible; on the tinted
+/// canvases the secondary text is darkened to stay legible.
+#[rustfmt::skip]
+const EDITORIAL: &[[&str; 10]] = &[
+    ["Editorial",          "d97757", "0e7c8c", "f29f05", "f3f2ee", "ffffff", "b9b8b2", "141413", "5e5d59", "d97757"],
+    ["Editorial Warm",     "d97757", "0e7c8c", "f29f05", "e5cabb", "f3f2ee", "a8978c", "141413", "4d4c48", "d97757"],
+    ["Editorial White",    "d97757", "0e7c8c", "f29f05", "ffffff", "f3f2ee", "b9b8b2", "141413", "5e5d59", "d97757"],
+    ["Editorial Sage",     "d97757", "0e7c8c", "f29f05", "b8d0c6", "f3f2ee", "88a096", "141413", "45504b", "d97757"],
+    ["Editorial Lavender", "d97757", "0e7c8c", "f29f05", "c9c8e0", "f3f2ee", "9897b4", "141413", "4a4960", "d97757"],
+];
+
+/// The first built-in theme drawn in `style`: the starting palette for a new
+/// theme of that style.
+pub fn first_of_style(style: Style) -> Theme {
+    let found = builtin_themes().into_iter().find(|t| t.style == style);
+    found.expect("a built-in theme per style")
 }
 
 pub fn builtin_themes() -> Vec<Theme> {
@@ -174,7 +240,9 @@ pub fn builtin_themes() -> Vec<Theme> {
         .iter()
         .map(|t| from_row(t, Style::Standard))
         .collect();
-    themes.push(pencil_art_theme());
+    themes.extend(PENCIL_ART.iter().map(|t| from_row(t, Style::PencilArt)));
+    themes.extend(SKETCH.iter().map(|t| from_row(t, Style::Sketch)));
+    themes.extend(EDITORIAL.iter().map(|t| from_row(t, Style::Editorial)));
     themes
 }
 
@@ -220,10 +288,13 @@ mod tests {
     fn families() {
         let themes = builtin_themes();
         for family in Family::ALL {
-            assert!(themes.iter().any(|t| t.family() == family), "{family:?}");
+            assert!(themes.iter().filter(|t| t.family() == family).count() >= 5, "{family:?}");
+        }
+        for style in Style::ALL {
+            assert_eq!(first_of_style(style).style, style);
         }
         // Themes saved before styles existed load as standard ones.
-        let mut json = serde_json::to_value(pencil_art_theme()).unwrap();
+        let mut json = serde_json::to_value(first_of_style(Style::PencilArt)).unwrap();
         json.as_object_mut().unwrap().remove("style");
         let old: Theme = serde_json::from_value(json).unwrap();
         assert_eq!(old.family(), Family::Dark);

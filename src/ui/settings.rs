@@ -103,7 +103,7 @@ pub fn sync(ui: &mut Ui, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
     heading(ui, "Cloud Sync", theme);
     let dim = |s: &str| RichText::new(s).size(12.5).color(theme.text_dim);
     let primary = |label: &str, enabled: bool| {
-        egui::Button::new(RichText::new(label).size(14.0).color(theme.surface))
+        egui::Button::new(RichText::new(label).size(14.0).color(theme.on_accent()))
             .fill(if enabled { theme.accent } else { theme.muted })
             .min_size(vec2(190.0, 34.0))
     };

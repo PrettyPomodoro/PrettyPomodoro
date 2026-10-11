@@ -2,7 +2,7 @@
 //!
 //! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Nord"] prettypomodoro`
 //!
-//! Pages: `running`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `sync`, `signin`, `code`, `about`.
+//! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `sync`, `signin`, `code`, `about`.
 //!
 //! Nothing is read from or written to the user's saved data in this mode.
 
@@ -66,8 +66,19 @@ impl Capture {
             };
         }
 
+        // "achieved" shows the break after a finished focus round, goal ticked off.
+        if self.page.as_deref() == Some("achieved") {
+            core.cfg.auto_start_break = false;
+            core.goal = "Draft the launch notes".into();
+            let now = Instant::now();
+            core.toggle(now);
+            core.tick(now + Duration::from_secs(3600));
+            core.goal_status = crate::core::GoalStatus::Achieved;
+        }
+
         // "running" shows the timer a third of the way through a focus round.
         if self.page.as_deref() == Some("running") {
+            core.goal = "Draft the launch notes".into();
             let started = Instant::now().checked_sub(Duration::from_secs(8 * 60 + 20));
             core.toggle(started.unwrap_or_else(Instant::now));
         }

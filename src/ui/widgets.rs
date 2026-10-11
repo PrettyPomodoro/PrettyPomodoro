@@ -162,13 +162,13 @@ pub fn paint_icon(p: &Painter, c: Pos2, icon: Icon, color: Color32) {
 }
 
 /// Text with extra space between letters, centred on `center`.
-pub fn spaced_text(p: &Painter, center: Pos2, text: &str, size: f32, color: Color32, gap: f32) {
+pub fn spaced_text(p: &Painter, center: Pos2, text: &str, font: FontId, color: Color32, gap: f32) {
     let mut job = egui::text::LayoutJob::default();
     job.append(
         text,
         0.0,
         egui::TextFormat {
-            font_id: FontId::proportional(size),
+            font_id: font,
             color,
             extra_letter_spacing: gap,
             ..Default::default()
@@ -255,7 +255,7 @@ pub fn heading(ui: &mut Ui, text: &str, theme: &Theme) {
     ui.add_space(6.0);
 }
 
-/// Ink outline around a filled shape, for themes in the pencil art style.
+/// Ink outline around a filled shape, for themes in a style that has one.
 pub fn ink_outline(p: &Painter, rect: Rect, radius: f32, theme: &Theme) {
     if let Some(ink) = theme.ink() {
         p.rect_stroke(rect, radius, Stroke::new(1.3_f32, ink), egui::StrokeKind::Outside);
