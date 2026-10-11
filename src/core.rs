@@ -93,6 +93,11 @@ pub struct Core {
     /// Picked up by the ticker thread, which owns starting sync jobs.
     pub sync_request: Option<SyncJob>,
 
+    /// A newer release, once the update check has found one.
+    pub update: crate::update::UpdateState,
+    /// Set by the Update button; picked up by the ticker thread.
+    pub update_request: bool,
+
     audio: Option<Audio>,
     notifications: bool,
     persist: bool,
@@ -124,6 +129,8 @@ impl Core {
             sign_in: SignIn::Idle,
             sign_in_attempt: 0,
             sync_request: None,
+            update: Default::default(),
+            update_request: false,
             notifications: audio.is_some(),
             persist: audio.is_some(),
             audio,
@@ -340,7 +347,7 @@ impl Core {
         self.play(Sound::FocusEnd);
     }
 
-    fn notify(&self, title: &str, body: &str) {
+    pub fn notify(&self, title: &str, body: &str) {
         if !self.notifications {
             return;
         }
@@ -360,11 +367,14 @@ impl Core {
 pub fn spawn_ticker(shared: Shared, ctx: egui::Context) {
     std::thread::spawn(move || loop {
         std::thread::sleep(Duration::from_millis(100));
-        let (running, job) = {
+        let (running, job, update) = {
             let mut core = lock(&shared);
             core.tick(Instant::now());
-            (core.running, core.sync_request.take())
+            (core.running, core.sync_request.take(), std::mem::take(&mut core.update_request))
         };
+        if update {
+            crate::update::spawn_install(shared.clone(), ctx.clone());
+        }
         if let Some(job) = job {
             crate::sync::spawn(shared.clone(), ctx.clone(), job);
         }

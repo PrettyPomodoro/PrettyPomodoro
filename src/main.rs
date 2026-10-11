@@ -10,6 +10,7 @@ mod sync;
 mod theme;
 mod tray;
 mod ui;
+mod update;
 
 use eframe::egui;
 use std::sync::{Arc, Mutex};

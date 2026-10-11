@@ -33,6 +33,8 @@ pub struct Config {
     pub sync: SyncConfig,
     /// Identifies this install in the synced history.
     pub device_id: String,
+    /// The newest version a desktop notification has already announced.
+    pub update_notified: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
@@ -70,6 +72,7 @@ impl Default for Config {
             custom_themes: Vec::new(),
             sync: SyncConfig::default(),
             device_id: String::new(),
+            update_notified: String::new(),
         }
     }
 }

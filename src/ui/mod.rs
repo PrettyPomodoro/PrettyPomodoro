@@ -71,6 +71,9 @@ impl App {
         crate::core::spawn_ticker(shared.clone(), cc.egui_ctx.clone());
 
         let capture = crate::capture::Capture::from_env();
+        if capture.is_none() {
+            crate::update::spawn_checker(shared.clone(), cc.egui_ctx.clone());
+        }
         let saved_cfg = {
             let mut core = lock(&shared);
             if let Some(capture) = &capture {
@@ -202,7 +205,7 @@ impl App {
                             core.sync_request = Some(job);
                         }
                     }
-                    Tab::About => settings::about(ui, &mut self.settings, theme),
+                    Tab::About => settings::about(ui, &mut self.settings, core, theme),
                 }
                 ui.add_space(14.0);
             });

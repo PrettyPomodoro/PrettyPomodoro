@@ -1,6 +1,6 @@
 //! The main card: progress ring, countdown and transport controls.
 
-use super::widgets::{icon_button, ink_outline, paint_icon, spaced_text, Icon};
+use super::widgets::{icon_button, ink_outline, paint_icon, spaced_text, start_update, update_notice, Icon};
 use super::{fonts, pencil, sketch};
 use crate::core::{Core, Phase};
 use crate::theme::{luminance, mix, Style, Theme, EDITORIAL_INK, INK};
@@ -13,6 +13,7 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let cx = rect.center().x;
     let color = core.phase.color(theme);
 
+    update_strip(ui, rect, core, theme);
     if core.phase == Phase::Focus || !core.goal.is_empty() {
         goal_box(ui, rect, core, theme);
     }
@@ -329,4 +330,40 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         (true, false) => "Tick off your goal",
         (true, true) => "Goal achieved",
     });
+}
+
+/// A newer release, announced in a thin strip under the title bar: what is
+/// available and a small button to get it.
+fn update_strip(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
+    let Some((text, action)) = update_notice(&core.update) else {
+        return;
+    };
+    let p = ui.painter().clone();
+    let y = rect.top() + 49.0;
+    let font = FontId::proportional(12.5);
+    let label = p.layout_no_wrap(text, font.clone(), theme.text_dim);
+    let Some(action) = action else {
+        p.galley(pos2(rect.center().x - label.size().x / 2.0, y - label.size().y / 2.0), label, theme.text_dim);
+        return;
+    };
+    let word = p.layout_no_wrap(action.to_owned(), font, theme.on_accent());
+    let button = vec2(word.size().x + 20.0, 18.0);
+    let left = rect.center().x - (label.size().x + 8.0 + button.x) / 2.0;
+    p.galley(pos2(left, y - label.size().y / 2.0), label.clone(), theme.text_dim);
+    let pill = Rect::from_min_size(pos2(left + label.size().x + 8.0, y - button.y / 2.0), button);
+    let resp = ui
+        .interact(pill, ui.id().with("update"), Sense::click())
+        .on_hover_cursor(egui::CursorIcon::PointingHand);
+    let fill = if resp.hovered() { mix(theme.accent, theme.text, 0.15) } else { theme.accent };
+    p.rect_filled(pill, 9.0, fill);
+    ink_outline(&p, pill, 9.0, theme);
+    p.galley(pill.center() - word.size() / 2.0, word, theme.on_accent());
+    let hint = match &core.update {
+        crate::update::UpdateState::Failed(_, error) => error.clone(),
+        _ if crate::update::INSTALLS_IN_PLACE => "Install the new version and restart".to_owned(),
+        _ => "Download the new version".to_owned(),
+    };
+    if resp.on_hover_text(hint).clicked() {
+        start_update(ui, core);
+    }
 }

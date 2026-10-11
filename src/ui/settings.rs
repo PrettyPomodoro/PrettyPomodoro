@@ -212,7 +212,7 @@ pub fn sync(ui: &mut Ui, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
     job
 }
 
-pub fn about(ui: &mut Ui, state: &mut State, theme: &Theme) {
+pub fn about(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     heading(ui, "About", theme);
     ui.vertical_centered(|ui| {
         let icon = state.icon.get_or_insert_with(|| {
@@ -231,6 +231,21 @@ pub fn about(ui: &mut Ui, state: &mut State, theme: &Theme) {
                 .size(12.5)
                 .color(theme.text_dim),
         );
+        if let Some((text, action)) = super::widgets::update_notice(&core.update) {
+            ui.add_space(4.0);
+            ui.label(RichText::new(text).size(13.5));
+            if let crate::update::UpdateState::Failed(_, error) = &core.update {
+                ui.label(RichText::new(error).size(12.5).color(theme.focus));
+            }
+            if let Some(action) = action {
+                let button = egui::Button::new(RichText::new(action).size(14.0).color(theme.on_accent()))
+                    .fill(theme.accent)
+                    .min_size(vec2(120.0, 30.0));
+                if ui.add(button).clicked() {
+                    super::widgets::start_update(ui, core);
+                }
+            }
+        }
         ui.add_space(8.0);
         ui.label(
             RichText::new("A small, themeable focus timer written in pure Rust with egui.")

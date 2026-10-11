@@ -43,6 +43,19 @@ The buttons always download the latest published release.
 - **Linux**: extract the archive and run `./install.sh`, or run `./prettypomodoro`
   directly. Sound needs ALSA (`libasound2`).
 
+## Updates
+
+The app checks GitHub for a newer release when it starts and twice a day while
+it runs. When there is one it shows a desktop notification, and an **Update**
+button appears under the title bar and on the About page.
+
+- **macOS**: the button downloads the release, replaces the app in place and
+  relaunches it. A round in progress is not carried over.
+- **Windows** and **Linux**: the button opens the download for your platform
+  in the browser; install it as before.
+
+The check is one request to GitHub's public API and sends nothing about you.
+
 ## Small and fast
 
 PrettyPomodoro is a single native Rust executable. It does not bundle a browser

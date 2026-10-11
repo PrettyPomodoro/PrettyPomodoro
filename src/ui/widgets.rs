@@ -259,6 +259,31 @@ pub fn text_link(ui: &mut Ui, text: &str, size: f32, theme: &Theme) -> Response 
     resp.on_hover_cursor(egui::CursorIcon::PointingHand)
 }
 
+/// What to say about a newer release and what its button is called; `None`
+/// when the app is up to date. The button is absent while installing.
+pub fn update_notice(update: &crate::update::UpdateState) -> Option<(String, Option<&'static str>)> {
+    use crate::update::UpdateState;
+    match update {
+        UpdateState::UpToDate => None,
+        UpdateState::Available(r) => Some((format!("Version {} is available", r.version), Some("Update"))),
+        UpdateState::Installing(r) => Some((format!("Updating to {}…", r.version), None)),
+        UpdateState::Failed(..) => Some(("The update did not install".to_owned(), Some("Retry"))),
+    }
+}
+
+/// Act on a press of the update button: install in place where the app can,
+/// otherwise open the download in the browser.
+pub fn start_update(ui: &Ui, core: &mut crate::core::Core) {
+    let Some(release) = core.update.release() else {
+        return;
+    };
+    if crate::update::INSTALLS_IN_PLACE {
+        core.update_request = true;
+    } else {
+        ui.ctx().open_url(egui::OpenUrl::new_tab(release.download_url()));
+    }
+}
+
 pub fn heading(ui: &mut Ui, text: &str, theme: &Theme) {
     ui.vertical_centered(|ui| {
         ui.label(egui::RichText::new(text).size(16.0).color(theme.text));

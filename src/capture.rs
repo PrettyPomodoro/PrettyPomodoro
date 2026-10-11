@@ -1,7 +1,7 @@
 //! Developer aid: render one page with demo data to a PNG, or to an SVG if the
 //! path ends in `.svg`, and exit.
 //!
-//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Ink Well"] [POMO_GOAL="..."] prettypomodoro`
+//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Ink Well"] [POMO_GOAL="..."] [POMO_UPDATE=1.2.3] prettypomodoro`
 //!
 //! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `goals`, `sync`, `signin`, `code`, `about`.
 //!
@@ -60,6 +60,15 @@ impl Capture {
             }
         }
         core.history = history;
+
+        // `POMO_UPDATE=1.2.3` shows that version as an available update.
+        if let Ok(version) = std::env::var("POMO_UPDATE") {
+            core.update = crate::update::UpdateState::Available(crate::update::Release {
+                version,
+                asset_url: None,
+                page_url: String::new(),
+            });
+        }
 
         // A few achieved goals for the goal history.
         let mut goals = crate::config::GoalLog::default();
