@@ -242,10 +242,10 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
 /// the ring, that can be typed over. Once the round has finished the goal is
 /// fixed and gets a box on its left to tick it off in.
 fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
-    let row = Rect::from_center_size(pos2(rect.center().x, rect.top() + 72.0), vec2(236.0, 28.0));
+    let row = Rect::from_center_size(pos2(rect.center().x, rect.top() + 72.0), vec2(304.0, 28.0));
     let id = ui.id().with("goal");
     let p = ui.painter().clone();
-    let font = FontId::proportional(14.0);
+    let font = FontId::proportional(16.0);
     // A row of text has more room above its letters than below; nudged up, the
     // letters sit level with the middle of the tick box.
     let lift = vec2(0.0, 1.0);
@@ -258,7 +258,7 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         let edit = egui::TextEdit::singleline(&mut core.goal)
             .id(id)
             .frame(false)
-            .hint_text(RichText::new("(Goal for current focus round)").color(theme.text_dim))
+            .hint_text(RichText::new("Goal for current focus round").color(theme.text_dim))
             .font(font)
             .text_color(theme.text)
             .horizontal_align(Align::Center)
