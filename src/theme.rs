@@ -167,8 +167,6 @@ pub const DEFAULT_THEME: &str = "Graphite";
 #[rustfmt::skip]
 const BUILTIN: &[[&str; 10]] = &[
     ["Graphite",         "505154", "505154", "505154", "ebebea", "fcfcfc", "adafb1", "27292d", "656a75", "08568c"],
-    ["Pomotroid",        "ff4e4d", "05ec8c", "0bbddb", "2f384b", "3d4457", "9ca5b5", "f6f2eb", "c0c9da", "05ec8c"],
-    ["Pomotroid Light",  "c84840", "3a7d58", "6aaec4", "f5f0e8", "ede6db", "c4bdb5", "2f384b", "55647a", "3a7d58"],
     ["Catppuccin Mocha", "f38ba8", "a6e3a1", "89b4fa", "1e1e2e", "313244", "585b70", "cdd6f4", "bac2de", "cba6f7"],
     ["Catppuccin Latte", "d20f39", "40a02b", "209fb5", "eff1f5", "e6e9ef", "bcc0cc", "4c4f69", "6c6f85", "8839ef"],
     ["Tokyo Night",      "f7768e", "73daca", "7aa2f7", "24283b", "1b1e2e", "565f89", "c0caf5", "9aa5ce", "9d7cd8"],

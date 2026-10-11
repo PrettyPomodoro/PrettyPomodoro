@@ -4,7 +4,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
 [Pomotroid](https://github.com/Splode/pomotroid).
 
-| Timer | Running (Pomotroid theme) | Pencil Art (Tomato Sketch) |
+| Timer | Running (Catppuccin Mocha) | Pencil Art (Tomato Sketch) |
 | --- | --- | --- |
 | ![Timer](docs/timer.png) | ![Running](docs/timer-dark.png) | ![Pencil art](docs/pencil.png) |
 
@@ -16,8 +16,8 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 - Compact 360 × 480 card window with its own title bar.
 - Focus, short break and long break rounds with adjustable lengths and round count.
-- 38 built-in themes in five families:
-  - **Light** (7) and **Dark** (16): Graphite, Pomotroid, Catppuccin, Tokyo Night,
+- 36 built-in themes in five families:
+  - **Light** (6) and **Dark** (15): Graphite, Catppuccin, Tokyo Night,
     Dracula, Nord, Gruvbox, Rosé Pine, One Dark, Solarized, GitHub, Everforest,
     Kanagawa, Monokai Pro, Night Owl, Ayu, Synthwave.
   - **Pencil Art** (5): Tomato Sketch and four more, drawn like the app icon with
