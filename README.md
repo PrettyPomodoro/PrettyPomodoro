@@ -8,7 +8,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 | --- | --- | --- |
 | ![Sky Sketch](docs/sky-sketch.svg) | ![Editorial Lavender](docs/editorial-lavender.svg) | ![Sketch Light](docs/sketch-light.svg) |
 
-| Activity | Activity (Ink Well) | Cloud Sync |
+| Activity (Editorial Sage) | Activity (Ink Well) | Cloud Sync |
 | --- | --- | --- |
 | ![Activity](docs/activity.svg) | ![Activity dark](docs/activity-dark.svg) | ![Cloud Sync](docs/sync.svg) |
 
