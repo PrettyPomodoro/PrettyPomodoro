@@ -32,7 +32,7 @@ fn shade(theme: &Theme, sessions: u32) -> Color32 {
 }
 
 pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
-    heading(ui, "Activity", theme);
+    heading(ui, "Focus", theme);
     let today = chrono::Local::now().date_naive();
     let history = &core.history;
 
@@ -60,7 +60,7 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     p.text(
         pos2(hero.center().x, hero.top() + 38.0),
         Align2::CENTER_CENTER,
-        "minutes of focus today",
+        "minutes today",
         FontId::proportional(11.5),
         theme.text_dim,
     );
