@@ -4,17 +4,13 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
 [Pomotroid](https://github.com/Splode/pomotroid).
 
-| Timer | Running (Velvet Dusk) | Pencil Art (Tomato Sketch) |
+| Editorial Sage (goal ticked off) | Pencil Art (Paper Sketch) | Ink Well |
 | --- | --- | --- |
-| ![Timer](docs/timer.png) | ![Running](docs/timer-dark.png) | ![Pencil art](docs/pencil.png) |
+| ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
 
 | Activity | Activity (Velvet Dusk) | Themes |
 | --- | --- | --- |
 | ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Themes](docs/themes.png) |
-
-| Editorial Sage (goal ticked off) | Pencil Art (Paper Sketch) | Ink Well |
-| --- | --- | --- |
-| ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
 
 ## Features
 
