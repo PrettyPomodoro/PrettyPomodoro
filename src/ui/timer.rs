@@ -70,12 +70,11 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
             pencil::calyx(&p, tip, spent_end - top, theme.short_break, ink);
         }
         Style::Sketch => {
-            // A hand-sketched chart: a dashed frame and grid rings, with the
+            // A hand-sketched chart: dashed grid rings, with the
             // time left as the one series over a wash. Breaks are drawn dashed,
             // like a comparison series, so they differ from focus by more than hue.
             let grid = Stroke::new(1.0_f32, mix(theme.background, theme.muted, 0.5));
             let full = top + TAU;
-            sketch::arc(&p, center, radius + 12.0, top, full, Stroke::new(1.5_f32, theme.muted), Some((8.0, 5.0)), 1);
             sketch::arc(&p, center, radius, top, full, grid, Some((6.0, 4.0)), 2);
             sketch::arc(&p, center, radius - 16.0, top, full, grid, Some((6.0, 4.0)), 3);
             if left > 0.0 {
