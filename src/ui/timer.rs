@@ -110,7 +110,9 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     }
 
     // Countdown, one glyph per fixed-width cell so the digits don't jitter.
-    let secs = core.remaining(now).as_secs_f32().ceil() as u64;
+    // Rounded to the nearest second, so a round visibly counts down to 00:00
+    // before it ends rather than ending on 00:01.
+    let secs = core.remaining(now).as_secs_f32().round() as u64;
     let text = format!("{:02}:{:02}", secs / 60, secs % 60);
     let face = match theme.style {
         Style::Standard | Style::PencilArt => fonts::LIGHT,
