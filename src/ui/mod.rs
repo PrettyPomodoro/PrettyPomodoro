@@ -20,7 +20,7 @@ use eframe::egui::{
 use widgets::{icon_button, Icon};
 
 pub const WINDOW_SIZE: [f32; 2] = [360.0, 480.0];
-const HEADER_H: f32 = 56.0;
+const HEADER_H: f32 = 40.0;
 const TABS_H: f32 = 46.0;
 /// macOS rounds the window itself; elsewhere the card is drawn on a transparent window.
 const CORNER: u8 = if cfg!(target_os = "macos") { 0 } else { 10 };
@@ -153,11 +153,21 @@ impl App {
                 self.drawer_open = false;
                 self.themes.editor = None;
             }
-        } else if icon_button(ui, left, Icon::Menu, theme, false)
-            .on_hover_text("Settings")
-            .clicked()
-        {
-            self.drawer_open = true;
+        } else {
+            // Settings and statistics, as two buttons side by side.
+            if icon_button(ui, left, Icon::Sliders, theme, false)
+                .on_hover_text("Settings")
+                .clicked()
+            {
+                self.drawer_open = true;
+            }
+            if icon_button(ui, slot(rect.left() + 62.0), Icon::Bars, theme, false)
+                .on_hover_text("Activity")
+                .clicked()
+            {
+                self.drawer_open = true;
+                self.tab = Tab::Stats;
+            }
         }
 
         if icon_button(ui, slot(rect.right() - 28.0), Icon::Close, theme, false).clicked() {

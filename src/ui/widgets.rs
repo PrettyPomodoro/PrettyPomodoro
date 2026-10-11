@@ -9,7 +9,6 @@ use std::f32::consts::TAU;
 
 #[derive(Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Icon {
-    Menu,
     Back,
     Minimize,
     Close,
@@ -26,7 +25,8 @@ pub enum Icon {
     Info,
     Edit,
     Trash,
-    Restart,
+    Previous,
+    Bars,
 }
 
 /// A clickable icon. Dim by default, full text colour when hovered or `active`.
@@ -63,10 +63,6 @@ pub fn paint_icon(p: &Painter, c: Pos2, icon: Icon, color: Color32) {
         p.add(Shape::line(pts, s));
     };
     match icon {
-        Icon::Menu => {
-            line((-10.0, -5.0), (10.0, -5.0));
-            line((-10.0, 3.0), (2.0, 3.0));
-        }
         Icon::Back => {
             line((4.0, -8.0), (-4.0, 0.0));
             line((-4.0, 0.0), (4.0, 8.0));
@@ -149,14 +145,16 @@ pub fn paint_icon(p: &Painter, c: Pos2, icon: Icon, color: Color32) {
             line((4.5, -4.0), (3.5, 7.0));
             line((-3.5, 7.0), (3.5, 7.0));
         }
-        Icon::Restart => {
-            // Clockwise arc with the arrow head at its end, pointing along the travel.
-            let end = TAU * 0.6;
-            arc(c, 7.0, -TAU * 0.2, end);
-            let (out, along) = (vec2(end.cos(), end.sin()), vec2(-end.sin(), end.cos()));
-            let base = 7.0 * out - 0.5 * along;
-            let pts = [base + 6.0 * along, base + 3.8 * out, base - 3.8 * out];
-            poly(&pts.map(|v| (v.x, v.y)));
+        Icon::Previous => {
+            poly(&[(6.0, -7.0), (-4.0, 0.0), (6.0, 7.0)]);
+            p.rect_filled(Rect::from_center_size(c + vec2(-6.0, 0.0), vec2(2.0, 14.0)), 0.0, color);
+        }
+        Icon::Bars => {
+            // Three rising bars on a shared baseline.
+            for (x, h) in [(-5.5, 6.0), (0.0, 10.0), (5.5, 14.0)] {
+                let bar = Rect::from_min_max(c + vec2(x - 1.6, 7.0 - h), c + vec2(x + 1.6, 7.0));
+                p.rect_filled(bar, 0.5, color);
+            }
         }
     }
 }

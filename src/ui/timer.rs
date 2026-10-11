@@ -152,7 +152,7 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     }
 
     // Play / pause.
-    let play = Rect::from_center_size(pos2(cx, rect.top() + 374.0), vec2(56.0, 56.0));
+    let play = Rect::from_center_size(pos2(cx, rect.top() + 378.0), vec2(56.0, 56.0));
     let resp = ui
         .interact(play, ui.id().with("play"), Sense::click())
         .on_hover_cursor(egui::CursorIcon::PointingHand);
@@ -183,65 +183,59 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         core.toggle(now);
     }
 
+    // Restart and skip sit either side of play; the round counter, reset and
+    // volume share the same three columns in a row below.
+    let column = |i: f32, y: f32| pos2(cx + 60.0 * i, rect.top() + y);
+    let slot = |i: f32, y: f32| Rect::from_center_size(column(i, y), vec2(32.0, 32.0));
+    if icon_button(ui, slot(-1.0, 378.0), Icon::Previous, theme, false)
+        .on_hover_text("Restart this round")
+        .clicked()
+    {
+        core.restart_phase();
+    }
+    if icon_button(ui, slot(1.0, 378.0), Icon::Skip, theme, false)
+        .on_hover_text("Skip to the next round")
+        .clicked()
+    {
+        core.skip(now);
+    }
+
     // Round counter: "current/total (focus sessions completed today)".
-    let base = pos2(rect.left() + 18.0, rect.bottom() - 62.0);
+    let row = 438.0;
     let today = core.history.day(chrono::Local::now().date_naive()).sessions;
-    let r = p.text(
-        base,
-        Align2::LEFT_BOTTOM,
-        format!("{}/{}", core.round, core.cfg.rounds),
-        FontId::proportional(18.0),
-        theme.text,
+    let fonts = (FontId::proportional(15.0), FontId::proportional(11.0));
+    let rounds = format!("{}/{}", core.round, core.cfg.rounds);
+    let sessions = format!("({today})");
+    let widths = (
+        p.layout_no_wrap(rounds.clone(), fonts.0.clone(), theme.text).size().x,
+        p.layout_no_wrap(sessions.clone(), fonts.1.clone(), theme.text_dim).size().x,
     );
-    let r2 = p.text(
-        r.right_bottom() + vec2(4.0, -1.0),
-        Align2::LEFT_BOTTOM,
-        format!("({today})"),
-        FontId::proportional(11.0),
-        theme.text_dim,
-    );
+    let base = column(-1.0, row + 8.0) - vec2((widths.0 + 4.0 + widths.1) / 2.0, 0.0);
+    let r = p.text(base, Align2::LEFT_BOTTOM, rounds, fonts.0, theme.text);
+    let r2 = p.text(r.right_bottom() + vec2(4.0, -1.0), Align2::LEFT_BOTTOM, sessions, fonts.1, theme.text_dim);
     ui.interact(r.union(r2), ui.id().with("rounds"), Sense::hover())
         .on_hover_text(format!(
             "Round {} of {} · {today} focus sessions today",
             core.round, core.cfg.rounds
         ));
 
-    let reset = Rect::from_min_size(pos2(rect.left() + 14.0, rect.bottom() - 46.0), vec2(48.0, 26.0));
+    let reset = Rect::from_center_size(column(0.0, row), vec2(52.0, 26.0));
     let resp = ui
         .interact(reset, ui.id().with("reset"), Sense::click())
         .on_hover_cursor(egui::CursorIcon::PointingHand)
         .on_hover_text("Back to round 1");
     let c = if resp.hovered() { theme.text } else { theme.text_dim };
-    p.text(reset.left_center() + vec2(4.0, 0.0), Align2::LEFT_CENTER, "Reset", FontId::proportional(14.0), c);
+    p.text(reset.center(), Align2::CENTER_CENTER, "Reset", FontId::proportional(14.0), c);
     if resp.clicked() {
         core.reset();
     }
 
-    // Transport controls, bottom right.
-    let slot = |i: f32| {
-        Rect::from_center_size(
-            pos2(rect.right() - 30.0 - 38.0 * i, rect.bottom() - 46.0),
-            vec2(32.0, 32.0),
-        )
-    };
     let vol = if core.cfg.muted { Icon::Muted } else { Icon::Volume };
-    if icon_button(ui, slot(0.0), vol, theme, false)
+    if icon_button(ui, slot(1.0, row), vol, theme, false)
         .on_hover_text(if core.cfg.muted { "Unmute" } else { "Mute" })
         .clicked()
     {
         core.cfg.muted = !core.cfg.muted;
-    }
-    if icon_button(ui, slot(1.0), Icon::Skip, theme, false)
-        .on_hover_text("Skip to the next round")
-        .clicked()
-    {
-        core.skip(now);
-    }
-    if icon_button(ui, slot(2.0), Icon::Restart, theme, false)
-        .on_hover_text("Restart this round")
-        .clicked()
-    {
-        core.restart_phase();
     }
 }
 
