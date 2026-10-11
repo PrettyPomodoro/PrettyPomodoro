@@ -240,7 +240,8 @@ pub fn show(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
 }
 
 /// The goal of the current focus round: a box to tick it off in and a text
-/// box, above the ring. The goal can be edited until the round has finished.
+/// box, above the ring. The goal can be edited until it is ticked off or the
+/// round has finished.
 fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     let row = Rect::from_center_size(pos2(rect.center().x, rect.top() + 72.0), vec2(236.0, 28.0));
     let tick = Rect::from_min_max(row.min, pos2(row.left() + 28.0, row.bottom()));
@@ -264,7 +265,8 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
     // letters sit in the middle of the box.
     let text_center = frame.center() - vec2(0.0, 1.0);
 
-    if core.phase == Phase::Focus {
+    // A ticked goal is settled; untick it to change the wording.
+    if core.phase == Phase::Focus && !core.goal_achieved {
         boxed(frame, edge(ui.memory(|m| m.has_focus(id)), theme.accent));
         // The field is exactly one row tall and centred in its box by hand;
         // left to itself the text sits against the top.
@@ -292,14 +294,13 @@ fn goal_box(ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
 
     // Only a goal that has been typed can be ticked off.
     let has_goal = !core.goal.trim().is_empty();
-    core.goal_achieved &= has_goal;
     let sense = if has_goal { Sense::click() } else { Sense::hover() };
     let mut resp = ui.interact(tick, ui.id().with("goal-tick"), sense);
     if has_goal {
         resp = resp.on_hover_cursor(egui::CursorIcon::PointingHand);
     }
     if resp.clicked() {
-        core.goal_achieved = !core.goal_achieved;
+        core.set_goal_achieved(!core.goal_achieved);
     }
     let achieved = core.goal_achieved;
     // A green that reads on the box's fill, light or dark.

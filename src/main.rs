@@ -14,11 +14,12 @@ use eframe::egui;
 use std::sync::{Arc, Mutex};
 
 fn main() -> eframe::Result {
-    let core = core::Core::new(
+    let mut core = core::Core::new(
         config::load_config(),
         config::load_history(),
         Some(audio::Audio::spawn()),
     );
+    core.goals = config::load_goals();
     let shared = Arc::new(Mutex::new(core));
 
     let mut viewport = egui::ViewportBuilder::default()

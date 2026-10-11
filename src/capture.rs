@@ -2,7 +2,7 @@
 //!
 //! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Ink Well"] [POMO_GOAL="..."] prettypomodoro`
 //!
-//! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `sync`, `signin`, `code`, `about`.
+//! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `goals`, `sync`, `signin`, `code`, `about`.
 //!
 //! Nothing is read from or written to the user's saved data in this mode.
 
@@ -60,6 +60,19 @@ impl Capture {
         }
         core.history = history;
 
+        // A few achieved goals for the goal history.
+        let mut goals = crate::config::GoalLog::default();
+        for (back, goal) in [
+            (2, "Outline the quarterly report"),
+            (1, "Review the pull requests"),
+            (1, "Fix the login bug"),
+            (0, "Draft the launch notes"),
+            (0, "Reply to the design feedback"),
+        ] {
+            goals.add(today - Days::new(back), goal);
+        }
+        core.goals = goals;
+
         // The sync page signed out, and part-way through signing in.
         if matches!(self.page.as_deref(), Some("signin" | "code")) {
             core.cfg.sync = Default::default();
@@ -78,7 +91,7 @@ impl Capture {
             let now = Instant::now();
             core.toggle(now);
             core.tick(now + Duration::from_secs(3600));
-            core.goal_achieved = true;
+            core.set_goal_achieved(true);
         }
 
         // "running" shows the timer a third of the way through a focus round.

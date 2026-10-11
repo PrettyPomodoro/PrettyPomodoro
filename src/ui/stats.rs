@@ -1,5 +1,6 @@
 //! Activity page: today's minutes of focus, a contribution-style heat map of
-//! completed focus sessions shaded from the theme's colours, and summary tiles.
+//! completed focus sessions shaded from the theme's colours, summary tiles and
+//! the goals achieved so far.
 
 use super::widgets::{ink_outline, heading, icon_button, Icon};
 use crate::core::Core;
@@ -20,6 +21,8 @@ const FLAME: Color32 = Color32::from_rgb(0xf5, 0x7c, 0x1f);
 pub struct State {
     /// How many pages of `WEEKS` back from the current week the map is showing.
     page: u64,
+    /// Scroll the goal history into view; used when capturing that section.
+    pub show_goals: bool,
 }
 
 fn shade(theme: &Theme, sessions: u32) -> Color32 {
@@ -204,6 +207,37 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
             .color(theme.text_dim),
         );
     });
+
+    goal_history(ui, state, core, theme);
+}
+
+/// The goals ticked off so far, newest day first.
+fn goal_history(ui: &mut Ui, state: &State, core: &Core, theme: &Theme) {
+    ui.add_space(14.0);
+    if state.show_goals {
+        ui.scroll_to_cursor(Some(egui::Align::TOP));
+    }
+    heading(ui, "Goal history", theme);
+    if core.goals.days.is_empty() {
+        ui.vertical_centered(|ui| {
+            let hint = egui::RichText::new("Goals you tick off will be listed here.");
+            ui.label(hint.size(12.5).color(theme.text_dim));
+        });
+        return;
+    }
+    for (day, goals) in core.goals.days.iter().rev() {
+        let date = day.format("%-d %B %y").to_string();
+        ui.label(egui::RichText::new(date).size(12.0).color(theme.text_dim));
+        for goal in goals {
+            ui.horizontal_top(|ui| {
+                // A bullet, then the goal wrapped beside it.
+                let (dot, _) = ui.allocate_exact_size(vec2(10.0, 18.0), Sense::hover());
+                ui.painter().circle_filled(dot.center(), 2.5, theme.focus);
+                ui.add(egui::Label::new(egui::RichText::new(goal).size(14.0).color(theme.text)).wrap());
+            });
+        }
+        ui.add_space(8.0);
+    }
 }
 
 fn duration(minutes: u32) -> String {

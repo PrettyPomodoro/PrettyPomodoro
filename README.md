@@ -21,7 +21,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 - **Private and free data sync.** Your history syncs between your computers
   through a secret GitHub Gist on your own account, at no cost.
 - **Set goals for each run.** Type a goal above the timer and tick it off in
-  green when you get there.
+  green when you get there. Achieved goals are kept in a history, grouped by day.
 - **Lightweight and efficient (built with Rust).** One small native executable
   with no bundled browser engine: a download under 10 MB that uses no CPU
   while idle.
@@ -107,7 +107,8 @@ flow enabled; its client ID is the `GITHUB_CLIENT_ID` constant in `src/sync.rs`.
 Settings and history live in the platform config directory under
 `pomodoro-rs/` (`~/Library/Application Support/pomodoro-rs` on macOS):
 `config.json` for settings and custom themes, `history.json` for completed
-focus sessions.
+focus sessions and `goals.json` for the goals you have ticked off. Cloud sync
+covers the history only; goals stay on the computer they were ticked on.
 
 ## Releases
 

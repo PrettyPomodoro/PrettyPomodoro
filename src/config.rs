@@ -174,6 +174,32 @@ impl History {
     }
 }
 
+/// Goals that were ticked off, by the day they were achieved, oldest first
+/// within a day. Kept on this computer only.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+pub struct GoalLog {
+    pub days: BTreeMap<NaiveDate, Vec<String>>,
+}
+
+impl GoalLog {
+    pub fn add(&mut self, day: NaiveDate, goal: &str) {
+        self.days.entry(day).or_default().push(goal.to_owned());
+    }
+
+    /// Take back the most recent entry of `goal`, for a tick that was undone.
+    pub fn remove(&mut self, goal: &str) {
+        let found = self.days.iter_mut().rev().find_map(|(day, goals)| {
+            let i = goals.iter().rposition(|g| g == goal)?;
+            goals.remove(i);
+            Some((*day, goals.is_empty()))
+        });
+        if let Some((day, true)) = found {
+            self.days.remove(&day);
+        }
+    }
+}
+
 pub fn data_dir() -> PathBuf {
     let dir = dirs::config_dir()
         .unwrap_or_else(|| PathBuf::from("."))
@@ -242,6 +268,14 @@ pub fn save_history(history: &History) {
     save("history.json", history, false);
 }
 
+pub fn load_goals() -> GoalLog {
+    load("goals.json")
+}
+
+pub fn save_goals(goals: &GoalLog) {
+    save("goals.json", goals, false);
+}
+
 fn new_device_id() -> String {
     use std::hash::{BuildHasher, Hasher};
     let mut h = std::collections::hash_map::RandomState::new().build_hasher();
@@ -273,6 +307,21 @@ mod tests {
 
         b.merge(&a);
         assert_eq!(a, b);
+    }
+
+    #[test]
+    fn goal_log_takes_back_the_latest_entry() {
+        let mut log = GoalLog::default();
+        log.add(d(1), "Report");
+        log.add(d(2), "Report");
+        log.add(d(2), "Slides");
+        log.remove("Report");
+        assert_eq!(log.days[&d(1)], ["Report"]);
+        assert_eq!(log.days[&d(2)], ["Slides"]);
+        log.remove("Slides");
+        assert!(!log.days.contains_key(&d(2)));
+        log.remove("Never logged");
+        assert_eq!(log.days.len(), 1);
     }
 
     #[test]

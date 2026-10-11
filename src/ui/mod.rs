@@ -106,7 +106,7 @@ impl App {
             "timer" => Tab::Timer,
             "options" => Tab::Options,
             "themes" | "family" | "editor" | "colors" => Tab::Themes,
-            "stats" => Tab::Stats,
+            "stats" | "goals" => Tab::Stats,
             "sync" | "signin" | "code" => Tab::Sync,
             "about" => Tab::About,
             _ => return,
@@ -121,6 +121,7 @@ impl App {
                 self.themes.pick_first_color();
             }
             "family" => self.themes.expand_current(&core.cfg),
+            "goals" => self.stats.show_goals = true,
             _ => {}
         }
     }

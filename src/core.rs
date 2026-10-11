@@ -3,7 +3,7 @@
 //! notifications) while the window is hidden in the tray.
 
 use crate::audio::{Audio, Sound};
-use crate::config::{self, Config, History};
+use crate::config::{self, Config, GoalLog, History};
 use crate::theme::Theme;
 use eframe::egui;
 use std::sync::{Arc, Mutex, MutexGuard};
@@ -75,8 +75,10 @@ pub struct Core {
     /// through the break after a finished round and is cleared for the next
     /// round.
     pub goal: String,
-    /// The goal has been ticked off.
+    /// The goal has been ticked off; set through `set_goal_achieved`.
     pub goal_achieved: bool,
+    /// Every goal ticked off so far.
+    pub goals: GoalLog,
     /// Time left when paused; while running, `deadline` is authoritative.
     remaining: Duration,
     deadline: Option<Instant>,
@@ -113,6 +115,7 @@ impl Core {
             running: false,
             goal: String::new(),
             goal_achieved: false,
+            goals: GoalLog::default(),
             remaining,
             deadline: None,
             fresh: true,
@@ -197,6 +200,24 @@ impl Core {
         }
         let was_running = self.running;
         self.advance(was_running, now);
+    }
+
+    /// Tick the current goal off, or undo that. A ticked goal is entered in
+    /// the goal log under today; unticking takes the entry back.
+    pub fn set_goal_achieved(&mut self, achieved: bool) {
+        let goal = self.goal.trim();
+        if achieved == self.goal_achieved || goal.is_empty() {
+            return;
+        }
+        if achieved {
+            self.goals.add(chrono::Local::now().date_naive(), goal);
+        } else {
+            self.goals.remove(goal);
+        }
+        self.goal_achieved = achieved;
+        if self.persist {
+            config::save_goals(&self.goals);
+        }
     }
 
     fn clear_goal(&mut self) {
@@ -412,7 +433,11 @@ mod tests {
         c.toggle(now);
         c.toggle(now);
         c.restart_phase();
-        c.goal_achieved = true;
+        c.set_goal_achieved(true);
+        assert_eq!(c.goals.days.values().next().unwrap(), &["Write the report"]);
+        c.set_goal_achieved(false);
+        assert!(c.goals.days.is_empty());
+        c.set_goal_achieved(true);
         finish(&mut c, &mut now);
         assert_eq!(c.phase, Phase::ShortBreak);
         assert_eq!((c.goal.as_str(), c.goal_achieved), ("Write the report", true));
@@ -421,6 +446,9 @@ mod tests {
         finish(&mut c, &mut now);
         assert_eq!(c.phase, Phase::Focus);
         assert_eq!((c.goal.as_str(), c.goal_achieved), ("", false));
+
+        // The log keeps the achieved goal after it has left the timer.
+        assert_eq!(c.goals.days.values().next().unwrap(), &["Write the report"]);
 
         // A skipped round takes its goal with it.
         c.goal = "Skipped".into();
