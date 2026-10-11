@@ -14,33 +14,17 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 ## Features
 
-- Compact 360 × 480 card window with its own title bar.
-- Focus, short break and long break rounds with adjustable lengths and round count.
-- 27 built-in themes in five families:
-  - **Editorial** (5): warm paper canvases, serif figures, clean ink outlines
-    and a terracotta accent. Editorial Sage is the default theme.
-  - **Sketch** (5): a greyscale interface around a timer drawn like a
-    hand-sketched chart, with dashed grid rings, one wobbly coloured series and
-    handwritten figures.
-  - **Light** (6): Graphite, Milk Foam, Old Parchment, Blush Dawn, Sunlit Sand,
-    Clean Sheet.
-  - **Dark** (6): Ink Well, Deep Lagoon, Ember Bark, Retro Arcade, Plum Twilight,
-    Abyss Blue.
-  - **Pencil Art** (5): Tomato Sketch and four more, drawn like the app icon with
-    ink outlines, hatching and a sketched tomato for the timer ring.
-- A theme editor for your own themes in any of the styles: flat light/dark,
-  pencil art, sketch or editorial.
-- A goal for each focus round, typed above the timer, with a box beside it to
-  tick the goal off in green. Both stay through the break that follows.
-- Chimes at the end of focus and break rounds, optional tick sounds, volume and mute.
-- Activity heat map in the style of the GitHub contribution graph, shaded from
-  the active theme's colours, with today / week / streak / all-time totals.
-- Private cloud sync of the focus history through a GitHub Gist.
-- Options: Always on Top, Auto-start Focus Timer, Auto-start Break Timer,
-  Tick Sounds (focus / break), Desktop Notifications (focus end / break end),
-  Minimize to Tray, Minimize to Tray on Close.
-- Tray menu: show the window, start / pause, skip, quit. The timer keeps
-  running, chiming and notifying while the window is hidden.
+- **Pretty themes.** 27 built-in themes in five families (Editorial, Sketch,
+  Light, Dark and Pencil Art), plus an editor for making your own.
+- **Progress activity calendar.** A heat map of every focus round you finish,
+  with today, this week, streak and all-time totals.
+- **Private and free data sync.** Your history syncs between your computers
+  through a secret GitHub Gist on your own account, at no cost.
+- **Set goals for each run.** Type a goal above the timer and tick it off in
+  green when you get there.
+- **Lightweight and efficient (built with Rust).** One small native executable
+  with no bundled browser engine: a download under 10 MB that uses no CPU
+  while idle.
 
 ## Download
 

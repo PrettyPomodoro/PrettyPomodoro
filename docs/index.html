@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PrettyPomodoro, a themeable Pomodoro timer</title>
-<meta name="description" content="A small, themeable Pomodoro timer for macOS, Windows and Linux. 27 built-in themes, a goal for each focus round and an activity heat map. Free and open source.">
+<meta name="description" content="A small, themeable Pomodoro timer for macOS, Windows and Linux. Pretty themes, an activity calendar, private and free sync, a goal for each round. Lightweight, built with Rust. Free and open source.">
 <meta name="theme-color" content="#101615">
 <link rel="icon" type="image/png" href="icon.png">
 <meta property="og:type" content="website">
@@ -114,7 +114,9 @@ h1 {
   font-size: clamp(1.75rem, 3.5vw, 2.25rem); line-height: 1.15;
   margin: 0 0 32px;
 }
-.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 20px; }
+.card { grid-column: span 2; }
+.card:nth-child(n+4) { grid-column: span 3; }
 .card {
   color: var(--ink); border: 2px solid var(--canvas-white); border-radius: 24px;
   padding: 28px 24px 30px;
@@ -125,6 +127,7 @@ h1 {
 .c2 { background: var(--data-peach); }
 .c3 { background: var(--tint-lavender); }
 .c4 { background: var(--tint-sage); }
+.c5 { background: var(--canvas-warm); }
 
 footer { border-top: 2px solid var(--panel-raised); padding: 28px 0 40px; color: var(--text-muted); font-size: 0.9375rem; }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
@@ -133,9 +136,16 @@ footer p { margin: 0; }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .hero { animation: none; } }
 
-/* four cards go 4, 2x2, then 1 across, never 3 + 1 */
-@media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 520px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+/* five cards go 3 + 2, then 2 + 2 + 1 wide, then 1 across */
+@media (max-width: 1000px) {
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card, .card:nth-child(n+4) { grid-column: span 1; }
+  .card:last-child { grid-column: span 2; }
+}
+@media (max-width: 520px) {
+  .cards { grid-template-columns: minmax(0, 1fr); }
+  .card:last-child { grid-column: span 1; }
+}
 @media (max-width: 800px) {
   .hero { grid-template-columns: minmax(0, 1fr); }
   .shot { justify-self: start; }
@@ -219,20 +229,24 @@ footer p { margin: 0; }
       <h2 id="features-title">What it does</h2>
       <ul class="cards">
         <li class="card c1">
-          <h3>27 themes</h3>
-          <p>Five families, from light and dark to pencil art, plus an editor for your own.</p>
+          <h3>Pretty themes</h3>
+          <p>27 built-in themes in five families, plus an editor for making your own.</p>
         </li>
         <li class="card c2">
-          <h3>A goal for each round</h3>
-          <p>Type it above the timer and tick it off when the round finishes.</p>
+          <h3>Progress activity calendar</h3>
+          <p>A heat map of every focus round you finish, with streaks and totals.</p>
         </li>
         <li class="card c3">
-          <h3>Activity and streaks</h3>
-          <p>A heat map of your focus rounds, shaded in your theme's colours.</p>
+          <h3>Private and free data sync</h3>
+          <p>Your history syncs through a secret GitHub Gist on your own account.</p>
         </li>
         <li class="card c4">
-          <h3>Private cloud sync</h3>
-          <p>Your history syncs through a secret GitHub Gist on your own account.</p>
+          <h3>Set goals for each run</h3>
+          <p>Type a goal above the timer and tick it off when you get there.</p>
+        </li>
+        <li class="card c5">
+          <h3>Lightweight and efficient</h3>
+          <p>Built with Rust: a download under 10 MB that uses no CPU while idle.</p>
         </li>
       </ul>
     </section>
