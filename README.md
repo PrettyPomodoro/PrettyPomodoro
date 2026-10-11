@@ -16,7 +16,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 - **Pretty themes.** 27 built-in themes in five families (Editorial, Sketch,
   Light, Dark and Pencil Art), plus an editor for making your own.
-- **Progress activity calendar.** A heat map of every focus round you finish,
+- **Progress calendar.** A heat map of every focus round you finish,
   with today, this week, streak and all-time totals.
 - **Private and free data sync.** Your history syncs between your computers
   through a secret GitHub Gist on your own account, at no cost.
