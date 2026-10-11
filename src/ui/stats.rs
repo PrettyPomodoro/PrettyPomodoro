@@ -1,5 +1,5 @@
-//! Activity page: summary tiles and a contribution-style heat map of
-//! completed focus sessions, shaded from the theme's colours.
+//! Activity page: today's minutes of focus, a contribution-style heat map of
+//! completed focus sessions shaded from the theme's colours, and summary tiles.
 
 use super::widgets::{ink_outline, heading, icon_button, Icon};
 use crate::core::Core;
@@ -13,6 +13,8 @@ const STEP: f32 = 16.0;
 const LABEL_W: f32 = 28.0;
 /// Sessions needed to reach each shade above "empty".
 const LEVELS: [u32; 4] = [1, 3, 5, 8];
+/// Colour of the flame beside today's minutes.
+const FLAME: Color32 = Color32::from_rgb(0xf5, 0x7c, 0x1f);
 
 #[derive(Default)]
 pub struct State {
@@ -34,7 +36,6 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     let today = chrono::Local::now().date_naive();
     let history = &core.history;
 
-    // Summary tiles.
     let week_start = today - Days::new(today.weekday().num_days_from_sunday() as u64);
     let week: u32 = (0..7)
         .map(|i| history.day(week_start + Days::new(i)).sessions)
@@ -46,18 +47,24 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
         (history.streak(today).to_string(), "Day Streak"),
         (total.sessions.to_string(), "All Time"),
     ];
-    let (row, _) = ui.allocate_exact_size(vec2(ui.available_width(), 56.0), Sense::hover());
-    let gap = 6.0;
-    let w = (row.width() - gap * 3.0) / 4.0;
-    for (i, (value, label)) in tiles.iter().enumerate() {
-        let tile = Rect::from_min_size(row.min + vec2(i as f32 * (w + gap), 0.0), vec2(w, row.height()));
-        let p = ui.painter();
-        p.rect_filled(tile, 7.0, mix(theme.surface, theme.muted, 0.16));
-        ink_outline(p, tile, 7.0, theme);
-        p.text(tile.center() - vec2(0.0, 8.0), Align2::CENTER_CENTER, value, FontId::proportional(21.0), theme.text);
-        p.text(tile.center() + vec2(0.0, 15.0), Align2::CENTER_CENTER, label, FontId::proportional(10.5), theme.text_dim);
-    }
-    ui.add_space(10.0);
+    // Today's focus, up front: a flame and the minutes.
+    let (hero, _) = ui.allocate_exact_size(vec2(ui.available_width(), 46.0), Sense::hover());
+    let p = ui.painter();
+    let figure = FontId::proportional(28.0);
+    let minutes = history.day(today).minutes.to_string();
+    let (flame_w, gap) = (p.layout_no_wrap("🔥".into(), figure.clone(), FLAME).size().x, 6.0);
+    let minutes_w = p.layout_no_wrap(minutes.clone(), figure.clone(), theme.text).size().x;
+    let left = pos2(hero.center().x - (flame_w + gap + minutes_w) / 2.0, hero.top() + 15.0);
+    p.text(left, Align2::LEFT_CENTER, "🔥", figure.clone(), FLAME);
+    p.text(left + vec2(flame_w + gap, 0.0), Align2::LEFT_CENTER, minutes, figure, theme.text);
+    p.text(
+        pos2(hero.center().x, hero.top() + 38.0),
+        Align2::CENTER_CENTER,
+        "minutes of focus today",
+        FontId::proportional(11.5),
+        theme.text_dim,
+    );
+    ui.add_space(2.0);
 
     // The grid covers WEEKS columns ending with the week `page` pages back.
     let last_week = week_start - Days::new(7 * WEEKS * state.page);
@@ -168,7 +175,21 @@ pub fn show(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {
     }
     p.text(pos2(x - 2.0, y), Align2::RIGHT_CENTER, "Less", small, theme.text_dim);
 
+    // Summary tiles.
     ui.add_space(8.0);
+    let (row, _) = ui.allocate_exact_size(vec2(ui.available_width(), 50.0), Sense::hover());
+    let gap = 6.0;
+    let w = (row.width() - gap * 3.0) / 4.0;
+    for (i, (value, label)) in tiles.iter().enumerate() {
+        let tile = Rect::from_min_size(row.min + vec2(i as f32 * (w + gap), 0.0), vec2(w, row.height()));
+        let p = ui.painter();
+        p.rect_filled(tile, 7.0, mix(theme.surface, theme.muted, 0.16));
+        ink_outline(p, tile, 7.0, theme);
+        p.text(tile.center() - vec2(0.0, 7.0), Align2::CENTER_CENTER, value, FontId::proportional(21.0), theme.text);
+        p.text(tile.center() + vec2(0.0, 13.0), Align2::CENTER_CENTER, label, FontId::proportional(10.5), theme.text_dim);
+    }
+
+    ui.add_space(6.0);
     ui.vertical_centered(|ui| {
         ui.label(
             egui::RichText::new(format!(
