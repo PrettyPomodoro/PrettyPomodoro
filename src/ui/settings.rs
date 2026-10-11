@@ -197,18 +197,18 @@ pub fn sync(ui: &mut Ui, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
         }
     });
 
-    // Goal texts are personal, so syncing them is something to opt into.
-    ui.add_space(14.0);
-    if toggle_row(ui, "Sync Goal Texts", &mut core.cfg.sync.sync_goals, theme)
-        && core.cfg.sync.sync_goals
-        && !core.cfg.sync.token.is_empty()
-    {
-        job = Some(SyncJob::Sync);
+    // Goal texts are personal, so syncing them is something to opt into, and
+    // the choice is only offered once there is an account to sync to.
+    if !core.cfg.sync.token.is_empty() {
+        ui.add_space(14.0);
+        if toggle_row(ui, "Sync Goal Texts", &mut core.cfg.sync.sync_goals, theme) && core.cfg.sync.sync_goals {
+            job = Some(SyncJob::Sync);
+        }
+        ui.label(dim(
+            "Also keeps the goals you tick off in your private gist, so your goal \
+             history follows you to your other computers.",
+        ));
     }
-    ui.label(dim(
-        "Also keeps the goals you tick off in your private gist, so your goal \
-         history follows you to your other computers.",
-    ));
     job
 }
 

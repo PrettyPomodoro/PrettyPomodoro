@@ -92,8 +92,8 @@ with any GitHub account.
    after every completed focus round.
 
 The text of the goals you tick off is not synced unless you switch on
-**Sync Goal Texts** on the same page; it then goes into a second file in the
-same gist.
+**Sync Goal Texts**, which appears on the same page once you are signed in; it
+then goes into a second file in the same gist.
 
 The sign-in only grants access to gists. History is stored per device and
 merged by taking the highest count each device has reported for a day, so
