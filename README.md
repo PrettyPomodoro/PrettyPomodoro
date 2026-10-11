@@ -17,6 +17,11 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 - Compact 360 × 480 card window with its own title bar.
 - Focus, short break and long break rounds with adjustable lengths and round count.
 - 36 built-in themes in five families:
+  - **Editorial** (5): warm paper canvases, serif figures, clean ink outlines
+    and a terracotta accent. Editorial Sage is the default theme.
+  - **Sketch** (5): a greyscale interface around a timer drawn like a
+    hand-sketched chart, with dashed grid rings, one wobbly coloured series and
+    handwritten figures.
   - **Light** (6): Graphite, Milk Foam, Old Parchment, Blush Dawn, Sunlit Sand,
     Clean Sheet.
   - **Dark** (15): Velvet Dusk, Neon Harbor, Midnight Orchid, Arctic Slate,
@@ -24,11 +29,6 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
     Hollow, Indigo Tide, Candy Charcoal, Abyss Blue, Desert Night, Retro Arcade.
   - **Pencil Art** (5): Tomato Sketch and four more, drawn like the app icon with
     ink outlines, hatching and a sketched tomato for the timer ring.
-  - **Sketch** (5): a greyscale interface around a timer drawn like a
-    hand-sketched chart, with dashed grid rings, one wobbly coloured series and
-    handwritten figures.
-  - **Editorial** (5): warm paper canvases, serif figures, clean ink outlines
-    and a terracotta accent.
 - A theme editor for your own themes in any of the styles: flat light/dark,
   pencil art, sketch or editorial.
 - A goal for each focus round, typed above the timer. When the round finishes

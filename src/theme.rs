@@ -45,8 +45,9 @@ pub enum Family {
 }
 
 impl Family {
+    /// In the order they are listed on the Themes page.
     pub const ALL: [Family; 5] =
-        [Family::Light, Family::Dark, Family::PencilArt, Family::Sketch, Family::Editorial];
+        [Family::Editorial, Family::Sketch, Family::Light, Family::Dark, Family::PencilArt];
 
     pub fn label(self) -> &'static str {
         match self {
@@ -161,7 +162,7 @@ mod hex {
     }
 }
 
-pub const DEFAULT_THEME: &str = "Graphite";
+pub const DEFAULT_THEME: &str = "Editorial Sage";
 
 /// Built-in themes that used to go by another name: (old, new).
 const RENAMED: &[(&str, &str)] = &[

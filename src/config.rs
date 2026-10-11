@@ -89,11 +89,8 @@ impl Config {
 
     pub fn active_theme(&self) -> Theme {
         let themes = self.all_themes();
-        themes
-            .iter()
-            .find(|t| t.name == self.theme)
-            .unwrap_or(&themes[0])
-            .clone()
+        let named = |name: &str| themes.iter().find(|t| t.name == name);
+        named(&self.theme).or_else(|| named(DEFAULT_THEME)).unwrap_or(&themes[0]).clone()
     }
 }
 
