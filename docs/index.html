@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PrettyPomodoro, a themeable Pomodoro timer</title>
+<meta name="description" content="A small, themeable Pomodoro timer for macOS, Windows and Linux. 36 built-in themes, a goal for each focus round and an activity heat map. Free and open source.">
+<meta name="theme-color" content="#101615">
+<link rel="icon" type="image/png" href="icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PrettyPomodoro, a themeable Pomodoro timer">
+<meta property="og:description" content="A small, themeable Pomodoro timer for macOS, Windows and Linux. Free and open source.">
+<meta property="og:image" content="https://prettypomodoro.github.io/PrettyPomodoro/editorial-sage.png">
+<meta property="og:url" content="https://prettypomodoro.github.io/PrettyPomodoro/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Newsreader:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --canvas: #F3F2EE;
+  --canvas-warm: #E5CABB;
+  --canvas-white: #FFFFFF;
+  --ink: #141413;
+  --ink-muted: #5E5D59;
+  --rule: #DDDCD6;
+  --accent: #D97757;
+  --panel-dark: #101615;
+  --panel-raised: #18201F;
+  --text-muted: #B9BDB8;
+  --dot: rgba(243, 242, 238, 0.07);
+  --data-teal-soft: #B3DFE2;
+  --data-peach: #FCE5B4;
+  --tint-lavender: #C9C8E0;
+  --tint-sage: #B8D0C6;
+  --data-teal: #0E7C8C;
+  --data-amber: #F29F05;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "DM Sans", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background-color: var(--panel-dark);
+  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.4px);
+  background-size: 24px 24px;
+  color: var(--canvas);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+a { color: var(--canvas-white); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--data-teal-soft); outline-offset: 3px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 max(16px, 4vw); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+header { padding: 28px 0 0; }
+.brand { font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.01em; }
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  gap: clamp(32px, 6vw, 88px);
+  align-items: center;
+  padding: clamp(48px, 9vw, 112px) 0;
+  animation: fade 0.5s ease-out both;
+}
+h1 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 6.5vw, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  margin: 0 0 20px;
+}
+.sub { color: var(--text-muted); font-size: 1.25rem; line-height: 1.45; margin: 0 0 40px; max-width: 30em; }
+
+/* download area: three equal buttons by default, one primary once JS has run */
+.dl { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn {
+  display: inline-flex; flex-direction: column; justify-content: center;
+  min-height: 56px; padding: 10px 24px;
+  border: 2px solid var(--canvas); border-radius: 24px;
+  color: var(--canvas); background: transparent;
+  font-weight: 700; font-size: 1.0625rem; line-height: 1.25;
+  text-decoration: none;
+}
+.btn small { font-weight: 400; font-size: 0.875rem; }
+.btn:hover { background: var(--panel-raised); }
+.dl.is-promoted { flex-direction: column; align-items: flex-start; gap: 16px; }
+.dl.is-promoted .btn.primary {
+  background: var(--accent); border-color: var(--accent); color: var(--ink);
+  min-height: 64px; padding: 12px 32px; font-size: 1.1875rem;
+}
+.dl.is-promoted .btn.primary:hover { background: #E08766; border-color: #E08766; }
+.also { margin: 0; color: var(--text-muted); font-size: 0.9375rem; }
+.also a { color: var(--canvas); }
+.fine { margin: 24px 0 0; color: var(--text-muted); font-size: 0.9375rem; }
+
+.shot { margin: 0; justify-self: center; width: 100%; max-width: 360px; }
+.shot img {
+  display: block; width: 100%; max-width: 360px; height: auto;
+  border: 2px solid var(--canvas); border-radius: 24px;
+}
+
+.features { padding: 0 0 clamp(56px, 9vw, 112px); }
+.features h2 {
+  font-family: var(--serif); font-weight: 500;
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem); line-height: 1.15;
+  margin: 0 0 32px;
+}
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.card {
+  color: var(--ink); border: 2px solid var(--canvas-white); border-radius: 24px;
+  padding: 28px 24px 30px;
+}
+.card h3 { font-family: var(--serif); font-weight: 500; font-size: 1.5rem; line-height: 1.2; margin: 0 0 10px; }
+.card p { margin: 0; font-size: 1rem; }
+.c1 { background: var(--data-teal-soft); }
+.c2 { background: var(--data-peach); }
+.c3 { background: var(--tint-lavender); }
+.c4 { background: var(--tint-sage); }
+
+footer { border-top: 2px solid var(--panel-raised); padding: 28px 0 40px; color: var(--text-muted); font-size: 0.9375rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+footer p { margin: 0; }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero { animation: none; } }
+
+/* four cards go 4, 2x2, then 1 across, never 3 + 1 */
+@media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 800px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .shot { justify-self: start; }
+}
+@media (max-width: 480px) {
+  .dl:not(.is-promoted) .btn { width: 100%; }
+  .dl.is-promoted .btn.primary { width: 100%; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap"><span class="brand">PrettyPomodoro</span></div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <h1 id="title">A Pomodoro timer worth looking at</h1>
+        <p class="sub">A small, themeable timer for macOS, Windows and Linux.</p>
+
+        <div class="dl" id="dl">
+          <a class="btn" data-os="macos" data-name="macOS" data-sub="Apple Silicon + Intel" href="https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-macos-universal.zip">macOS<small>Apple Silicon + Intel</small></a>
+          <a class="btn" data-os="windows" data-name="Windows" data-sub="x64" href="https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-windows-x64.zip">Windows<small>x64</small></a>
+          <a class="btn" data-os="linux" data-name="Linux" data-sub="x64" href="https://github.com/PrettyPomodoro/PrettyPomodoro/releases/latest/download/PrettyPomodoro-linux-x64.tar.gz">Linux<small>x64</small></a>
+        </div>
+        <script>
+        (function () {
+          try {
+            var dl = document.getElementById('dl');
+            var ua = navigator.userAgent || '';
+            var data = navigator.userAgentData;
+            var plat = (data && data.platform) || navigator.platform || '';
+            var all = plat + ' ' + ua;
+            var os = null;
+            var unsupported = /Android|iPhone|iPad|iPod|iOS|CrOS|Chrome OS|ChromeOS/i.test(all) ||
+              (/Mac/i.test(plat) && navigator.maxTouchPoints > 1);
+            if (!unsupported) {
+              if (/Win/i.test(plat) || (!plat && /Windows/i.test(ua))) os = 'windows';
+              else if (/Mac/i.test(plat) || (!plat && /Macintosh/i.test(ua))) os = 'macos';
+              else if (/Linux|X11/i.test(all)) os = 'linux';
+            }
+            if (!os) return;
+            var links = Array.prototype.slice.call(dl.querySelectorAll('a[data-os]'));
+            var others = [];
+            links.forEach(function (a) {
+              if (a.getAttribute('data-os') === os) {
+                a.className = 'btn primary';
+                a.innerHTML = '';
+                a.appendChild(document.createTextNode('Download for ' + a.getAttribute('data-name')));
+                var s = document.createElement('small');
+                s.textContent = a.getAttribute('data-sub');
+                a.appendChild(s);
+              } else {
+                others.push(a);
+              }
+            });
+            var p = document.createElement('p');
+            p.className = 'also';
+            p.appendChild(document.createTextNode('Also for '));
+            p.appendChild(others[0]);
+            p.appendChild(document.createTextNode(' and '));
+            p.appendChild(others[1]);
+            others.forEach(function (a) { a.className = ''; a.textContent = a.getAttribute('data-name'); });
+            dl.appendChild(p);
+            dl.className = 'dl is-promoted';
+          } catch (e) { /* all three links stay visible */ }
+        })();
+        </script>
+
+        <p class="fine">Free and open source under the MIT license.</p>
+      </div>
+
+      <figure class="shot">
+        <img src="editorial-sage.png" width="360" height="480" alt="The PrettyPomodoro window in the Editorial Sage theme: a sage green card with a teal timer ring reading 05:00 for a short break, and the goal Draft the launch notes ticked off above it.">
+      </figure>
+    </section>
+
+    <section class="features" aria-labelledby="features-title">
+      <h2 id="features-title">What it does</h2>
+      <ul class="cards">
+        <li class="card c1">
+          <h3>36 themes</h3>
+          <p>Five families, from light and dark to pencil art, plus an editor for your own.</p>
+        </li>
+        <li class="card c2">
+          <h3>A goal for each round</h3>
+          <p>Type it above the timer and tick it off when the round finishes.</p>
+        </li>
+        <li class="card c3">
+          <h3>Activity and streaks</h3>
+          <p>A heat map of your focus rounds, shaded in your theme's colours.</p>
+        </li>
+        <li class="card c4">
+          <h3>Private cloud sync</h3>
+          <p>Your history syncs through a secret GitHub Gist on your own account.</p>
+        </li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>PrettyPomodoro, MIT license</p>
+    <p><a href="https://github.com/PrettyPomodoro/PrettyPomodoro">View the source on GitHub</a></p>
+  </div>
+</footer>
+</body>
+</html>
