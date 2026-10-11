@@ -59,7 +59,8 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 header { padding: 28px 0 0; }
-.brand { font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.01em; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.0625rem; letter-spacing: 0.01em; }
+.brand img { display: block; width: 32px; height: 32px; }
 
 .hero {
   display: grid;
@@ -147,7 +148,7 @@ footer p { margin: 0; }
 </head>
 <body>
 <header>
-  <div class="wrap"><span class="brand">PrettyPomodoro</span></div>
+  <div class="wrap"><span class="brand"><img src="icon.png" width="32" height="32" alt="">PrettyPomodoro</span></div>
 </header>
 
 <main>
