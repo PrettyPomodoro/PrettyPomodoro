@@ -156,8 +156,7 @@ The icon files in `assets/` are generated from `assets/icon-source.webp` with
 
 ## Acknowledgements
 
-PrettyPomodoro was inspired by [Pomotroid](https://github.com/Splode/pomotroid),
-whose compact timer layout it follows. Thank you to its authors.
+Thank you to [Pomotroid](https://github.com/Splode/pomotroid) for inspiring us to make this app.
 
 ## License
 
