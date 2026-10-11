@@ -150,11 +150,24 @@ pub fn paint_icon(p: &Painter, c: Pos2, icon: Icon, color: Color32) {
             p.rect_filled(Rect::from_center_size(c + vec2(-6.0, 0.0), vec2(2.0, 14.0)), 0.0, color);
         }
         Icon::Bars => {
-            // Three rising bars on a shared baseline.
-            for (x, h) in [(-5.5, 6.0), (0.0, 10.0), (5.5, 14.0)] {
-                let bar = Rect::from_min_max(c + vec2(x - 1.6, 7.0 - h), c + vec2(x + 1.6, 7.0));
+            // Three rising bars on a shared baseline, under an arrow that
+            // curves up and to the right.
+            for (x, h) in [(-5.5, 4.0), (0.0, 7.0), (5.5, 10.0)] {
+                let bar = Rect::from_min_max(c + vec2(x - 1.6, 8.0 - h), c + vec2(x + 1.6, 8.0));
                 p.rect_filled(bar, 0.5, color);
             }
+            let (from, bend, tip) = (vec2(-8.5, 0.0), vec2(0.5, -2.5), vec2(5.5, -6.5));
+            let curve = (0..=8)
+                .map(|i| {
+                    let t = i as f32 / 8.0;
+                    c + from * (1.0 - t).powi(2) + bend * 2.0 * t * (1.0 - t) + tip * t * t
+                })
+                .collect();
+            p.add(Shape::line(curve, Stroke::new(1.5_f32, color)));
+            let along = (tip - bend).normalized();
+            let across = vec2(-along.y, along.x);
+            let head = [tip + along * 3.5, tip + across * 2.8, tip - across * 2.8];
+            poly(&head.map(|v| (v.x, v.y)));
         }
     }
 }
