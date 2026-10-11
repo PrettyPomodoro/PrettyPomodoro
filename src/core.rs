@@ -72,8 +72,8 @@ pub struct Core {
     pub round: u32,
     pub running: bool,
     /// What the current focus round is for, typed on the timer page. It stays
-    /// through the break after a finished round and is cleared for the next
-    /// round.
+    /// through the break after a finished round, to be ticked off, and is
+    /// cleared for the next round.
     pub goal: String,
     /// The goal has been ticked off; set through `set_goal_achieved`.
     pub goal_achieved: bool,
@@ -433,14 +433,16 @@ mod tests {
         c.toggle(now);
         c.toggle(now);
         c.restart_phase();
+        finish(&mut c, &mut now);
+        assert_eq!(c.phase, Phase::ShortBreak);
+        assert_eq!((c.goal.as_str(), c.goal_achieved), ("Write the report", false));
+
+        // Ticked during the break, the goal enters the log; unticking takes it back.
         c.set_goal_achieved(true);
         assert_eq!(c.goals.days.values().next().unwrap(), &["Write the report"]);
         c.set_goal_achieved(false);
         assert!(c.goals.days.is_empty());
         c.set_goal_achieved(true);
-        finish(&mut c, &mut now);
-        assert_eq!(c.phase, Phase::ShortBreak);
-        assert_eq!((c.goal.as_str(), c.goal_achieved), ("Write the report", true));
 
         // The next focus round starts with an empty, unticked goal.
         finish(&mut c, &mut now);

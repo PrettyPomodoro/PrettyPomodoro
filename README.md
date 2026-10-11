@@ -4,7 +4,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 [egui](https://github.com/emilk/egui). The layout follows
 [Pomotroid](https://github.com/Splode/pomotroid).
 
-| Editorial Sage (goal ticked off) | Pencil Art (Paper Sketch) | Ink Well |
+| Editorial Sage | Pencil Art (Paper Sketch) | Ink Well |
 | --- | --- | --- |
 | ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
 
@@ -21,7 +21,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 - **Private and free data sync.** Your history syncs between your computers
   through a secret GitHub Gist on your own account, at no cost.
 - **Set goals for each run.** Type a goal above the timer and tick it off in
-  green when you get there. Achieved goals are kept in a history, grouped by day.
+  green when the round ends. Achieved goals are kept in a history, grouped by day.
 - **Lightweight and efficient (built with Rust).** One small native executable
   with no bundled browser engine: a download under 10 MB that uses no CPU
   while idle.
