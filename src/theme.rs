@@ -166,25 +166,16 @@ pub const DEFAULT_THEME: &str = "Editorial Sage";
 
 /// Built-in themes that used to go by another name: (old, new).
 const RENAMED: &[(&str, &str)] = &[
-    ("Catppuccin Mocha", "Velvet Dusk"),
     ("Catppuccin Latte", "Milk Foam"),
-    ("Tokyo Night", "Neon Harbor"),
-    ("Dracula", "Midnight Orchid"),
-    ("Nord", "Arctic Slate"),
     ("Gruvbox Light", "Old Parchment"),
     ("Gruvbox", "Ember Bark"),
     ("Rosé Pine Dawn", "Blush Dawn"),
     ("Rosé Pine", "Plum Twilight"),
-    ("One Dark", "Quiet Carbon"),
     ("Solarized Dark", "Deep Lagoon"),
     ("Solarized Light", "Sunlit Sand"),
     ("GitHub Dark", "Ink Well"),
     ("GitHub Light", "Clean Sheet"),
-    ("Everforest", "Mossy Hollow"),
-    ("Kanagawa", "Indigo Tide"),
-    ("Monokai Pro", "Candy Charcoal"),
     ("Night Owl", "Abyss Blue"),
-    ("Ayu Mirage", "Desert Night"),
     ("Synthwave", "Retro Arcade"),
 ];
 
@@ -196,27 +187,18 @@ pub fn current_name(name: &str) -> Option<&'static str> {
 /// name, focus, short, long, background, surface, muted, text, text_dim, accent
 #[rustfmt::skip]
 const BUILTIN: &[[&str; 10]] = &[
-    ["Graphite",        "505154", "505154", "505154", "ebebea", "fcfcfc", "adafb1", "27292d", "656a75", "08568c"],
-    ["Velvet Dusk",     "f38ba8", "a6e3a1", "89b4fa", "1e1e2e", "313244", "585b70", "cdd6f4", "bac2de", "cba6f7"],
-    ["Milk Foam",       "d20f39", "40a02b", "209fb5", "eff1f5", "e6e9ef", "bcc0cc", "4c4f69", "6c6f85", "8839ef"],
-    ["Neon Harbor",     "f7768e", "73daca", "7aa2f7", "24283b", "1b1e2e", "565f89", "c0caf5", "9aa5ce", "9d7cd8"],
-    ["Midnight Orchid", "ff5555", "50fa7b", "8be9fd", "282a36", "44475a", "6272a4", "f8f8f2", "bfc3d9", "bd93f9"],
-    ["Arctic Slate",    "bf616a", "a3be8c", "81a1c1", "2e3440", "3b4252", "616e88", "d8dee9", "a9b4c7", "88c0d0"],
-    ["Ember Bark",      "fb4934", "b8bb26", "83a598", "282828", "3c3836", "7c6f64", "ebdbb2", "bdae93", "fabd2f"],
-    ["Old Parchment",   "9d0006", "79740e", "076678", "fbf1c7", "ebdbb2", "bdae93", "3c3836", "665c54", "b57614"],
-    ["Plum Twilight",   "eb6f92", "9ccfd8", "c4a7e7", "191724", "1f1d2e", "524f67", "e0def4", "908caa", "c4a7e7"],
-    ["Blush Dawn",      "b4637a", "56949f", "907aa9", "faf4ed", "fffaf3", "dfdad9", "575279", "797593", "ea9d34"],
-    ["Quiet Carbon",    "e06c75", "98c379", "61afef", "282c34", "3b4048", "5c6370", "abb2bf", "8b92a0", "c678dd"],
-    ["Deep Lagoon",     "dc322f", "859900", "2aa198", "002b36", "073642", "586e75", "93a1a1", "839496", "268bd2"],
-    ["Sunlit Sand",     "cb4b16", "859900", "2aa198", "fdf6e3", "eee8d5", "93a1a1", "586e75", "657b83", "268bd2"],
-    ["Ink Well",        "f85149", "3fb950", "58a6ff", "0d1117", "161b22", "30363d", "e6edf3", "8b949e", "58a6ff"],
-    ["Clean Sheet",     "cf222e", "1a7f37", "8250df", "ffffff", "f6f8fa", "d0d7de", "24292f", "57606a", "0969da"],
-    ["Mossy Hollow",    "e67e80", "a7c080", "7fbbb3", "2d353b", "3d484d", "596a6d", "d3c6aa", "9da9a0", "a7c080"],
-    ["Indigo Tide",     "c34043", "76946a", "7e9cd8", "1f1f28", "2a2a37", "54546d", "dcd7ba", "c8c093", "957fb8"],
-    ["Candy Charcoal",  "ff6188", "a9dc76", "78dce8", "2d2a2e", "403e41", "5b595c", "fcfcfa", "939293", "ffd866"],
-    ["Abyss Blue",      "ef5350", "addb67", "82aaff", "011627", "0d2231", "1d3b53", "d6deeb", "7fa3b3", "c792ea"],
-    ["Desert Night",    "f28779", "bae67e", "5ccfe6", "1f2430", "2a3546", "707a8c", "cbccc6", "a0a6ae", "ffcc66"],
-    ["Retro Arcade",    "ff7edb", "72f1b8", "36f9f6", "262335", "372d4b", "495495", "e0e3e6", "b893ce", "fede5d"],
+    ["Graphite",      "505154", "505154", "505154", "ebebea", "fcfcfc", "adafb1", "27292d", "656a75", "08568c"],
+    ["Milk Foam",     "d20f39", "40a02b", "209fb5", "eff1f5", "e6e9ef", "bcc0cc", "4c4f69", "6c6f85", "8839ef"],
+    ["Old Parchment", "9d0006", "79740e", "076678", "fbf1c7", "ebdbb2", "bdae93", "3c3836", "665c54", "b57614"],
+    ["Blush Dawn",    "b4637a", "56949f", "907aa9", "faf4ed", "fffaf3", "dfdad9", "575279", "797593", "ea9d34"],
+    ["Sunlit Sand",   "cb4b16", "859900", "2aa198", "fdf6e3", "eee8d5", "93a1a1", "586e75", "657b83", "268bd2"],
+    ["Clean Sheet",   "cf222e", "1a7f37", "8250df", "ffffff", "f6f8fa", "d0d7de", "24292f", "57606a", "0969da"],
+    ["Ink Well",      "f85149", "3fb950", "58a6ff", "0d1117", "161b22", "30363d", "e6edf3", "8b949e", "58a6ff"],
+    ["Deep Lagoon",   "dc322f", "859900", "2aa198", "002b36", "073642", "586e75", "93a1a1", "839496", "268bd2"],
+    ["Ember Bark",    "fb4934", "b8bb26", "83a598", "282828", "3c3836", "7c6f64", "ebdbb2", "bdae93", "fabd2f"],
+    ["Retro Arcade",  "ff7edb", "72f1b8", "36f9f6", "262335", "372d4b", "495495", "e0e3e6", "b893ce", "fede5d"],
+    ["Plum Twilight", "eb6f92", "9ccfd8", "c4a7e7", "191724", "1f1d2e", "524f67", "e0def4", "908caa", "c4a7e7"],
+    ["Abyss Blue",    "ef5350", "addb67", "82aaff", "011627", "0d2231", "1d3b53", "d6deeb", "7fa3b3", "c792ea"],
 ];
 
 /// The Pencil Art family. Tomato Sketch is the app icon's blue, tomato red and

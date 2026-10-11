@@ -8,7 +8,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 | --- | --- | --- |
 | ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
 
-| Activity | Activity (Velvet Dusk) | Cloud Sync |
+| Activity | Activity (Ink Well) | Cloud Sync |
 | --- | --- | --- |
 | ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Cloud Sync](docs/sync.png) |
 
@@ -16,7 +16,7 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 
 - Compact 360 × 480 card window with its own title bar.
 - Focus, short break and long break rounds with adjustable lengths and round count.
-- 36 built-in themes in five families:
+- 27 built-in themes in five families:
   - **Editorial** (5): warm paper canvases, serif figures, clean ink outlines
     and a terracotta accent. Editorial Sage is the default theme.
   - **Sketch** (5): a greyscale interface around a timer drawn like a
@@ -24,9 +24,8 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
     handwritten figures.
   - **Light** (6): Graphite, Milk Foam, Old Parchment, Blush Dawn, Sunlit Sand,
     Clean Sheet.
-  - **Dark** (15): Velvet Dusk, Neon Harbor, Midnight Orchid, Arctic Slate,
-    Ember Bark, Plum Twilight, Quiet Carbon, Deep Lagoon, Ink Well, Mossy
-    Hollow, Indigo Tide, Candy Charcoal, Abyss Blue, Desert Night, Retro Arcade.
+  - **Dark** (6): Ink Well, Deep Lagoon, Ember Bark, Retro Arcade, Plum Twilight,
+    Abyss Blue.
   - **Pencil Art** (5): Tomato Sketch and four more, drawn like the app icon with
     ink outlines, hatching and a sketched tomato for the timer ring.
 - A theme editor for your own themes in any of the styles: flat light/dark,
@@ -154,6 +153,11 @@ The icon files in `assets/` are generated from `assets/icon-source.webp` with
 - Text uses the system UI font (San Francisco, Segoe UI, or Inter / Ubuntu /
   Noto / Liberation / DejaVu on Linux) and falls back to a bundled font, so
   every label renders on all three.
+
+## Acknowledgements
+
+PrettyPomodoro was inspired by [Pomotroid](https://github.com/Splode/pomotroid),
+whose compact timer layout it follows. Thank you to its authors.
 
 ## License
 
