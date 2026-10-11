@@ -8,9 +8,9 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 | --- | --- | --- |
 | ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![Ink Well](docs/ink-well.png) |
 
-| Activity | Activity (Velvet Dusk) | Themes |
+| Activity | Activity (Velvet Dusk) | Cloud Sync |
 | --- | --- | --- |
-| ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Themes](docs/themes.png) |
+| ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Cloud Sync](docs/sync.png) |
 
 ## Features
 
