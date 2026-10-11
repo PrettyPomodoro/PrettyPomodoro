@@ -12,6 +12,10 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 | --- | --- | --- |
 | ![Activity](docs/activity.png) | ![Activity dark](docs/activity-dark.png) | ![Themes](docs/themes.png) |
 
+| Editorial Sage (goal ticked off) | Pencil Art (Paper Sketch) | GitHub Dark |
+| --- | --- | --- |
+| ![Editorial Sage](docs/editorial-sage.png) | ![Paper Sketch](docs/paper-sketch.png) | ![GitHub Dark](docs/github-dark.png) |
+
 ## Features
 
 - Compact 360 × 480 card window with its own title bar.
