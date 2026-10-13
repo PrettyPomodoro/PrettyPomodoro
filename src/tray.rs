@@ -139,27 +139,15 @@ mod imp {
             .with_menu(Box::new(menu))
             .with_tooltip("PrettyPomodoro")
             .with_icon(icon()?)
-            .with_icon_as_template(true)
             .build()
             .ok()?;
         Some(Tray { _icon: icon })
     }
 
-    /// A ring with a centre dot, drawn in code so no asset file is needed.
+    /// The app icon in full colour, small.
     fn icon() -> Option<Icon> {
-        const N: u32 = 44;
-        let c = (N as f32 - 1.0) / 2.0;
-        let mut rgba = Vec::with_capacity((N * N * 4) as usize);
-        for y in 0..N {
-            for x in 0..N {
-                let d = ((x as f32 - c).powi(2) + (y as f32 - c).powi(2)).sqrt();
-                let ring = 1.0 - ((d - 15.5).abs() - 2.2).clamp(0.0, 1.0);
-                let dot = 1.0 - (d - 5.5).clamp(0.0, 1.0);
-                let alpha = (ring.max(dot) * 255.0) as u8;
-                rgba.extend_from_slice(&[0, 0, 0, alpha]);
-            }
-        }
-        Icon::from_rgba(rgba, N, N).ok()
+        let (rgba, side) = crate::icon::tray_image();
+        Icon::from_rgba(rgba, side, side).ok()
     }
 }
 
