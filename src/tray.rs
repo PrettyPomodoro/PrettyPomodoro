@@ -139,12 +139,15 @@ mod imp {
             .with_menu(Box::new(menu))
             .with_tooltip("PrettyPomodoro")
             .with_icon(icon()?)
+            // macOS draws a template in the menu bar's own text colour: white
+            // on a dark bar, dark on a light one.
+            .with_icon_as_template(true)
             .build()
             .ok()?;
         Some(Tray { _icon: icon })
     }
 
-    /// The app icon in full colour, small.
+    /// The app icon's tomato on its own, in white.
     fn icon() -> Option<Icon> {
         let (rgba, side) = crate::icon::tray_image();
         Icon::from_rgba(rgba, side, side).ok()

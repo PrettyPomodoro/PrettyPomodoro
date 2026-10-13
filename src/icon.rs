@@ -3,9 +3,11 @@
 
 use eframe::egui;
 
-/// Rounded artwork without a margin: window icon on Windows and Linux, About
-/// page, menu bar and tray.
+/// Rounded artwork without a margin: window icon on Windows and Linux, About page.
 const PLAIN: &[u8] = include_bytes!("../assets/icon.png");
+/// The tomato alone, white on transparent: menu bar and system tray.
+#[cfg(any(target_os = "macos", target_os = "windows"))]
+const TRAY: &[u8] = include_bytes!("../assets/icon-tray.png");
 /// With the margin macOS expects around Dock icons.
 #[cfg(target_os = "macos")]
 const WINDOW: &[u8] = include_bytes!("../assets/icon-macos.png");
@@ -33,11 +35,11 @@ pub fn about_image() -> egui::ColorImage {
     egui::ColorImage::from_rgba_unmultiplied(size, img.as_raw())
 }
 
-/// The artwork scaled down for the menu bar or system tray, as RGBA pixels
-/// and the length of a side.
+/// The white tomato for the menu bar or system tray, as RGBA pixels and the
+/// length of a side.
+#[cfg(any(target_os = "macos", target_os = "windows"))]
 pub fn tray_image() -> (Vec<u8>, u32) {
-    // Twice the 22-point menu bar height and then some, so it stays sharp on dense screens.
-    const SIDE: u32 = 64;
-    let img = image::imageops::resize(&decode(PLAIN), SIDE, SIDE, image::imageops::FilterType::Lanczos3);
-    (img.into_raw(), SIDE)
+    let img = decode(TRAY);
+    let side = img.width();
+    (img.into_raw(), side)
 }
