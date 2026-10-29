@@ -354,6 +354,11 @@ impl Core {
         let (title, body) = (title.to_owned(), body.to_owned());
         // Showing a notification can block on the OS; keep it off the timer thread.
         std::thread::spawn(move || {
+            // Without this, the notification library asks AppleScript for an app
+            // named "use_default", which makes macOS show a "Choose Application"
+            // window. Only the first call takes effect, so later errors are fine.
+            #[cfg(target_os = "macos")]
+            let _ = notify_rust::set_application("io.github.ahmed-abd-elwahed.prettypomodoro");
             let _ = notify_rust::Notification::new()
                 .appname("PrettyPomodoro")
                 .summary(&title)
