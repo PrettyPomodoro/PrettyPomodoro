@@ -235,6 +235,14 @@ impl Core {
         self.goal_achieved = false;
     }
 
+    /// A ticked goal is done, so the next focus round starts fresh; an
+    /// unticked one carries over.
+    fn clear_achieved_goal(&mut self) {
+        if self.goal_achieved {
+            self.clear_goal();
+        }
+    }
+
     fn advance(&mut self, autostart: bool, now: Instant) {
         match self.phase {
             Phase::Focus => {
@@ -246,12 +254,12 @@ impl Core {
                 self.enter(next, autostart, now);
             }
             Phase::ShortBreak => {
-                self.clear_goal();
+                self.clear_achieved_goal();
                 self.round += 1;
                 self.enter(Phase::Focus, autostart, now);
             }
             Phase::LongBreak => {
-                self.clear_goal();
+                self.clear_achieved_goal();
                 self.round = 1;
                 self.enter(Phase::Focus, autostart, now);
             }
@@ -469,6 +477,14 @@ mod tests {
 
         // The log keeps the achieved goal after it has left the timer.
         assert_eq!(c.goals.days.values().next().unwrap(), &["Write the report"]);
+
+        // An unticked goal carries over into the next focus round.
+        c.goal = "Read the paper".into();
+        finish(&mut c, &mut now);
+        assert_eq!(c.phase, Phase::LongBreak);
+        finish(&mut c, &mut now);
+        assert_eq!(c.phase, Phase::Focus);
+        assert_eq!((c.goal.as_str(), c.goal_achieved), ("Read the paper", false));
 
         // A skipped round takes its goal with it.
         c.goal = "Skipped".into();
