@@ -1,12 +1,13 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod api;
 mod audio;
+mod avatar;
 mod capture;
 mod config;
 mod core;
 mod icon;
 mod svg;
-mod sync;
 mod theme;
 mod tray;
 mod ui;

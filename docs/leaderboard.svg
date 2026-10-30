@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" width="360" height="480">
+<defs>
+<clipPath id="c0"><rect x="0" y="40" width="360" height="394"/></clipPath>
+</defs>
+<rect x="0" y="0" width="360" height="480" rx="0" fill="none"/>
+<rect x="0" y="0" width="360" height="480" rx="0" fill="#b8d0c6"/>
+<text x="124.22" y="25.97" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" textLength="110.55" lengthAdjust="spacingAndGlyphs" xml:space="preserve">PrettyPomodoro</text>
+<path d="M32 12L24 20" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M24 20L32 28" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M325 13L339 27" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M325 27L339 13" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M289 20L303 20" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<rect x="0" y="40" width="360" height="394" rx="0" fill="#f3f2ee"/>
+<g clip-path="url(#c0)">
+<text x="137" y="67.47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="86.48" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Leaderboard</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="128" y="94.59" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" textLength="105.48" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Fri, 30 Oct · 6 players</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="109" width="316" height="34" rx="7" fill="#e4e7e2"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="21.35" y="108.35" width="317.3" height="35.3" rx="7.65" fill="none" stroke="#141413" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="30.61" y="131.97" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.8" font-weight="400" style="font-variant-numeric:lining-nums" fill="#f57c1f" xml:space="preserve">🔥</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="266.84" y="131.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="60.52" lengthAdjust="spacingAndGlyphs" xml:space="preserve">2 h 30 min</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="131.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="30.02" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Priya</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="153" width="316" height="34" rx="7" fill="#e4e7e2"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="21.35" y="152.35" width="317.3" height="35.3" rx="7.65" fill="none" stroke="#141413" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="35.16" y="175.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" xml:space="preserve">2</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="274.84" y="175.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="52.19" lengthAdjust="spacingAndGlyphs" xml:space="preserve">2 h 5 min</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="175.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="45.24" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Marcus</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="197" width="316" height="34" rx="7" fill="#edd7cd"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="21.35" y="196.35" width="317.3" height="35.3" rx="7.65" fill="none" stroke="#141413" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22.65" y="197.65" width="314.7" height="32.7" rx="6.35" fill="none" stroke="#d97757" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="34.98" y="219.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" xml:space="preserve">3</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="268.84" y="219.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="59.02" lengthAdjust="spacingAndGlyphs" xml:space="preserve">1 h 40 min</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="219.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="58.96" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Ada (you)</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="241" width="316" height="34" rx="7" fill="#e4e7e2"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="21.35" y="240.35" width="317.3" height="35.3" rx="7.65" fill="none" stroke="#141413" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="34.89" y="263.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" xml:space="preserve">4</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="270.84" y="263.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="56.54" lengthAdjust="spacingAndGlyphs" xml:space="preserve">1 h 15 min</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="263.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="26.42" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Yuki</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="285" width="316" height="34" rx="7" fill="#e4e7e2"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="21.35" y="284.35" width="317.3" height="35.3" rx="7.65" fill="none" stroke="#141413" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="35.03" y="307.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" xml:space="preserve">5</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="287.84" y="307.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="39.84" lengthAdjust="spacingAndGlyphs" xml:space="preserve">50 min</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="307.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="41.6" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Tomas</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="22" y="329" width="316" height="34" rx="7" fill="#e4e7e2"/>
+</g>
+<g clip-path="url(#c0)">
+<rect x="21.35" y="328.35" width="317.3" height="35.3" rx="7.65" fill="none" stroke="#141413" stroke-width="1.3"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="34.81" y="351.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" xml:space="preserve">6</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="287.84" y="351.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="39.29" lengthAdjust="spacingAndGlyphs" xml:space="preserve">25 min</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="351.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="29.86" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Noor</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="91" y="393.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" textLength="171.29" lengthAdjust="spacingAndGlyphs" xml:space="preserve">You are 3rd of 6 with 1 h 40 min.</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="75" y="423.59" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#45504b" textLength="207.9" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Updated just now · refreshes every minute</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="144.44" y="447.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#141413" textLength="68.65" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Refresh Now</text>
+</g>
+<circle cx="25.71" cy="457" r="8.5" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M25.71 452L25.71 457" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M25.71 457L29.21 459.5" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M68.14 451L86.14 451" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="80.14" cy="451" r="2.8" fill="#45504b"/>
+<path d="M68.14 457L86.14 457" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="73.14" cy="457" r="2.8" fill="#45504b"/>
+<path d="M68.14 463L86.14 463" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="78.14" cy="463" r="2.8" fill="#45504b"/>
+<circle cx="128.57" cy="457" r="8.5" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="124.27" cy="454.88" r="1.5" fill="#45504b"/>
+<circle cx="128.51" cy="452.2" r="1.5" fill="#45504b"/>
+<circle cx="132.82" cy="454.77" r="1.5" fill="#45504b"/>
+<circle cx="132.07" cy="460.5" r="2.4" fill="#45504b"/>
+<rect x="171.5" y="450.5" width="17" height="15" rx="2" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M171.5 454.5L188.5 454.5" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M176 448L176 452" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<path d="M184 448L184 452" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="176" cy="458.5" r="1" fill="#45504b"/>
+<circle cx="180" cy="458.5" r="1" fill="#45504b"/>
+<circle cx="184" cy="458.5" r="1" fill="#45504b"/>
+<circle cx="176" cy="462" r="1" fill="#45504b"/>
+<circle cx="180" cy="462" r="1" fill="#45504b"/>
+<path d="M227.48 454.73L226.7 454.89L225.9 454.86L225.13 454.64L224.43 454.25L223.84 453.71L223.4 453.04L223.12 452.29L223.03 451.5L223.12 450.71L223.4 449.96L223.84 449.29L224.43 448.75L225.13 448.36L225.9 448.14L226.7 448.11L227.48 448.27" fill="none" stroke="#141413" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M235.38 448.27L236.16 448.11L236.96 448.14L237.73 448.36L238.43 448.75L239.01 449.29L239.46 449.96L239.73 450.71L239.83 451.5L239.73 452.29L239.46 453.04L239.01 453.71L238.43 454.25L237.73 454.64L236.96 454.86L236.16 454.89L235.38 454.73" fill="none" stroke="#141413" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M225.43 448.5L237.43 448.5L235.43 456L227.43 456Z" fill="#141413"/>
+<rect x="230.13" y="456" width="2.6" height="5" rx="0" fill="#141413"/>
+<rect x="225.93" y="461.2" width="11" height="2.6" rx="1" fill="#141413"/>
+<path d="M216.43 478.5L246.43 478.5" fill="none" stroke="#d97757" stroke-width="3"/>
+<path d="M278.36 463.5L277.48 463.41L276.64 463.16L275.86 462.74L275.18 462.18L274.62 461.5L274.2 460.72L273.94 459.88L273.86 459L273.94 458.12L274.2 457.28L274.62 456.5L275.18 455.82L275.86 455.26L276.64 454.84L277.48 454.59L278.36 454.5" fill="none" stroke="#45504b" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M276.4 454.81L276.59 453.9L276.94 453.04L277.42 452.25L278.03 451.55L278.75 450.96L279.55 450.51L280.43 450.19L281.34 450.02L282.27 450.02L283.18 450.16L284.06 450.46L284.88 450.9L285.61 451.48L286.23 452.16L286.73 452.95L287.09 453.8" fill="none" stroke="#45504b" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M287.86 454.5L288.74 454.59L289.58 454.84L290.36 455.26L291.04 455.82L291.6 456.5L292.01 457.28L292.27 458.12L292.36 459L292.27 459.88L292.01 460.72L291.6 461.5L291.04 462.18L290.36 462.74L289.58 463.16L288.74 463.41L287.86 463.5" fill="none" stroke="#45504b" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M278.36 463.5L287.86 463.5" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="334.29" cy="457" r="8.5" fill="none" stroke="#45504b" stroke-width="1.6"/>
+<circle cx="334.29" cy="452.8" r="1.2" fill="#45504b"/>
+<path d="M334.29 456L334.29 461.8" fill="none" stroke="#45504b" stroke-width="1.6"/>
+</svg>

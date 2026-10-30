@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 480" width="360" height="480">
+<defs>
+<clipPath id="c0"><rect x="0" y="40" width="360" height="394"/></clipPath>
+</defs>
+<rect x="0" y="0" width="360" height="480" rx="0" fill="none"/>
+<rect x="0" y="0" width="360" height="480" rx="0" fill="#ffffff"/>
+<text x="124.22" y="25.97" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="110.55" lengthAdjust="spacingAndGlyphs" xml:space="preserve">PrettyPomodoro</text>
+<path d="M32 12L24 20" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M24 20L32 28" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M325 13L339 27" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M325 27L339 13" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M289 20L303 20" fill="none" stroke="#737373" stroke-width="1.6"/>
+<rect x="0" y="40" width="360" height="394" rx="0" fill="#fafafa"/>
+<g clip-path="url(#c0)">
+<text x="152" y="67.47" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="56.83" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Account</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="128" y="97.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="106.18" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Signed in as Ada</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="129" y="119.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="102.31" lengthAdjust="spacingAndGlyphs" xml:space="preserve">ada@example.com</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="60" y="138" width="240" height="34" rx="6" fill="#404040"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="151.16" y="160.03" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14" font-weight="400" style="font-variant-numeric:lining-nums" fill="#fafafa" textLength="57.84" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Sync Now</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="93" y="194.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="170.84" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Last synced 2026-10-30 16:09</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="58" y="215.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="237.74" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Syncs on launch and after every focus round.</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="252.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="116.67" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Leaderboard Name</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="313.16" y="253.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="20.55" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Edit</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="277.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="21.54" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Ada</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="318.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="177.73" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Show Me on the Leaderboard</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="302" y="304" width="36" height="18" rx="9" fill="#404040"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="329" cy="313" r="6.5" fill="#fafafa"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="348.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="278.24" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Your name and today's focus minutes appear on the </text>
+<text x="22" y="363.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="288.97" lengthAdjust="spacingAndGlyphs" xml:space="preserve">board. Switch this off to keep your minutes to yourself; </text>
+<text x="22" y="378.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#737373" textLength="119.02" lengthAdjust="spacingAndGlyphs" xml:space="preserve">your history still syncs.</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="22" y="419.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="14.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="98" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Sync Goal Texts</text>
+</g>
+<g clip-path="url(#c0)">
+<rect x="302" y="405" width="36" height="18" rx="9" fill="#c0c0c0"/>
+</g>
+<g clip-path="url(#c0)">
+<circle cx="311" cy="414" r="6.5" fill="#fafafa"/>
+</g>
+<g clip-path="url(#c0)">
+<text x="155.47" y="518.53" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="49.45" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Sign Out</text>
+</g>
+<g clip-path="url(#c0)">
+<text x="137.59" y="548.09" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="400" style="font-variant-numeric:lining-nums" fill="#171717" textLength="82.13" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Delete Account</text>
+</g>
+<circle cx="25.71" cy="457" r="8.5" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M25.71 452L25.71 457" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M25.71 457L29.21 459.5" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M68.14 451L86.14 451" fill="none" stroke="#737373" stroke-width="1.6"/>
+<circle cx="80.14" cy="451" r="2.8" fill="#737373"/>
+<path d="M68.14 457L86.14 457" fill="none" stroke="#737373" stroke-width="1.6"/>
+<circle cx="73.14" cy="457" r="2.8" fill="#737373"/>
+<path d="M68.14 463L86.14 463" fill="none" stroke="#737373" stroke-width="1.6"/>
+<circle cx="78.14" cy="463" r="2.8" fill="#737373"/>
+<circle cx="128.57" cy="457" r="8.5" fill="none" stroke="#737373" stroke-width="1.6"/>
+<circle cx="124.27" cy="454.88" r="1.5" fill="#737373"/>
+<circle cx="128.51" cy="452.2" r="1.5" fill="#737373"/>
+<circle cx="132.82" cy="454.77" r="1.5" fill="#737373"/>
+<circle cx="132.07" cy="460.5" r="2.4" fill="#737373"/>
+<rect x="171.5" y="450.5" width="17" height="15" rx="2" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M171.5 454.5L188.5 454.5" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M176 448L176 452" fill="none" stroke="#737373" stroke-width="1.6"/>
+<path d="M184 448L184 452" fill="none" stroke="#737373" stroke-width="1.6"/>
+<circle cx="176" cy="458.5" r="1" fill="#737373"/>
+<circle cx="180" cy="458.5" r="1" fill="#737373"/>
+<circle cx="184" cy="458.5" r="1" fill="#737373"/>
+<circle cx="176" cy="462" r="1" fill="#737373"/>
+<circle cx="180" cy="462" r="1" fill="#737373"/>
+<path d="M227.48 454.73L226.7 454.89L225.9 454.86L225.13 454.64L224.43 454.25L223.84 453.71L223.4 453.04L223.12 452.29L223.03 451.5L223.12 450.71L223.4 449.96L223.84 449.29L224.43 448.75L225.13 448.36L225.9 448.14L226.7 448.11L227.48 448.27" fill="none" stroke="#737373" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M235.38 448.27L236.16 448.11L236.96 448.14L237.73 448.36L238.43 448.75L239.01 449.29L239.46 449.96L239.73 450.71L239.83 451.5L239.73 452.29L239.46 453.04L239.01 453.71L238.43 454.25L237.73 454.64L236.96 454.86L236.16 454.89L235.38 454.73" fill="none" stroke="#737373" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M225.43 448.5L237.43 448.5L235.43 456L227.43 456Z" fill="#737373"/>
+<rect x="230.13" y="456" width="2.6" height="5" rx="0" fill="#737373"/>
+<rect x="225.93" y="461.2" width="11" height="2.6" rx="1" fill="#737373"/>
+<path d="M278.36 463.5L277.48 463.41L276.64 463.16L275.86 462.74L275.18 462.18L274.62 461.5L274.2 460.72L273.94 459.88L273.86 459L273.94 458.12L274.2 457.28L274.62 456.5L275.18 455.82L275.86 455.26L276.64 454.84L277.48 454.59L278.36 454.5" fill="none" stroke="#171717" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M276.4 454.81L276.59 453.9L276.94 453.04L277.42 452.25L278.03 451.55L278.75 450.96L279.55 450.51L280.43 450.19L281.34 450.02L282.27 450.02L283.18 450.16L284.06 450.46L284.88 450.9L285.61 451.48L286.23 452.16L286.73 452.95L287.09 453.8" fill="none" stroke="#171717" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M287.86 454.5L288.74 454.59L289.58 454.84L290.36 455.26L291.04 455.82L291.6 456.5L292.01 457.28L292.27 458.12L292.36 459L292.27 459.88L292.01 460.72L291.6 461.5L291.04 462.18L290.36 462.74L289.58 463.16L288.74 463.41L287.86 463.5" fill="none" stroke="#171717" stroke-width="1.6" stroke-linejoin="round"/>
+<path d="M278.36 463.5L287.86 463.5" fill="none" stroke="#171717" stroke-width="1.6"/>
+<path d="M267.86 478.5L297.86 478.5" fill="none" stroke="#404040" stroke-width="3"/>
+<circle cx="334.29" cy="457" r="8.5" fill="none" stroke="#737373" stroke-width="1.6"/>
+<circle cx="334.29" cy="452.8" r="1.2" fill="#737373"/>
+<path d="M334.29 456L334.29 461.8" fill="none" stroke="#737373" stroke-width="1.6"/>
+</svg>

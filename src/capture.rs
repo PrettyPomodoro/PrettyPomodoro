@@ -1,9 +1,15 @@
 //! Developer aid: render one page with demo data to a PNG, or to an SVG if the
 //! path ends in `.svg`, and exit.
 //!
-//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Ink Well"] [POMO_GOAL="..."] [POMO_UPDATE=1.2.3] prettypomodoro`
+//! `POMO_CAPTURE=out.png [POMO_PAGE=stats] [POMO_THEME="Ink Well"] [POMO_GOAL="..."]
+//!  [POMO_UPDATE=1.2.3] [POMO_FRAMES=10] prettypomodoro`
 //!
-//! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`, `stats`, `goals`, `sync`, `signin`, `code`, `about`.
+//! `POMO_FRAMES` is how many frames to draw before capturing. The default of ten
+//! lets layout and animation settle; a page waiting on the network (the
+//! leaderboard) needs more, since each extra frame is about a second apart.
+//!
+//! Pages: `running`, `achieved`, `timer`, `options`, `themes`, `family`, `editor`, `colors`,
+//! `stats`, `goals`, `leaderboard`, `account`, `signin`, `browser`, `about`.
 //!
 //! Nothing is read from or written to the user's saved data in this mode.
 
@@ -19,6 +25,35 @@ pub struct Capture {
     pub page: Option<String>,
     theme: Option<String>,
     frame: u32,
+    /// The frame to capture on.
+    frames: u32,
+}
+
+/// A plausible board for the screenshots, with the demo user part-way down it.
+fn demo_board(today: chrono::NaiveDate) -> crate::api::Leaderboard {
+    let players = [
+        ("Priya", 150, 6),
+        ("Marcus", 125, 5),
+        ("Ada", 100, 4),
+        ("Yuki", 75, 3),
+        ("Tomas", 50, 2),
+        ("Noor", 25, 1),
+    ];
+    let entries: Vec<crate::api::Entry> = players
+        .iter()
+        .enumerate()
+        .map(|(i, (name, minutes, sessions))| crate::api::Entry {
+            rank: Some(i as u32 + 1),
+            name: (*name).to_owned(),
+            minutes: *minutes,
+            sessions: *sessions,
+            you: *name == "Ada",
+            // No files to serve in a capture, so everyone shows their initials.
+            avatar: None,
+        })
+        .collect();
+    let you = entries.iter().find(|e| e.you).cloned();
+    crate::api::Leaderboard { day: today, entries, you, players: 6 }
 }
 
 impl Capture {
@@ -28,6 +63,7 @@ impl Capture {
             page: std::env::var("POMO_PAGE").ok(),
             theme: std::env::var("POMO_THEME").ok(),
             frame: 0,
+            frames: std::env::var("POMO_FRAMES").ok().and_then(|n| n.parse().ok()).unwrap_or(10),
         })
     }
 
@@ -83,14 +119,22 @@ impl Capture {
         }
         core.goals = goals;
 
-        // The sync page signed out, and part-way through signing in.
-        if matches!(self.page.as_deref(), Some("signin" | "code")) {
-            core.cfg.sync = Default::default();
+        // A signed-in account, so the Account page and the board have something
+        // to show. `signin` and `browser` show the signed-out states instead.
+        core.cfg.account.display_name = "Ada".into();
+        core.cfg.account.email = Some("ada@example.com".into());
+        core.cfg.account.provider = Some("email".into());
+        core.cfg.account.token = "demo".into();
+        core.cfg.account.last_sync = chrono::Local::now().format("%Y-%m-%d %H:%M").to_string().into();
+        core.board.data = Some(demo_board(today));
+        core.board.fetched_at = Some(Instant::now());
+
+        if matches!(self.page.as_deref(), Some("signin" | "browser")) {
+            core.cfg.account = Default::default();
         }
-        if self.page.as_deref() == Some("code") {
-            core.sign_in = crate::core::SignIn::Waiting {
-                code: "WDJB-MJHT".into(),
-                url: "https://github.com/login/device".into(),
+        if self.page.as_deref() == Some("browser") {
+            core.sign_in = crate::core::SignIn::InBrowser {
+                url: "https://accounts.google.com/o/oauth2/v2/auth".into(),
             };
         }
 
@@ -119,7 +163,7 @@ impl Capture {
 
     /// The capture is an SVG and it is time to render it.
     pub fn wants_svg(&self) -> bool {
-        self.is_svg() && self.frame == 10
+        self.is_svg() && self.frame == self.frames
     }
 
     pub fn save_svg(&self, svg: &str) -> ! {
@@ -133,7 +177,7 @@ impl Capture {
     pub fn update(&mut self, ctx: &egui::Context) {
         self.frame += 1;
         // Give layout and animations a few frames to settle first.
-        if self.frame == 10 && !self.is_svg() {
+        if self.frame == self.frames && !self.is_svg() {
             ctx.send_viewport_cmd(egui::ViewportCommand::Screenshot(Default::default()));
         }
         let shot = ctx.input(|i| {

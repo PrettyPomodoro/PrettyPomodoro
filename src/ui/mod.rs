@@ -1,6 +1,8 @@
 //! The window: custom title bar, the timer card and the settings drawer.
 
+mod account;
 pub mod fonts;
+mod leaderboard;
 mod pencil;
 mod settings;
 mod sketch;
@@ -31,16 +33,18 @@ enum Tab {
     Options,
     Themes,
     Stats,
-    Sync,
+    Leaderboard,
+    Account,
     About,
 }
 
-const TABS: [(Tab, Icon, &str); 6] = [
+const TABS: [(Tab, Icon, &str); 7] = [
     (Tab::Timer, Icon::Clock, "Timer"),
     (Tab::Options, Icon::Sliders, "Options"),
     (Tab::Themes, Icon::Palette, "Themes"),
     (Tab::Stats, Icon::Calendar, "Activity"),
-    (Tab::Sync, Icon::Cloud, "Cloud Sync"),
+    (Tab::Leaderboard, Icon::Trophy, "Leaderboard"),
+    (Tab::Account, Icon::Cloud, "Account"),
     (Tab::About, Icon::Info, "About"),
 ];
 
@@ -54,6 +58,7 @@ pub struct App {
     themes: themes::State,
     stats: stats::State,
     settings: settings::State,
+    account: account::State,
 
     saved_cfg: Config,
     applied_theme: Option<Theme>,
@@ -78,8 +83,8 @@ impl App {
             let mut core = lock(&shared);
             if let Some(capture) = &capture {
                 capture.prepare(&mut core);
-            } else if !core.cfg.sync.token.is_empty() {
-                core.sync_request = Some(crate::core::SyncJob::Sync);
+            } else if core.cfg.account.signed_in() {
+                core.request(crate::core::Job::Sync);
             }
             core.cfg.clone()
         };
@@ -93,6 +98,7 @@ impl App {
             themes: Default::default(),
             stats: Default::default(),
             settings: Default::default(),
+            account: Default::default(),
             saved_cfg,
             applied_theme: None,
             applied_on_top: None,
@@ -110,7 +116,8 @@ impl App {
             "options" => Tab::Options,
             "themes" | "family" | "editor" | "colors" => Tab::Themes,
             "stats" | "goals" => Tab::Stats,
-            "sync" | "signin" | "code" => Tab::Sync,
+            "leaderboard" | "board" => Tab::Leaderboard,
+            "account" | "sync" | "signin" => Tab::Account,
             "about" => Tab::About,
             _ => return,
         };
@@ -136,7 +143,7 @@ impl App {
         }
     }
 
-    fn header(&mut self, ui: &mut Ui, rect: Rect, core: &Core, theme: &Theme) {
+    fn header(&mut self, ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
         let ctx = ui.ctx().clone();
         let drag = ui.interact(rect, ui.id().with("titlebar"), Sense::click_and_drag());
         if drag.drag_started() {
@@ -165,12 +172,12 @@ impl App {
             {
                 self.drawer_open = true;
             }
-            if icon_button(ui, slot(rect.left() + 62.0), Icon::Bars, theme, false)
-                .on_hover_text("Activity")
+            if icon_button(ui, slot(rect.left() + 62.0), Icon::Trophy, theme, false)
+                .on_hover_text("Leaderboard")
                 .clicked()
             {
                 self.drawer_open = true;
-                self.tab = Tab::Stats;
+                self.tab = Tab::Leaderboard;
             }
         }
 
@@ -180,6 +187,26 @@ impl App {
         if icon_button(ui, slot(rect.right() - 64.0), Icon::Minimize, theme, false).clicked() {
             self.hide_or(&ctx, core.cfg.minimize_to_tray, ViewportCommand::Minimized(true));
         }
+
+        // The profile, in the corner: the user's own face when they have one.
+        let profile = slot(rect.right() - 100.0);
+        let open_profile = if core.cfg.account.signed_in() {
+            let name = core.cfg.account.display_name.clone();
+            let path = core.cfg.account.avatar.clone();
+            let picture = core.avatar(path.as_deref());
+            crate::avatar::button(ui, profile, picture.as_ref(), &name, theme)
+                .on_hover_text(format!("{name} · profile"))
+                .clicked()
+        } else {
+            icon_button(ui, profile, Icon::Person, theme, false)
+                .on_hover_text("Sign in")
+                .clicked()
+        };
+        if open_profile {
+            self.drawer_open = true;
+            self.tab = Tab::Account;
+            self.account.show_profile();
+        }
     }
 
     fn drawer(&mut self, ui: &mut Ui, rect: Rect, core: &mut Core, theme: &Theme) {
@@ -187,6 +214,8 @@ impl App {
         ui.painter().rect_filled(content, 0.0, theme.surface);
 
         let inner = content.shrink2(vec2(22.0, 0.0));
+        // Set from inside the page below, and acted on once it has been drawn.
+        let mut open_account = false;
         let mut child = ui.new_child(egui::UiBuilder::new().max_rect(inner));
         child.set_clip_rect(content);
         egui::ScrollArea::vertical()
@@ -200,15 +229,27 @@ impl App {
                     Tab::Options => settings::options(ui, core, theme),
                     Tab::Themes => themes::show(ui, &mut self.themes, core, theme),
                     Tab::Stats => stats::show(ui, &mut self.stats, core, theme),
-                    Tab::Sync => {
-                        if let Some(job) = settings::sync(ui, core, theme) {
-                            core.sync_request = Some(job);
+                    Tab::Leaderboard => match leaderboard::show(ui, core, theme) {
+                        Some(leaderboard::Action::Refresh) => {
+                            core.board.stale();
+                            core.request(crate::core::Job::Leaderboard);
+                        }
+                        Some(leaderboard::Action::OpenAccount) => open_account = true,
+                        None => {}
+                    },
+                    Tab::Account => {
+                        if let Some(job) = account::show(ui, &mut self.account, core, theme) {
+                            core.request(job);
                         }
                     }
                     Tab::About => settings::about(ui, &mut self.settings, core, theme),
                 }
                 ui.add_space(14.0);
             });
+
+        if open_account {
+            self.tab = Tab::Account;
+        }
 
         let bar = Rect::from_min_max(pos2(rect.left(), rect.bottom() - TABS_H), rect.max);
         let w = bar.width() / TABS.len() as f32;
@@ -321,6 +362,10 @@ impl App {
             ctx.send_viewport_cmd(ViewportCommand::WindowLevel(level));
         }
 
+        // Both of these refresh themselves only while they are being looked at.
+        core.board.open = self.drawer_open && self.tab == Tab::Leaderboard;
+        core.activity_open = self.drawer_open && self.tab == Tab::Stats;
+
         egui::CentralPanel::default()
             .frame(egui::Frame::new())
             .show(ctx, |ui| {
@@ -328,7 +373,7 @@ impl App {
                 ui.painter().rect_filled(rect, CORNER, theme.background);
                 let header = Rect::from_min_size(rect.min, vec2(rect.width(), HEADER_H));
                 let body = Rect::from_min_max(header.left_bottom(), rect.max);
-                self.header(ui, header, &core, &theme);
+                self.header(ui, header, &mut core, &theme);
                 if self.drawer_open {
                     self.drawer(ui, body, &mut core, &theme);
                 } else {

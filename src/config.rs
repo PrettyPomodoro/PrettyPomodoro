@@ -30,24 +30,69 @@ pub struct Config {
     pub theme: String,
     pub custom_themes: Vec<Theme>,
 
-    pub sync: SyncConfig,
+    pub account: AccountConfig,
     /// Identifies this install in the synced history.
     pub device_id: String,
     /// The newest version a desktop notification has already announced.
     pub update_notified: String,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+/// The PrettyPomodoro account this computer is signed in to, and where its
+/// backend lives. Written owner-readable only, because it holds the token.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
-pub struct SyncConfig {
-    /// GitHub access token from "Sign in with GitHub".
+pub struct AccountConfig {
+    /// Base URL of the backend. Editable, so a self-hosted server can be used.
+    pub server: String,
+    /// Session token from signing in; empty when signed out.
     pub token: String,
-    /// GitHub username, once known.
-    pub login: Option<String>,
-    pub gist_id: String,
+    /// The name shown on the leaderboard.
+    pub display_name: String,
+    /// Path of the profile picture on the server, e.g. `/v1/avatars/ab12…`.
+    pub avatar: Option<String>,
+    /// Only set for an email account.
+    pub email: Option<String>,
+    /// How this account signs in: `email`, `google` or `facebook`.
+    pub provider: Option<String>,
+    /// Appear on the public leaderboard. On unless the user opts out.
+    pub show_on_leaderboard: bool,
     pub last_sync: Option<String>,
     /// Also sync the text of achieved goals. Off unless the user opts in.
     pub sync_goals: bool,
+}
+
+impl Default for AccountConfig {
+    fn default() -> Self {
+        Self {
+            server: crate::api::DEFAULT_SERVER.to_owned(),
+            token: String::new(),
+            display_name: String::new(),
+            avatar: None,
+            email: None,
+            provider: None,
+            show_on_leaderboard: true,
+            last_sync: None,
+            sync_goals: false,
+        }
+    }
+}
+
+impl AccountConfig {
+    pub fn signed_in(&self) -> bool {
+        !self.token.trim().is_empty()
+    }
+
+    /// Forget the account but keep this computer's choices (server, and whether
+    /// goals and the leaderboard are opted into).
+    pub fn sign_out(&mut self) {
+        let keep = Self {
+            server: self.server.clone(),
+            sync_goals: self.sync_goals,
+            show_on_leaderboard: self.show_on_leaderboard,
+            ..Self::default()
+        };
+        *self = keep;
+    }
 }
 
 impl Default for Config {
@@ -70,7 +115,7 @@ impl Default for Config {
             muted: false,
             theme: DEFAULT_THEME.to_owned(),
             custom_themes: Vec::new(),
-            sync: SyncConfig::default(),
+            account: AccountConfig::default(),
             device_id: String::new(),
             update_notified: String::new(),
         }
@@ -114,15 +159,27 @@ pub struct History {
 }
 
 impl History {
+    fn entry(&mut self, day: NaiveDate, device: &str) -> &mut DayStat {
+        self.days.entry(day).or_default().entry(device.to_owned()).or_default()
+    }
+
+    /// Add focus time as it is spent, a minute at a time, so a round in
+    /// progress counts towards today and towards the leaderboard.
+    pub fn add_minutes(&mut self, day: NaiveDate, device: &str, minutes: u32) {
+        self.entry(day, device).minutes += minutes;
+    }
+
+    /// Count a focus round that ran to the end. Its minutes were already added
+    /// as they passed, so this only moves the session count.
+    pub fn add_session(&mut self, day: NaiveDate, device: &str) {
+        self.entry(day, device).sessions += 1;
+    }
+
+    /// A whole round in one go: the shape history had before minutes were
+    /// counted as they passed. Used for demo data and tests.
     pub fn record(&mut self, day: NaiveDate, device: &str, minutes: u32) {
-        let stat = self
-            .days
-            .entry(day)
-            .or_default()
-            .entry(device.to_owned())
-            .or_default();
-        stat.sessions += 1;
-        stat.minutes += minutes;
+        self.add_minutes(day, device, minutes);
+        self.add_session(day, device);
     }
 
     pub fn day(&self, day: NaiveDate) -> DayStat {

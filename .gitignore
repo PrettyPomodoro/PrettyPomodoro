@@ -2,3 +2,9 @@
 /dist
 .DS_Store
 .claude/
+
+# Server data
+*.db
+*.db-wal
+*.db-shm
+server/.env

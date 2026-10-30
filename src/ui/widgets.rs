@@ -26,7 +26,8 @@ pub enum Icon {
     Edit,
     Trash,
     Previous,
-    Bars,
+    Trophy,
+    Person,
 }
 
 /// A clickable icon. Dim by default, full text colour when hovered or `active`.
@@ -149,25 +150,19 @@ pub fn paint_icon(p: &Painter, c: Pos2, icon: Icon, color: Color32) {
             poly(&[(6.0, -7.0), (-4.0, 0.0), (6.0, 7.0)]);
             p.rect_filled(Rect::from_center_size(c + vec2(-6.0, 0.0), vec2(2.0, 14.0)), 0.0, color);
         }
-        Icon::Bars => {
-            // Three rising bars on a shared baseline, under an arrow that
-            // curves up and to the right.
-            for (x, h) in [(-5.5, 4.0), (0.0, 7.0), (5.5, 10.0)] {
-                let bar = Rect::from_min_max(c + vec2(x - 1.6, 8.0 - h), c + vec2(x + 1.6, 8.0));
-                p.rect_filled(bar, 0.5, color);
-            }
-            let (from, bend, tip) = (vec2(-8.5, 0.0), vec2(0.5, -2.5), vec2(5.5, -6.5));
-            let curve = (0..=8)
-                .map(|i| {
-                    let t = i as f32 / 8.0;
-                    c + from * (1.0 - t).powi(2) + bend * 2.0 * t * (1.0 - t) + tip * t * t
-                })
-                .collect();
-            p.add(Shape::line(curve, Stroke::new(1.5_f32, color)));
-            let along = (tip - bend).normalized();
-            let across = vec2(-along.y, along.x);
-            let head = [tip + along * 3.5, tip + across * 2.8, tip - across * 2.8];
-            poly(&head.map(|v| (v.x, v.y)));
+        Icon::Person => {
+            // A head over shoulders, for an account with no picture yet.
+            p.circle_stroke(c + vec2(0.0, -4.0), 4.2, s);
+            arc(c + vec2(0.0, 9.5), 7.0, TAU * 0.55, TAU * 0.95);
+        }
+        Icon::Trophy => {
+            // A cup tapering to a stem and a base, with a handle each side.
+            // Handles first, so the cup is drawn over where they meet it.
+            arc(c + vec2(-5.0, -5.5), 3.4, TAU * 0.2, TAU * 0.8);
+            arc(c + vec2(5.0, -5.5), 3.4, -TAU * 0.3, TAU * 0.3);
+            poly(&[(-6.0, -8.5), (6.0, -8.5), (4.0, -1.0), (-4.0, -1.0)]);
+            p.rect_filled(Rect::from_center_size(c + vec2(0.0, 1.5), vec2(2.6, 5.0)), 0.0, color);
+            p.rect_filled(Rect::from_center_size(c + vec2(0.0, 5.5), vec2(11.0, 2.6)), 0.8, color);
         }
     }
 }
@@ -256,6 +251,20 @@ pub fn text_link(ui: &mut Ui, text: &str, size: f32, theme: &Theme) -> Response 
     let color = if resp.hovered() { theme.accent } else { theme.text };
     ui.painter()
         .text(rect.center(), Align2::CENTER_CENTER, text, FontId::proportional(size), color);
+    resp.on_hover_cursor(egui::CursorIcon::PointingHand)
+}
+
+/// Like `text_link`, but in the focus colour: for a destructive action.
+pub fn danger_link(ui: &mut Ui, text: &str, size: f32, theme: &Theme) -> Response {
+    let font = FontId::proportional(size);
+    let galley = ui.painter().layout_no_wrap(text.to_owned(), font.clone(), theme.focus);
+    let (rect, resp) = ui.allocate_exact_size(galley.size() + vec2(8.0, 6.0), Sense::click());
+    let color = if resp.hovered() {
+        theme.focus
+    } else {
+        theme.focus.gamma_multiply(0.85)
+    };
+    ui.painter().text(rect.center(), Align2::CENTER_CENTER, text, font, color);
     resp.on_hover_cursor(egui::CursorIcon::PointingHand)
 }
 

@@ -14,7 +14,8 @@ dirs = "6"
 rodio = { version = "0.20", default-features = false }
 notify-rust = "4"
 ureq = { version = "2", features = ["json"] }
-image = { version = "0.25", default-features = false, features = ["png", "webp"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
+rfd = { version = "0.15", default-features = false, features = ["xdg-portal", "tokio"] }
 raw-window-handle = "0.6"
 ab_glyph = "0.2"
 
@@ -25,7 +26,7 @@ tray-icon = "0.21"
 objc2 = "0.6"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-windows-sys = { version = "0.59", features = ["Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }
+windows-sys = { version = "0.59", features = ["Win32_UI_WindowsAndMessaging", "Win32_Foundation", "Win32_Globalization"] }
 
 [target.'cfg(windows)'.build-dependencies]
 winresource = "0.1"
@@ -34,3 +35,6 @@ winresource = "0.1"
 opt-level = 3
 lto = "thin"
 strip = true
+
+[workspace]
+members = ["server"]

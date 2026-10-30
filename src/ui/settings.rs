@@ -1,7 +1,8 @@
-//! Settings drawer pages: timer durations, options, cloud sync and about.
+//! Settings drawer pages: timer durations, options and about. The account and
+//! leaderboard pages live in `account.rs` and `leaderboard.rs`.
 
 use super::widgets::{ink_outline, heading, slider, text_link, toggle_row};
-use crate::core::{Core, SignIn, SyncJob, SyncState};
+use crate::core::Core;
 use crate::theme::{mix, Theme};
 use eframe::egui::{self, vec2, Align2, Color32, FontId, RichText, Sense, Ui};
 
@@ -96,120 +97,6 @@ pub fn options(ui: &mut Ui, core: &mut Core, theme: &Theme) {
                 .color(theme.text_dim),
         );
     }
-}
-
-/// Returns the background job the user asked for, if any.
-pub fn sync(ui: &mut Ui, core: &mut Core, theme: &Theme) -> Option<SyncJob> {
-    heading(ui, "Cloud Sync", theme);
-    let dim = |s: &str| RichText::new(s).size(12.5).color(theme.text_dim);
-    let primary = |label: &str, enabled: bool| {
-        egui::Button::new(RichText::new(label).size(14.0).color(theme.on_accent()))
-            .fill(if enabled { theme.accent } else { theme.muted })
-            .min_size(vec2(190.0, 34.0))
-    };
-    let mut job = None;
-
-    ui.vertical_centered(|ui| {
-        ui.label(dim("Sync your history privately for free."));
-        ui.add_space(14.0);
-
-        if !core.cfg.sync.token.is_empty() {
-            // Signed in.
-            let who = match &core.cfg.sync.login {
-                Some(login) => format!("Signed in as {login}"),
-                None => "Signed in with GitHub".to_owned(),
-            };
-            ui.label(RichText::new(who).size(15.0));
-            ui.add_space(10.0);
-
-            let running = core.sync_state == SyncState::Running;
-            let label = if running { "Syncing…" } else { "Sync Now" };
-            if ui.add_enabled(!running, primary(label, !running)).clicked() {
-                job = Some(SyncJob::Sync);
-            }
-            ui.add_space(4.0);
-            match &core.sync_state {
-                SyncState::Idle | SyncState::Running => {}
-                SyncState::Done(msg) => {
-                    ui.label(RichText::new(msg).size(12.5).color(theme.short_break));
-                }
-                SyncState::Failed(msg) => {
-                    ui.label(RichText::new(msg).size(12.5).color(theme.focus));
-                }
-            }
-            if let Some(when) = &core.cfg.sync.last_sync {
-                ui.label(dim(&format!("Last synced {when}")));
-            }
-            ui.label(dim("Syncs on launch and after every focus round."));
-            ui.add_space(12.0);
-            if text_link(ui, "Sign Out", 13.5, theme).clicked() {
-                // Signing out forgets the account, not the choice below.
-                let sync_goals = core.cfg.sync.sync_goals;
-                core.cfg.sync = crate::config::SyncConfig { sync_goals, ..Default::default() };
-                core.sync_state = SyncState::Idle;
-            }
-            return;
-        }
-
-        match core.sign_in.clone() {
-            SignIn::Waiting { code, url } => {
-                ui.label(RichText::new("Enter this code on GitHub").size(14.0));
-                ui.add_space(6.0);
-                let galley = ui.painter().layout_no_wrap(code.clone(), FontId::monospace(26.0), theme.text);
-                let (rect, _) = ui.allocate_exact_size(galley.size() + vec2(28.0, 18.0), Sense::hover());
-                ui.painter().rect_filled(rect, 8.0, theme.background);
-                ink_outline(ui.painter(), rect, 8.0, theme);
-                ui.painter().galley(rect.center() - galley.size() / 2.0, galley, theme.text);
-                ui.add_space(4.0);
-                ui.label(dim("It is already copied. GitHub opened in your browser."));
-                ui.add_space(8.0);
-                ui.horizontal(|ui| {
-                    let w = (ui.available_width() - 8.0) / 2.0;
-                    if ui.add_sized([w, 30.0], egui::Button::new("Copy Code")).clicked() {
-                        ui.ctx().copy_text(code.clone());
-                    }
-                    if ui.add_sized([w, 30.0], egui::Button::new("Open GitHub")).clicked() {
-                        ui.ctx().open_url(egui::OpenUrl::new_tab(&url));
-                    }
-                });
-                ui.add_space(8.0);
-                ui.label(dim("Waiting for you to approve…"));
-                if text_link(ui, "Cancel", 13.5, theme).clicked() {
-                    core.sign_in = SignIn::Idle;
-                    core.sign_in_attempt += 1;
-                }
-            }
-            state => {
-                let starting = state == SignIn::Starting;
-                let label = if starting { "Contacting GitHub…" } else { "Sign in with GitHub" };
-                if ui.add_enabled(!starting, primary(label, !starting)).clicked() {
-                    job = Some(SyncJob::SignIn);
-                }
-                ui.add_space(6.0);
-                if let SignIn::Failed(msg) = &state {
-                    ui.label(RichText::new(msg).size(12.5).color(theme.focus));
-                }
-                ui.label(dim(
-                    "You get a short code to enter on github.com. The app can only \
-                     read and write your gists, where it keeps your data in one private gist.",
-                ));
-            }
-        }
-    });
-
-    // Goal texts are personal, so syncing them is something to opt into, and
-    // the choice is only offered once there is an account to sync to.
-    if !core.cfg.sync.token.is_empty() {
-        ui.add_space(14.0);
-        if toggle_row(ui, "Sync Goal Texts", &mut core.cfg.sync.sync_goals, theme) && core.cfg.sync.sync_goals {
-            job = Some(SyncJob::Sync);
-        }
-        ui.label(dim(
-            "Also keeps the goals you tick off in your private gist, so your goal \
-             history follows you to your other computers.",
-        ));
-    }
-    job
 }
 
 pub fn about(ui: &mut Ui, state: &mut State, core: &mut Core, theme: &Theme) {

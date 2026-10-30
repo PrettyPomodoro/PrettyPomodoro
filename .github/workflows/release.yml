@@ -1,6 +1,7 @@
 name: Release
 
-# Builds the downloadable packages for macOS, Windows and Linux.
+# Builds the downloadable packages for macOS, Windows and Linux, and tests the
+# backend in `server/`.
 #
 # - Every push to main and every manual run builds and tests all three and
 #   keeps the packages as workflow artifacts.
@@ -25,6 +26,18 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  # The backend is a separate crate with no desktop dependencies, so it is
+  # tested once on Linux rather than three times alongside the app packages.
+  server:
+    name: Server
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Test
+        run: cargo test -p prettypomodoro-server --locked
+
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}

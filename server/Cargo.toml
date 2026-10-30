@@ -1,0 +1,27 @@
+[package]
+name = "prettypomodoro-server"
+version = "0.1.0"
+edition = "2021"
+description = "Accounts, history sync and the focus leaderboard for PrettyPomodoro"
+license = "MIT"
+
+[dependencies]
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "query", "tokio"] }
+tokio = { version = "1", default-features = false, features = ["rt-multi-thread", "macros", "net", "signal", "time"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std", "serde"] }
+rusqlite = { version = "0.37", features = ["bundled", "chrono"] }
+r2d2 = "0.8"
+r2d2_sqlite = "0.31"
+argon2 = { version = "0.5", features = ["std"] }
+sha2 = "0.10"
+base64 = "0.22"
+getrandom = "0.3"
+url = "2"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+tempfile = "3"

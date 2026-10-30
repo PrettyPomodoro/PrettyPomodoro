@@ -8,9 +8,9 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
 | --- | --- | --- |
 | ![Sky Sketch](docs/sky-sketch.svg) | ![Editorial Lavender](docs/editorial-lavender.svg) | ![Sketch Light](docs/sketch-light.svg) |
 
-| Activity (Editorial Sage) | Activity (Ink Well) | Cloud Sync (Sketch Blue) |
-| --- | --- | --- |
-| ![Activity](docs/activity.svg) | ![Activity dark](docs/activity-dark.svg) | ![Cloud Sync](docs/sync.svg) |
+| Leaderboard | Activity | Activity (dark) | Account |
+| --- | --- | --- | --- |
+| ![Leaderboard](docs/leaderboard.svg) | ![Activity](docs/activity.svg) | ![Activity dark](docs/activity-dark.svg) | ![Account](docs/account.svg) |
 
 ## Features
 
@@ -18,8 +18,11 @@ A small, themeable Pomodoro timer for the desktop, written in pure Rust with
   Light, Dark and Pencil Art), plus an editor for making your own.
 - **Progress calendar.** A heat map of every focus round you finish,
   with today, this week, streak and all-time totals.
-- **Private and free data sync.** Your history syncs between your computers
-  through a secret GitHub Gist on your own account, at no cost.
+- **A leaderboard for today.** See how your focus minutes compare with everyone
+  else's, refreshed every minute while you watch. Opt out at any time and keep
+  your minutes to yourself.
+- **Your history on your account.** Sign in with Google, Facebook or an email
+  address and your focus history follows you between computers.
 - **Set goals for each run.** Type a goal above the timer and tick it off in
   green when the round ends. Achieved goals are kept in a history, grouped by day.
 - **Lightweight and efficient (built with Rust).** One small native executable
@@ -94,38 +97,74 @@ D-Bus development packages first (`libasound2-dev`, `libdbus-1-dev` on Debian/Ub
 
 `Space` starts and pauses the timer.
 
-## Cloud sync
+## Account, sync and the leaderboard
 
-Sync keeps the focus history in a private (secret) GitHub Gist, which is free
-with any GitHub account.
+Signing in gives you two things: your focus history on every computer you use,
+and a place on the leaderboard.
 
-1. Open **Settings → Cloud Sync** and press **Sign in with GitHub**.
-2. The app shows a short code, copies it and opens github.com. Paste the code
-   there and approve.
-3. That's it. The app finds the gist created by another device on the same
-   account, or creates one, and from then on syncs by itself on launch and
-   after every completed focus round.
+1. Open **Settings → Account** (the cloud tab).
+2. Press **Continue with Google**, **Continue with Facebook**, or make an
+   account with an email address and a password.
+3. Google and Facebook open your browser; finish there and come back. The app
+   is waiting and signs itself in.
 
-The text of the goals you tick off is not synced unless you switch on
-**Sync Goal Texts**, which appears on the same page once you are signed in; it
-then goes into a second file in the same gist.
+From then on the app syncs on launch and after every completed focus round.
+Syncing merges rather than overwrites: each computer only ever raises its own
+count for a day, so syncing repeatedly or from several machines never double
+counts.
 
-The sign-in only grants access to gists. History is stored per device and
-merged by taking the highest count each device has reported for a day, so
-syncing repeatedly or from several machines never double counts.
+### The leaderboard
 
-The access token is stored in plain text in the config file (readable only by
-your user account on macOS and Linux). **Sign Out** removes it.
+The trophy button on the home screen opens the leaderboard: everyone signed in,
+ranked by the focus minutes they have put in today, with your own row marked.
+It refreshes every minute while the page is open, and again whenever you finish
+a round.
 
-Building your own copy: sign-in goes through a GitHub OAuth app with device
-flow enabled; its client ID is the `GITHUB_CLIENT_ID` constant in `src/sync.rs`.
+"Today" is each person's own local date, so a day in Melbourne is compared with
+a day in Berlin rather than with a slice of two.
+
+Your name and today's minutes are the only things that appear. Turn off
+**Show Me on the Leaderboard** on the Account page to disappear from it; your
+history still syncs, and you still see your own total. Goal texts never appear
+on the board.
+
+### Privacy and what is stored
+
+The server keeps your display name, your account's email address if you signed
+up with one, and a count of sessions and minutes per day per device. The text of
+the goals you tick off stays on your computer unless you switch on **Sync Goal
+Texts**.
+
+**Delete Account** on the Account page erases the account and everything stored
+with it.
+
+The session token is kept in the config file, readable only by your user account
+on macOS and Linux. **Sign Out** removes it.
+
+### Running the backend
+
+The server is a second crate in this repository, in `server/`. It is a single
+Rust binary with a SQLite file beside it:
+
+```bash
+cargo run -p prettypomodoro-server
+```
+
+See [server/README.md](server/README.md) for the settings, the OAuth setup and
+the API. Point the app at your own copy from **Account → Server**, or set
+`POMO_SERVER` while developing. The address the app uses by default is the
+`DEFAULT_SERVER` constant in `src/api.rs`.
 
 ## Data
 
 Settings and history live in the platform config directory under
 `pomodoro-rs/` (`~/Library/Application Support/pomodoro-rs` on macOS):
-`config.json` for settings and custom themes, `history.json` for completed
-focus sessions and `goals.json` for the goals you have ticked off.
+`config.json` for settings, custom themes and the signed-in account,
+`history.json` for completed focus sessions and `goals.json` for the goals you
+have ticked off.
+
+Your computer stays the source of truth: the app works signed out, and the
+server holds a copy, not the original.
 
 ## Releases
 
